@@ -10,3 +10,13 @@ require 'vcloud/core/vapp'
 require 'vcloud/core/vapp_template'
 require 'vcloud/core/org_vdc_network'
 require 'vcloud/core/query'
+
+module Vcloud
+  module Core
+
+    def self.logger
+      @logger ||=Logger.new(STDOUT)
+    end
+
+  end
+end

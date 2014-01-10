@@ -39,14 +39,14 @@ module Vcloud
         end
 
         def post_instantiate_vapp_template(vdc, template, name, params)
-          Vcloud.logger.info("instantiating #{name} vapp in #{vdc[:name]}")
+          Vcloud::Core.logger.info("instantiating #{name} vapp in #{vdc[:name]}")
           vapp = @vcloud.post_instantiate_vapp_template(extract_id(vdc), template, name, params).body
           @vcloud.process_task(vapp[:Tasks][:Task])
           @vcloud.get_vapp(extract_id(vapp)).body
         end
 
         def put_memory(vm_id, memory)
-          Vcloud.logger.info("putting #{memory}MB memory into VM #{vm_id}")
+          Vcloud::Core.logger.info("putting #{memory}MB memory into VM #{vm_id}")
           task = @vcloud.put_memory(vm_id, memory).body
           @vcloud.process_task(task)
         end
@@ -61,13 +61,13 @@ module Vcloud
         end
 
         def put_cpu(vm_id, cpu)
-          Vcloud.logger.info("putting #{cpu} CPU(s) into VM #{vm_id}")
+          Vcloud::Core.logger.info("putting #{cpu} CPU(s) into VM #{vm_id}")
           task = @vcloud.put_cpu(vm_id, cpu).body
           @vcloud.process_task(task)
         end
 
         def put_vm(id, name, options={})
-          Vcloud.logger.info("updating name : #{name}, :options => #{options} in vm : #{id}")
+          Vcloud::Core.logger.info("updating name : #{name}, :options => #{options} in vm : #{id}")
           task = @vcloud.put_vm(id, name, options).body
           @vcloud.process_task(task)
         end
@@ -117,7 +117,7 @@ module Vcloud
         end
 
         def post_create_org_vdc_network(vdc_id, name, options)
-          Vcloud.logger.info("creating #{options[:fence_mode]} OrgVdcNetwork #{name} in vDC #{vdc_id}")
+          Vcloud::Core.logger.info("creating #{options[:fence_mode]} OrgVdcNetwork #{name} in vDC #{vdc_id}")
           attrs = @vcloud.post_create_org_vdc_network(vdc_id, name, options).body
           @vcloud.process_task(attrs[:Tasks][:Task])
           get_network(extract_id(attrs))
@@ -129,7 +129,7 @@ module Vcloud
         end
 
         def power_on_vapp(vapp_id)
-          Vcloud.logger.info("Powering on vApp #{vapp_id}")
+          Vcloud::Core.logger.info("Powering on vApp #{vapp_id}")
           task = @vcloud.post_power_on_vapp(vapp_id).body
           @vcloud.process_task(task)
         end
@@ -144,7 +144,7 @@ module Vcloud
         end
 
         def put_vapp_metadata_value(id, k, v)
-          Vcloud.logger.info("putting metadata pair '#{k}'=>'#{v}' to #{id}")
+          Vcloud::Core.logger.info("putting metadata pair '#{k}'=>'#{v}' to #{id}")
           # need to convert key to_s since Fog 0.17 borks on symbol key
           task = @vcloud.put_vapp_metadata_item_metadata(id, k.to_s, v).body
           @vcloud.process_task(task)
@@ -202,7 +202,7 @@ module Vcloud
           l[:type] == ContentTypes::CATALOG_ITEM && l[:name].match(template_name)
         end
         if link.nil?
-          Vcloud.logger.warn("Template #{template_name} not found in catalog #{catalog_name}")
+          Vcloud::Core.logger.warn("Template #{template_name} not found in catalog #{catalog_name}")
           return nil
         end
         catalog_item = @fog.get_catalog_item(extract_id(link))
@@ -212,11 +212,11 @@ module Vcloud
 
       def put_network_connection_system_section_vapp(vm_id, section)
         begin
-          Vcloud.logger.info("adding NIC into VM #{vm_id}")
+          Vcloud::Core.logger.info("adding NIC into VM #{vm_id}")
           @fog.put_network_connection_system_section_vapp(vm_id, section)
         rescue
-          Vcloud.logger.info("failed to put_network_connection_system_section_vapp for vm : #{vm_id} ")
-          Vcloud.logger.info("requested network section : #{section.inspect}")
+          Vcloud::Core.logger.info("failed to put_network_connection_system_section_vapp for vm : #{vm_id} ")
+          Vcloud::Core.logger.info("requested network section : #{section.inspect}")
           raise
         end
       end
@@ -231,7 +231,7 @@ module Vcloud
 
       def put_guest_customization_section(vm_id, vm_name, script)
         begin
-          Vcloud.logger.info("configuring guest customization section for vm : #{vm_id}")
+          Vcloud::Core.logger.info("configuring guest customization section for vm : #{vm_id}")
           customization_req = {
             :Enabled             => true,
             :CustomizationScript => script,
@@ -239,8 +239,8 @@ module Vcloud
           }
           @fog.put_guest_customization_section_vapp(vm_id, customization_req)
         rescue
-          Vcloud.logger.info("=== interpolated preamble:")
-          Vcloud.logger.info(script)
+          Vcloud::Core.logger.info("=== interpolated preamble:")
+          Vcloud::Core.logger.info(script)
           raise
         end
       end

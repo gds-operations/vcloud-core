@@ -131,7 +131,7 @@ module Vcloud
                 }
               },
             }
-            Vcloud.logger.should_receive(:info)
+            Vcloud::Core.logger.should_receive(:info)
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
@@ -161,7 +161,7 @@ module Vcloud
                 }
               }
             }
-            Vcloud.logger.should_receive(:info)
+            Vcloud::Core.logger.should_receive(:info)
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
@@ -199,7 +199,7 @@ module Vcloud
                 }
               },
             }
-            Vcloud.logger.should_receive(:info)
+            Vcloud::Core.logger.should_receive(:info)
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
@@ -241,7 +241,7 @@ module Vcloud
               },
               :EdgeGateway => { :href => "/#{@edgegw_id}" },
             }
-            Vcloud.logger.should_receive(:info)
+            Vcloud::Core.logger.should_receive(:info)
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })

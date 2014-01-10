@@ -63,7 +63,7 @@ module Vcloud
       end
 
       def self.instantiate(name, network_names, template_id, vdc_name)
-        Vcloud.logger.info("Instantiating new vApp #{name} in vDC '#{vdc_name}'")
+        Vcloud::Core.logger.info("Instantiating new vApp #{name} in vDC '#{vdc_name}'")
         fog_interface = Vcloud::Fog::ServiceInterface.new
         networks = get_networks(network_names, vdc_name)
 

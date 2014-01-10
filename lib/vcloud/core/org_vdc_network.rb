@@ -32,10 +32,10 @@ module Vcloud
         options[:EdgeGateway] = { :href => edgegw.href } if edgegw
 
         begin
-          Vcloud.logger.info("Provisioning new OrgVdcNetwork #{name} in vDC '#{vdc_name}'")
+          Vcloud::Core.logger.info("Provisioning new OrgVdcNetwork #{name} in vDC '#{vdc_name}'")
           attrs = Vcloud::Fog::ServiceInterface.new.post_create_org_vdc_network(vdc.id, name, options)
         rescue RuntimeError => e
-          Vcloud.logger.error("Could not provision orgVdcNetwork: #{e.message}")
+          Vcloud::Core.logger.error("Could not provision orgVdcNetwork: #{e.message}")
         end
 
         raise "Did not successfully create orgVdcNetwork" unless attrs && attrs.key?(:href)

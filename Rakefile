@@ -10,3 +10,9 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 task :default => [:spec]
+
+require "gem_publisher"
+task :publish_gem do |t|
+  gem = GemPublisher.publish_if_updated("vcloud-core.gemspec", :rubygems)
+  puts "Published #{gem}" if gem
+end

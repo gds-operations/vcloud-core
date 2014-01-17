@@ -11,7 +11,7 @@ end
 SimpleCov.start 'gem'
 
 require 'bundler/setup'
-require 'vcloud'
+require 'vcloud/core'
 require 'support/stub_fog_interface.rb'
 
 

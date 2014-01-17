@@ -1,5 +1,3 @@
-require 'vcloud'
-
 module Vcloud
   class Query
 

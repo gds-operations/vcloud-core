@@ -1,3 +1,5 @@
+require 'csv'
+
 module Vcloud
   class Query
 

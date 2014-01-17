@@ -8,9 +8,10 @@ require 'vcloud/core/version'
 Gem::Specification.new do |s|
   s.name        = 'vcloud-core'
   s.version     = Vcloud::Core::VERSION
-  s.authors     = ['Government Digital Service']
+  s.authors     = ['Anna Shipman']
+  s.email       = ['anna.shipman@digital.cabinet-office.gov.uk']
   s.summary     = 'Core tools for interacting with VMware vCloud Director'
-  s.description = 'Core tools for interacting with VMware vCloud Director'
+  s.description = 'Core tools for interacting with VMware vCloud Director. Includes VCloud Query, a light wrapper round the vCloud Query API.'
   s.homepage    = 'http://github.com/alphagov/vcloud-core'
   s.license     = 'MIT'
 

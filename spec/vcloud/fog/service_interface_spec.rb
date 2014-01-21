@@ -29,6 +29,30 @@ module Vcloud
         expect { service_interface.catalog('DoesNotExist') }.to raise_exception(RuntimeError, 'catalog DoesNotExist cannot be found')
       end
 
+      context 'configure edge gateway' do
+        before(:each) do
+          @config = { :Blah => 'TestData' }
+          @vcloud = double(:vcloud)
+          ::Fog::Compute::VcloudDirector.should_receive(:new).and_return(@vcloud)
+        end
+
+        it "should configure firewall for given edge gateway id" do
+          task = double(:task)
+          @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
+              and_return(double(:response, :body => { :Tasks => {:Task => task} }))
+          @vcloud.should_receive(:process_task).with(task)
+
+          ServiceInterface.new.configure_edge_gateway "1234", @config
+        end
+
+
+        it "should log and return exceptions without swallowing" do
+          @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
+              and_raise(RuntimeError, "Test Error")
+          expect{ ServiceInterface.new.configure_edge_gateway("1234", @config) }.to raise_error("Test Error")
+        end
+      end
+
     end
   end
 end

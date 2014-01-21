@@ -38,18 +38,22 @@ module Vcloud
 
         it "should configure firewall for given edge gateway id" do
           task = double(:task)
+          Vcloud::Core::logger.should_receive(:info).with("Updating EdgeGateway 1234")
           @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
               and_return(double(:response, :body => { :Tasks => {:Task => task} }))
           @vcloud.should_receive(:process_task).with(task)
 
-          ServiceInterface.new.configure_edge_gateway "1234", @config
+          ServiceInterface.new.post_configure_edge_gateway_services "1234", @config
         end
 
 
         it "should log and return exceptions without swallowing" do
+          Vcloud::Core::logger.should_receive(:info).with("Updating EdgeGateway 1234")
+          runtime_error = RuntimeError.new('Test Error')
+          Vcloud::Core::logger.should_receive(:error).with("Could not update EdgeGateway 1234 : #{runtime_error}")
           @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
-              and_raise(RuntimeError, "Test Error")
-          expect{ ServiceInterface.new.configure_edge_gateway("1234", @config) }.to raise_error("Test Error")
+              and_raise(runtime_error)
+          expect{ ServiceInterface.new.post_configure_edge_gateway_services("1234", @config) }.to raise_error("Test Error")
         end
       end
 

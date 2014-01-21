@@ -125,8 +125,14 @@ module Vcloud
         end
 
         def post_configure_edge_gateway_services(edgegw_id, config)
-          attrs = @vcloud.post_configure_edge_gateway_services(edgegw_id, config).body
-          @vcloud.process_task(attrs[:Tasks][:Task])
+          Vcloud::Core.logger.info("Updating EdgeGateway #{edgegw_id}")
+          begin
+            attrs = @vcloud.post_configure_edge_gateway_services(edgegw_id, config).body
+            @vcloud.process_task(attrs[:Tasks][:Task])
+          rescue Exception => ex
+            Vcloud::Core.logger.error("Could not update EdgeGateway #{edgegw_id} : #{ex}")
+            raise
+          end
         end
 
         def power_off_vapp(vapp_id)
@@ -249,11 +255,6 @@ module Vcloud
           Vcloud::Core.logger.info(script)
           raise
         end
-      end
-
-      def configure_edge_gateway(gw_id, config)
-        Vcloud::Core.logger.info("Updating EdgeGateway #{gw_id}")
-        @fog.post_configure_edge_gateway_services(gw_id, config)
       end
 
       private

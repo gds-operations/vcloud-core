@@ -21,6 +21,11 @@ module Vcloud
         end
       end
 
+      def update_configuration(config)
+        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi.post_configure_edge_gateway_services(id, config)
+      end
+
       def self.get_by_name(name)
         ids = self.get_ids_by_name(name)
         raise "edgeGateway #{name} not found" if ids.size == 0

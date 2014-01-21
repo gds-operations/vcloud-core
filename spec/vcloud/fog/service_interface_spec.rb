@@ -40,7 +40,7 @@ module Vcloud
           task = double(:task)
           Vcloud::Core::logger.should_receive(:info).with("Updating EdgeGateway 1234")
           @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
-              and_return(double(:response, :body => { :Tasks => {:Task => task} }))
+              and_return(double(:response, :body =>  task ))
           @vcloud.should_receive(:process_task).with(task)
 
           ServiceInterface.new.post_configure_edge_gateway_services "1234", @config

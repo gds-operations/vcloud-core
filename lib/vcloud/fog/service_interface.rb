@@ -127,8 +127,8 @@ module Vcloud
         def post_configure_edge_gateway_services(edgegw_id, config)
           Vcloud::Core.logger.info("Updating EdgeGateway #{edgegw_id}")
           begin
-            attrs = @vcloud.post_configure_edge_gateway_services(edgegw_id, config).body
-            @vcloud.process_task(attrs[:Tasks][:Task])
+            task = @vcloud.post_configure_edge_gateway_services(edgegw_id, config).body
+            @vcloud.process_task(task)
           rescue Exception => ex
             Vcloud::Core.logger.error("Could not update EdgeGateway #{edgegw_id} : #{ex}")
             raise

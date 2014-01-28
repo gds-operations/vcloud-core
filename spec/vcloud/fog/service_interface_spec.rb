@@ -10,8 +10,8 @@ module Vcloud
       it 'should raise a exception if named vdc not found in the data returned' do
 
         fog_facade = double(:FogFacade)
-        expect(fog_facade).to receive(:session).any_number_of_times { FOG_SESSION_RESPONSE }
-        expect(fog_facade).to receive(:get_organization).any_number_of_times { FOG_ORGANIZATION_RESPONSE }
+        expect(fog_facade).to receive(:session).and_return { FOG_SESSION_RESPONSE }
+        expect(fog_facade).to receive(:get_organization).and_return { FOG_ORGANIZATION_RESPONSE }
 
         service_interface = ServiceInterface.new(fog_facade)
 
@@ -21,8 +21,8 @@ module Vcloud
       it 'should raise a exception if named catalog cannot be found in the data returned' do
 
         fog_facade = double(:FogFacade)
-        expect(fog_facade).to receive(:session).any_number_of_times { FOG_SESSION_RESPONSE }
-        expect(fog_facade).to receive(:get_organization).any_number_of_times { FOG_ORGANIZATION_RESPONSE }
+        expect(fog_facade).to receive(:session).and_return { FOG_SESSION_RESPONSE }
+        expect(fog_facade).to receive(:get_organization).and_return { FOG_ORGANIZATION_RESPONSE }
 
         service_interface = ServiceInterface.new(fog_facade)
 

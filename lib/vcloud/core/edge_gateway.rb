@@ -30,7 +30,7 @@ module Vcloud
         gateway_interfaces = vcloud_attributes[:Configuration][:GatewayInterfaces][:GatewayInterface]
         unless gateway_interfaces.empty?
           return gateway_interfaces.find{ |interface|
-            interface[:Network] && interface[:Network][:href].split('/').last == gateway_interface_id
+            interface[:Network][:href].split('/').last == gateway_interface_id
           }
         end
       end

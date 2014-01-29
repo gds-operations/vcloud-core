@@ -20,6 +20,7 @@ module Vcloud
         it { should respond_to(:id) }
         it { should respond_to(:name) }
         it { should respond_to(:href) }
+        it { should respond_to(:vcloud_gateway_interface_by_id) }
       end
 
       context "#initialize" do
@@ -68,6 +69,77 @@ module Vcloud
           mock_query = double(:query, :get_all_results => q_results)
           Vcloud::Query.should_receive(:new).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(mock_query)
           expect{ EdgeGateway.get_by_name('edgegw-test-1') }.to raise_exception(RuntimeError, "edgeGateway edgegw-test-1 not found")
+        end
+
+      end
+
+      context "#vcloud_gateway_interface_by_id" do
+
+        before(:each) do
+          @valid_ext_id = "12345678-70ac-487e-9c1e-124716764274"
+          @valid_int_id = "12345678-70ac-487e-9c1e-552f1f0a91dc"
+          edge_gateway_hash = {
+            :Configuration=>
+              {:GatewayBackingConfig=>"compact",
+               :GatewayInterfaces=>
+                {:GatewayInterface=>
+                  [{:Name=>"EXTERNAL_NETWORK",
+                    :Network=>
+                     {:type=>"application/vnd.vmware.admin.network+xml",
+                      :name=>"EXTERNAL_NETWORK",
+                      :href=>
+                       "https://example.com/api/admin/network/#{@valid_ext_id}"},
+                    :InterfaceType=>"uplink",
+                    :SubnetParticipation=>
+                     {:Gateway=>"192.2.0.1",
+                      :Netmask=>"255.255.255.0",
+                      :IpAddress=>"192.2.0.66"},
+                    :UseForDefaultRoute=>"true"},
+                   {:Name=>"INTERNAL_NETWORK",
+                    :Network=>
+                     {:type=>"application/vnd.vmware.admin.network+xml",
+                      :name=>"INTERNAL_NETWORK",
+                      :href=>
+                       "https://example.com/api/admin/network/#{@valid_int_id}"},
+                    :InterfaceType=>"internal",
+                    :SubnetParticipation=>
+                     {:Gateway=>"192.168.1.1",
+                      :Netmask=>"255.255.255.0",
+                      :IpAddress=>"192.168.1.55"},
+                    :UseForDefaultRoute=>"false"
+                   },
+                  ]
+                }
+              }
+          }
+          @mock_fog_interface.should_receive(:get_edge_gateway).
+            and_return(edge_gateway_hash)
+          @edgegw = EdgeGateway.new(@edgegw_id)
+        end
+
+        it "should return nil if the network id is not found" do
+          expect(@edgegw.vcloud_gateway_interface_by_id(
+               '12345678-1234-1234-1234-123456789012')).
+            to be_nil
+        end
+
+        it "should return a vcloud network hash if the network id is found" do
+          expect(@edgegw.vcloud_gateway_interface_by_id(@valid_int_id)).
+            to eq(
+                   {:Name=>"INTERNAL_NETWORK",
+                    :Network=>
+                     {:type=>"application/vnd.vmware.admin.network+xml",
+                      :name=>"INTERNAL_NETWORK",
+                      :href=>
+                       "https://example.com/api/admin/network/#{@valid_int_id}"},
+                    :InterfaceType=>"internal",
+                    :SubnetParticipation=>
+                     {:Gateway=>"192.168.1.1",
+                      :Netmask=>"255.255.255.0",
+                      :IpAddress=>"192.168.1.55"},
+                    :UseForDefaultRoute=>"false"
+                   },
+                 )
         end
 
       end

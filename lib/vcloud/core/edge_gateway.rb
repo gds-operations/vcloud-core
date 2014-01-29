@@ -26,7 +26,7 @@ module Vcloud
         fsi.post_configure_edge_gateway_services(id, config)
       end
 
-      def get_gateway_interface_by_id gateway_interface_id
+      def vcloud_gateway_interface_by_id gateway_interface_id
         gateway_interfaces = vcloud_attributes[:Configuration][:GatewayInterfaces][:GatewayInterface]
         unless gateway_interfaces.empty?
           return gateway_interfaces.find{ |interface|

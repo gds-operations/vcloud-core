@@ -26,6 +26,15 @@ module Vcloud
         fsi.post_configure_edge_gateway_services(id, config)
       end
 
+      def get_gateway_interface_by_id gateway_interface_id
+        gateway_interfaces = vcloud_attributes[:Configuration][:GatewayInterfaces][:GatewayInterface]
+        unless gateway_interfaces.empty?
+          return gateway_interfaces.find{ |interface|
+            interface[:Network] && interface[:Network][:href].split('/').last == gateway_interface_id
+          }
+        end
+      end
+
       def self.get_by_name(name)
         ids = self.get_ids_by_name(name)
         raise "edgeGateway #{name} not found" if ids.size == 0

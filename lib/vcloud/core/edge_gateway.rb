@@ -56,17 +56,17 @@ module Vcloud
       end
 
       def interfaces
-        vca = vcloud_attributes
-        return [] unless gwis = vca[:Configuration][:GatewayInterfaces]
-        return [] unless interfaces = gwis[:GatewayInterface]
-        interfaces.map do |vcloud_attrs|
-          out = {}
-          out[:name] = vcloud_attrs[:Name]
-          out[:interface_type] = vcloud_attrs[:InterfaceType]
-          out[:network_href]   = vcloud_attrs[:Network][:href]
-          out[:network_id]     = vcloud_attrs[:Network][:href].split('/').last
-          out[:network_name]   = vcloud_attrs[:Network][:name]
-          out
+        gateway_config = vcloud_attributes
+        return [] unless gateway_config[:Configuration][:GatewayInterfaces]
+        return [] unless vcloud_interfaces = gateway_config[:Configuration][:GatewayInterfaces][:GatewayInterface]
+        vcloud_interfaces.map do |vcloud_interface|
+          our_interface = {}
+          our_interface[:name] = vcloud_interface[:Name]
+          our_interface[:interface_type] = vcloud_interface[:InterfaceType]
+          our_interface[:network_href]   = vcloud_interface[:Network][:href]
+          our_interface[:network_id]     = vcloud_interface[:Network][:href].split('/').last
+          our_interface[:network_name]   = vcloud_interface[:Network][:name]
+          our_interface
         end
       end
 

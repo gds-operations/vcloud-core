@@ -1,3 +1,9 @@
+## 0.0.6 (2014-02-12)
+
+Features:
+
+  - adds EdgeGateway.interfaces for returning simple array of VSE interface details
+
 ## 0.0.5 (2014-01-29)
 
 Features:

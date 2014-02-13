@@ -147,23 +147,10 @@ module Vcloud
 
         context "#interfaces" do
 
-          it "should return an array of EdgeGateway interfaces" do
-            expect(@edgegw.interfaces).
-              to eq([
-                { name: "EXTERNAL_NETWORK",
-                  interface_type: "uplink",
-                  network_href:   "https://example.com/api/admin/network/12345678-70ac-487e-9c1e-124716764274",
-                  network_id:     "12345678-70ac-487e-9c1e-124716764274",
-                  network_name:   "EXTERNAL_NETWORK"
-                },
-                {
-                  name: "INTERNAL_NETWORK",
-                  interface_type: "internal",
-                  network_href:   "https://example.com/api/admin/network/12345678-70ac-487e-9c1e-552f1f0a91dc",
-                  network_id:     "12345678-70ac-487e-9c1e-552f1f0a91dc",
-                  network_name:   "INTERNAL_NETWORK"
-                }
-              ])
+          it "should return an array of EdgeGatewayInterface objects" do
+            interfaces_list = @edgegw.interfaces
+            expect(interfaces_list.class).to be(Array)
+            expect(interfaces_list.first.class).to be(Vcloud::Core::EdgeGatewayInterface)
           end
 
         end

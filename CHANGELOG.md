@@ -1,3 +1,11 @@
+## 0.0.6 (2014-02-13)
+
+Features:
+
+  - adds EdgeGateway.interfaces for returning array of EdgeGatewayInterface objects
+    associated with the EdgeGateway
+  - adds EdgeGatewayInterface class, representing a vCloud GatewayInterfaceType
+
 ## 0.0.5 (2014-01-29)
 
 Features:

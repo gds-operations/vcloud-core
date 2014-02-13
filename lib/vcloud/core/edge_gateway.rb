@@ -55,6 +55,15 @@ module Vcloud
         vcloud_attributes[:name]
       end
 
+      def interfaces
+        gateway_config = vcloud_attributes[:Configuration]
+        return [] unless gateway_config[:GatewayInterfaces]
+        return [] unless gateway_interfaces = gateway_config[:GatewayInterfaces][:GatewayInterface]
+        gateway_interfaces.map do |vcloud_gateway_interface_hash|
+          EdgeGatewayInterface.new(vcloud_gateway_interface_hash)
+        end
+      end
+
     end
   end
 end

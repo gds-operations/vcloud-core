@@ -39,6 +39,34 @@ module Vcloud
           expect(obj.class).to be(Vcloud::Core::EdgeGatewayInterface)
         end
 
+        it "should raise an error if passed a nil value" do
+          expect { EdgeGatewayInterface.new(nil) }.to raise_error("Argument error: nil not allowed")
+        end
+
+        it "should raise an error if a :Name is not passed" do
+          expect { EdgeGatewayInterface.new({}) }.to raise_error("Argument error: must have a :Name")
+        end
+
+        it "should raise an error if a :Network is not passed" do
+          expect { EdgeGatewayInterface.new({Name: 'test-interface'}) }.to raise_error("Argument error: must have a :Network section")
+        end
+
+        it "should raise an error if a :Network :href is not passed" do
+          bad_input = {
+            Name: 'test-interface',
+            Network: { name: "test-network" }
+          }
+          expect { EdgeGatewayInterface.new(bad_input) }.to raise_error("Argument error: must have a :Network[:href]")
+        end
+
+        it "should raise an error if a :Network :name is not passed" do
+          bad_input = {
+            Name: 'test-interface',
+            Network: { href: "http://example.com/1234" }
+          }
+          expect { EdgeGatewayInterface.new(bad_input) }.to raise_error("Argument error: must have a :Network[:name]")
+        end
+
       end
 
       context "#name" do

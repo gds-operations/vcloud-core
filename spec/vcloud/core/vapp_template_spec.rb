@@ -58,6 +58,21 @@ module Vcloud
             to raise_error('Could not find template vApp')
         end
 
+        it 'should raise an error if more than one template is returned' do
+          q_results = [
+            { :name => 'test_template',
+              :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890ab001" },
+            { :name => 'test_template',
+              :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890ab002" },
+          ]
+          mock_query = double(:query, :get_all_results => q_results)
+          Vcloud::Query.should_receive(:new).
+            with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
+            and_return(mock_query)
+          expect { VappTemplate.get('test_catalog', 'test_template') }.
+            to raise_error('Template test_template is not unique in catalog test_catalog')
+        end
+
         it 'should return a valid template object if it exists' do
           q_results = [
             { :name => 'test_template',

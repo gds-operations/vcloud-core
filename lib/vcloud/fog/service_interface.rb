@@ -192,14 +192,6 @@ module Vcloud
         response_body[:VAppRecord].detect { |record| record[:vdcName] == vdc_name }
       end
 
-      def catalog(name)
-        link = org[:Link].select { |l| l[:rel] == RELATION::CHILD }.detect do |l|
-          l[:type] == ContentTypes::CATALOG && l[:name] == name
-        end
-        raise "catalog #{name} cannot be found" unless link
-        @fog.get_catalog(extract_id(link))
-      end
-
       def vdc(name)
         link = org[:Link].select { |l| l[:rel] == RELATION::CHILD }.detect do |l|
           l[:type] == ContentTypes::VDC && l[:name] == name
@@ -208,19 +200,6 @@ module Vcloud
         @fog.get_vdc(link[:href].split('/').last)
 
       end
-
-      def template(catalog_name, template_name)
-        link = catalog(catalog_name)[:CatalogItems][:CatalogItem].detect do |l|
-          l[:type] == ContentTypes::CATALOG_ITEM && l[:name].match(template_name)
-        end
-        if link.nil?
-          Vcloud::Core.logger.warn("Template #{template_name} not found in catalog #{catalog_name}")
-          return nil
-        end
-        catalog_item = @fog.get_catalog_item(extract_id(link))
-        catalog_item[:Entity]
-      end
-
 
       def put_network_connection_system_section_vapp(vm_id, section)
         begin

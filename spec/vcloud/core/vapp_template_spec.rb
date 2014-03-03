@@ -49,23 +49,24 @@ module Vcloud
       context '#get' do
 
         it 'should raise a RuntimeError if there is no template' do
-          @mock_fog_interface.should_receive(:template).
-            with('test_catalog', 'test_template').and_return(nil)
+          q_results = [ ]
+          mock_query = double(:query, :get_all_results => q_results)
+          Vcloud::Query.should_receive(:new).
+            with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
+            and_return(mock_query)
           expect { VappTemplate.get('test_catalog', 'test_template') }.
             to raise_error('Could not find template vApp')
         end
 
-
         it 'should return a valid template object if it exists' do
-          test_catalog_item_entity = {
-              :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890abcde"
-          }
-          @mock_fog_interface.should_receive(:template).
-            with('test_catalog', 'test_template').
-            and_return(test_catalog_item_entity)
-          Vcloud::Fog::ServiceInterface.should_receive(:new).
-            and_return(@mock_fog_interface)
-
+          q_results = [
+            { :name => 'test_template',
+              :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890abcde" }
+          ]
+          mock_query = double(:query, :get_all_results => q_results)
+          Vcloud::Query.should_receive(:new).
+            with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
+            and_return(mock_query)
           test_template = VappTemplate.get('test_catalog', 'test_template')
           test_template.id.should == 'vappTemplate-12345678-90ab-cdef-0123-4567890abcde'
         end

@@ -1,3 +1,9 @@
+## 0.0.7 (2014-03-03)
+
+Bugfixes:
+
+  - vAppTemplate not retrieved if ISO exists with similar name [#66758184]
+
 ## 0.0.6 (2014-02-13)
 
 Features:

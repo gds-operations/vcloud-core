@@ -163,6 +163,21 @@ module Vcloud
           @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
         end
 
+        it "should handle bootstrap vars being missing" do
+          name = 'test-vm'
+          bootstrap_config = {
+            script_path: 'hello_world.erb',
+            script_post_processor: 'remove_hello.rb',
+          }
+          extra_disks = []
+          @vm.should_receive(:generate_preamble).
+            with('hello_world.erb', 'remove_hello.rb', { extra_disks: [] }).
+            and_return('RETURNED_PREAMBLE')
+          @fog_interface.should_receive(:put_guest_customization_section).
+            with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
+          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        end
+
       end
 
       context '#generate_preamble' do

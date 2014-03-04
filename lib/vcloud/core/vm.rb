@@ -101,6 +101,7 @@ module Vcloud
         if bootstrap_config.nil? or bootstrap_config[:script_path].nil?
           interpolated_preamble = ''
         else
+          bootstrap_config[:vars] = {} unless bootstrap_config.key?(:vars)
           preamble_vars = bootstrap_config[:vars].merge(:extra_disks => extra_disks)
           interpolated_preamble = generate_preamble(
               bootstrap_config[:script_path],

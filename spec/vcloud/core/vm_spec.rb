@@ -122,6 +122,64 @@ module Vcloud
         end
       end
 
+      context '#configure_guest_customization_section' do
+
+        it "should handle complete configuration" do
+          name = 'test-vm'
+          bootstrap_config = {
+            script_path: 'hello_world.erb',
+            script_post_processor: 'remove_hello.rb',
+            vars: { bob: 'hello', mary: 'hello' },
+          }
+          extra_disks = []
+          @vm.should_receive(:generate_preamble).
+            with('hello_world.erb', 'remove_hello.rb', {
+              bob: "hello",
+              mary: "hello",
+              extra_disks: [] }).
+            and_return('RETURNED_PREAMBLE')
+          @fog_interface.should_receive(:put_guest_customization_section).
+            with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
+          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        end
+
+        it "should handle nil configuration" do
+          name = 'test-vm'
+          bootstrap_config = nil
+          extra_disks = nil
+          @vm.should_not_receive(:generate_preamble)
+          @fog_interface.should_receive(:put_guest_customization_section).
+            with(@vm_id, 'test-vm', '')
+          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        end
+
+        it "should handle empty configuration" do
+          name = 'test-vm'
+          bootstrap_config = {}
+          extra_disks = nil
+          @vm.should_not_receive(:generate_preamble)
+          @fog_interface.should_receive(:put_guest_customization_section).
+            with(@vm_id, 'test-vm', '')
+          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        end
+
+        it "should handle bootstrap vars being missing" do
+          name = 'test-vm'
+          bootstrap_config = {
+            script_path: 'hello_world.erb',
+            script_post_processor: 'remove_hello.rb',
+          }
+          extra_disks = []
+          @vm.should_receive(:generate_preamble).
+            with('hello_world.erb', 'remove_hello.rb', { extra_disks: [] }).
+            and_return('RETURNED_PREAMBLE')
+          @fog_interface.should_receive(:put_guest_customization_section).
+            with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
+          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        end
+
+      end
+
       context '#generate_preamble' do
         it "should interpolate vars hash into template" do
           vars = {:message => 'hello world'}

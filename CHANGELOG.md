@@ -1,3 +1,9 @@
+## 0.0.7 (2014-03-04)
+
+Bugfix:
+
+  - missing VM bootstrap->vars section would throw NilClass error
+
 ## 0.0.6 (2014-02-13)
 
 Features:

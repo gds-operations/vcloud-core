@@ -23,11 +23,27 @@ module Vcloud
         vcloud_attributes[:name]
       end
 
+      def self.get_ids_by_name_and_catalog name, catalog_name
+        raise "provide Catalog and vAppTemplate name" unless name && catalog_name
+        q = Query.new(
+          'vAppTemplate',
+          :filter => "name==#{name};catalogName==#{catalog_name}"
+        )
+        unless query_results = q.get_all_results
+          raise "Error retreiving #{q.type} query '#{q.filter}'"
+        end
+        query_results.collect do |record|
+          record[:href].split('/').last if record.key?(:href)
+        end
+      end
+
       def self.get catalog_name, catalog_item_name
-        raise "provide catalog and catalog item name to load vappTemplate" unless catalog_name && catalog_item_name
-        body = Vcloud::Fog::ServiceInterface.new.template(catalog_name, catalog_item_name)
-        raise 'Could not find template vApp' unless body && body.key?(:href)
-        self.new(body[:href].split('/').last)
+        ids = self.get_ids_by_name_and_catalog(catalog_item_name, catalog_name)
+        raise 'Could not find template vApp' if ids.size == 0
+        if ids.size > 1
+          raise "Template #{catalog_item_name} is not unique in catalog #{catalog_name}"
+        end
+        return self.new(ids.first)
       end
 
       def self.id_prefix

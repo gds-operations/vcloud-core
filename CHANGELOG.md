@@ -4,6 +4,25 @@ Features:
 
   - adds a configuration validator
 
+## 0.0.8 (2014-03-04)
+
+Bugfix:
+
+  - missing VM bootstrap->vars section would throw NilClass error
+
+## 0.0.7 (2014-03-03)
+
+Bugfixes:
+
+  - vAppTemplate not retrieved if ISO exists with similar name [#66758184]
+
+## 0.0.6 (2014-02-13)
+
+Features:
+
+  - adds EdgeGateway.interfaces for returning array of EdgeGatewayInterface objects
+    associated with the EdgeGateway
+  - adds EdgeGatewayInterface class, representing a vCloud GatewayInterfaceType
 
 ## 0.0.5 (2014-01-29)
 

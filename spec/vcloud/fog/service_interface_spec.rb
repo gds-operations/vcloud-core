@@ -18,17 +18,6 @@ module Vcloud
         expect { service_interface.vdc('DoesNotExist') }.to raise_exception(RuntimeError, 'vdc DoesNotExist cannot be found')
       end
 
-      it 'should raise a exception if named catalog cannot be found in the data returned' do
-
-        fog_facade = double(:FogFacade)
-        expect(fog_facade).to receive(:session).and_return { FOG_SESSION_RESPONSE }
-        expect(fog_facade).to receive(:get_organization).and_return { FOG_ORGANIZATION_RESPONSE }
-
-        service_interface = ServiceInterface.new(fog_facade)
-
-        expect { service_interface.catalog('DoesNotExist') }.to raise_exception(RuntimeError, 'catalog DoesNotExist cannot be found')
-      end
-
       context 'configure edge gateway' do
         before(:each) do
           @config = { :Blah => 'TestData' }

@@ -73,7 +73,7 @@ module Vcloud
 
       end
 
-      context "#vcloud_gateway_interface_by_id" do
+      context "Interface related tests" do
 
         before(:each) do
           @valid_ext_id = "12345678-70ac-487e-9c1e-124716764274"
@@ -117,29 +117,42 @@ module Vcloud
           @edgegw = EdgeGateway.new(@edgegw_id)
         end
 
-        it "should return nil if the network id is not found" do
-          expect(@edgegw.vcloud_gateway_interface_by_id(
-               '12345678-1234-1234-1234-123456789012')).
-            to be_nil
+        context "#vcloud_gateway_interface_by_id" do
+
+          it "should return nil if the network id is not found" do
+            expect(@edgegw.vcloud_gateway_interface_by_id(
+                 '12345678-1234-1234-1234-123456789012')).
+              to be_nil
+          end
+
+          it "should return a vcloud network hash if the network id is found" do
+            expect(@edgegw.vcloud_gateway_interface_by_id(@valid_int_id)).
+              to eq(
+                     {:Name=>"INTERNAL_NETWORK",
+                      :Network=>
+                       {:type=>"application/vnd.vmware.admin.network+xml",
+                        :name=>"INTERNAL_NETWORK",
+                        :href=>
+                         "https://example.com/api/admin/network/#{@valid_int_id}"},
+                      :InterfaceType=>"internal",
+                      :SubnetParticipation=>
+                       {:Gateway=>"192.168.1.1",
+                        :Netmask=>"255.255.255.0",
+                        :IpAddress=>"192.168.1.55"},
+                      :UseForDefaultRoute=>"false"
+                     },
+                   )
+          end
         end
 
-        it "should return a vcloud network hash if the network id is found" do
-          expect(@edgegw.vcloud_gateway_interface_by_id(@valid_int_id)).
-            to eq(
-                   {:Name=>"INTERNAL_NETWORK",
-                    :Network=>
-                     {:type=>"application/vnd.vmware.admin.network+xml",
-                      :name=>"INTERNAL_NETWORK",
-                      :href=>
-                       "https://example.com/api/admin/network/#{@valid_int_id}"},
-                    :InterfaceType=>"internal",
-                    :SubnetParticipation=>
-                     {:Gateway=>"192.168.1.1",
-                      :Netmask=>"255.255.255.0",
-                      :IpAddress=>"192.168.1.55"},
-                    :UseForDefaultRoute=>"false"
-                   },
-                 )
+        context "#interfaces" do
+
+          it "should return an array of EdgeGatewayInterface objects" do
+            interfaces_list = @edgegw.interfaces
+            expect(interfaces_list.class).to be(Array)
+            expect(interfaces_list.first.class).to be(Vcloud::Core::EdgeGatewayInterface)
+          end
+
         end
 
       end

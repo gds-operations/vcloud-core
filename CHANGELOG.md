@@ -1,3 +1,9 @@
+## Current...
+
+Features:
+
+  - adds a configuration validator
+
 ## 0.0.8 (2014-03-04)
 
 Bugfix:

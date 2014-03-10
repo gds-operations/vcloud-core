@@ -9,10 +9,10 @@ module Vcloud
       config = JSON.parse(json_string, :symbolize_names => true)
 
       if schema
-        validation = ConfigValidator.validate(:base, config, schema)
+        validation = Core::ConfigValidator.validate(:base, config, schema)
         unless validation.valid?
           validation.errors.each do |error|
-            Vcloud.logger.fatal(error)
+            Vcloud::Core.logger.fatal(error)
           end
           raise("Supplied configuration does not match supplied schema")
         end

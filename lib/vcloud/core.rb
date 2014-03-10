@@ -3,6 +3,7 @@ require 'vcloud/fog'
 
 require 'vcloud/core/version'
 
+require 'vcloud/core/config_loader'
 require 'vcloud/core/config_validator'
 require 'vcloud/core/entity'
 require 'vcloud/core/metadata_helper'

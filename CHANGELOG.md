@@ -1,8 +1,8 @@
-## Current...
+## 0.0.9 (2014-03-10)
 
 Features:
 
-  - adds a configuration validator
+  - adds a configuration loader and a configuration validator
 
 ## 0.0.8 (2014-03-04)
 

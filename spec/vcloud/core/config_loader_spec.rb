@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Vcloud::ConfigLoader do
 
   before(:all) do
-    @valid_config = valid_config
     @data_dir = File.join(File.dirname(__FILE__), "/data")
   end
 

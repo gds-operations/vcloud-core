@@ -3,16 +3,7 @@ require 'spec_helper'
 describe Vcloud::Query do
   context "attributes" do
 
-    context "our object should have methods" do
-      before(:each) do
-        @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        @query = Vcloud::Query.new()
-      end
-      it { @query.should respond_to(:run) }
-    end
-
-    context "#run with no type set" do
+    context "#run called with no type set on construction" do
       
       before(:each) do
         @mock_fog_interface = StubFogInterface.new
@@ -20,12 +11,7 @@ describe Vcloud::Query do
         @query = @query = Vcloud::Query.new()
       end
 
-      it "should call output_potential_query_types when run not provided with a type" do
-        @query.should_receive(:output_potential_query_types)
-        @query.run()
-      end
-
-      it "should output viable types when run not provided with a type" do
+      it "should get and reformat query types" do
         @mock_fog_interface.stub(:get_execute_query).and_return( 
           { :Link => [
             {:rel=>"down",
@@ -100,8 +86,6 @@ describe Vcloud::Query do
         @query.should_receive(:puts).with("Stuff 1,Stuff 2,Stuff 3\nMore Stuff 1,More Stuff 2,More Stuff 3\n")
         @query.run()
       end
-
-#      it "should output a query in yaml when run with a type"
 
     end
 

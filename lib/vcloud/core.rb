@@ -16,6 +16,7 @@ require 'vcloud/core/vapp'
 require 'vcloud/core/vapp_template'
 require 'vcloud/core/org_vdc_network'
 require 'vcloud/core/query'
+require 'vcloud/core/query_runner'
 
 module Vcloud
   module Core

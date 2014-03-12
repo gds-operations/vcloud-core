@@ -3,9 +3,6 @@ require 'csv'
 module Vcloud
   class Query
 
-    attr_reader :type
-    attr_reader :options
-
     def initialize(type=nil, options={})
       @type = type
       @options = options
@@ -14,20 +11,7 @@ module Vcloud
       @fsi = Vcloud::Fog::ServiceInterface.new
     end
 
-    def filter
-      options[:filter]
-    end
-
-    def output_format
-      options[:output_format]
-    end
-
-    def fields
-      options[:fields]
-    end
-
     def run()
-
       puts "options:" if @options[:debug]
       pp @options if @options[:debug]
 
@@ -38,6 +22,11 @@ module Vcloud
       end
     end
 
+  private
+
+    attr_reader :type
+    attr_reader :options
+
     def get_all_results
       results = []
       (1..get_num_pages).each do |page|
@@ -45,8 +34,6 @@ module Vcloud
       end
       results
     end
-
-    private
 
     def get_num_pages
       body = @fsi.get_execute_query(type=@type, @options)

@@ -18,6 +18,12 @@ module Vcloud
       end
     end
 
+    # <b>DEPRECATED:</b> Please use <tt>Vcloud::QueryRunner.run</tt> instead.
+    def get_all_results
+      warn "[DEPRECATION] `Vcloud::Query::get_all_results` is deprecated.  Please use `Vcloud::QueryRunner.run` instead."
+      @query_runner.run(@type, @options)
+    end
+
   private
     def output_query_results
       results = @query_runner.run(@type, @options)

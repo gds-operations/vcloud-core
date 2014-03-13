@@ -7,7 +7,7 @@ module Vcloud
       @type = type
       @options = options
       @options[:output_format] ||= 'tsv'
-      @vcloud_query_runner = Vcloud::QueryRunner.new
+      @query_runner = Vcloud::QueryRunner.new
     end
 
     def run()
@@ -20,24 +20,38 @@ module Vcloud
 
   private
     def output_query_results
-      results = @vcloud_query_runner.run(@type, @options)
+      results = @query_runner.run(@type, @options)
       output_header(results)
       output_results(results)
     end
 
     def output_available_query_types
-      queries = {}
-      type_width = 0
+      available_query_types = @query_runner.available_query_types
 
-      @vcloud_query_runner.available_query_types.each do |type, format|
-        queries[type] ||= []
+      available_queries = collate_formats_for_types(available_query_types)
+
+      print_query_types(available_queries)
+    end
+
+    def collate_formats_for_types(available_queries)
+      queries = Hash.new { |h, k| h[k]=[] }
+      available_queries.each do |type, format|
         queries[type] << format
-        type_width = [type_width, type.size].max
       end
+      queries
+    end
+
+    def print_query_types(queries)
+      type_width = longest_query_type(queries)
+
       queries.keys.sort.each do |type|
         puts "%-#{type_width}s %s" % [type, queries[type].sort.join(',')]
       end
+    end
 
+    def longest_query_type(queries)
+      return 0 if queries.keys.empty?
+      queries.keys.max_by{|key| key.length}.length
     end
 
     def output_header(results)

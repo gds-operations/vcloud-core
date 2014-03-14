@@ -10,7 +10,7 @@ module Vcloud
     end
 
     def available_query_types
-      query_list = @fsi.get_execute_query
+      query_list = @fsi.get_execute_query()
       query_list[:Link].select do |link|
         link[:rel] == 'down'
       end.map do |link|
@@ -34,7 +34,7 @@ module Vcloud
       body = @fsi.get_execute_query(type, options)
       last_page = body[:lastPage] || 1
       raise "Invalid lastPage (#{last_page}) in query results" unless last_page.is_a? Integer
-      return last_page.to_i
+      last_page.to_i
     end
 
     def get_results_page(page, type, options)
@@ -46,10 +46,13 @@ module Vcloud
         raise "Access denied: #{e.message}"
       end
 
-      records = body.keys.detect {|key| key.to_s =~ /Record|Reference$/}
+      records = key_of_first_record_or_reference(body)
       body[records] = [body[records]] if body[records].is_a?(Hash)
-      return nil if body[records].nil? || body[records].empty?
       body[records]
+    end
+
+    def key_of_first_record_or_reference(body)
+      body.keys.detect { |key| key.to_s =~ /Record|Reference$/ }
     end
   end
 end

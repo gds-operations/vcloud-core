@@ -86,4 +86,3 @@ describe Vcloud::Query do
   end
 
 end
-

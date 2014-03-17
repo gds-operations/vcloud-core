@@ -168,4 +168,3 @@ describe Vcloud::QueryRunner do
     end
   end
 end
-

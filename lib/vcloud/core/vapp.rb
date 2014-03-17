@@ -13,8 +13,8 @@ module Vcloud
       end
 
       def self.get_by_name(name)
-        q = Query.new('vApp', :filter => "name==#{name}")
-        unless res = q.get_all_results
+        q = QueryRunner.new
+        unless res = q.run('vApp', :filter => "name==#{name}")
           raise "Error finding vApp by name #{name}"
         end
         case res.size

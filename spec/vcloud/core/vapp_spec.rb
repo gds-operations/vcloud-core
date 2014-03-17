@@ -52,16 +52,18 @@ module Vcloud
           q_results = [
             { :name => 'vapp-test-1', :href => @vapp_id }
           ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==vapp-test-1").and_return(mock_query)
+          mock_query = double(:query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           obj = Vapp.get_by_name('vapp-test-1')
           expect(obj.class).to be(Vcloud::Core::Vapp)
         end
 
         it "should raise an error if no vApp with that name exists" do
           q_results = [ ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==vapp-test-1").and_return(mock_query)
+          mock_query = double(:query_runner)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
         end
 
@@ -70,8 +72,9 @@ module Vcloud
             { :name => 'vapp-test-1', :href => @vapp_id },
             { :name => 'vapp-test-1', :href => '/bogus' },
           ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==vapp-test-1").and_return(mock_query)
+          mock_query = double(:query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
         end
 

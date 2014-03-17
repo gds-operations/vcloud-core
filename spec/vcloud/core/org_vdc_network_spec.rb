@@ -110,7 +110,7 @@ module Vcloud
             q_results = [
               { :name => @net_name, :href => "/#{@net_id}" }
             ]
-            @mock_net_query = double(:query, :get_all_results => q_results)
+            @mock_net_query = double(:query_runner, :run => q_results)
             @config = {
               :name => @net_name,
               :vdc_name => @vdc_name,

@@ -293,15 +293,19 @@ module Vcloud
           vdc_results = [
             { :vdcName => 'vdc-test-1' }
           ]
-          mock_vdc_query = double(:query, :get_all_results => vdc_results)
+          mock_vdc_query = double(:query_runner)
 
           storage_profile_results = [
             { :href => 'test-href' }
           ]
-          mock_sp_query = double(:query, :get_all_results => storage_profile_results)
+          mock_sp_query = double(:query_runner)
 
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==#{@vapp_name}").and_return(mock_vdc_query)
-          Vcloud::Query.should_receive(:new).with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").and_return(mock_sp_query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          mock_sp_query.should_receive(:run).
+            with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
+            and_return(storage_profile_results)
 
           generated_storage_profile = { name: 'storage_profile_name', href: 'test-href' }
           @fog_interface.should_receive(:put_vm).with(@vm_id, @vm_name, { :StorageProfile => generated_storage_profile} ).and_return(true)
@@ -313,13 +317,17 @@ module Vcloud
           vdc_results = [
             { :vdcName => 'vdc-test-1' }
           ]
-          mock_vdc_query = double(:query, :get_all_results => vdc_results)
+          mock_vdc_query = double(:query_runner)
 
           storage_profile_results = []
-          mock_sp_query = double(:query, :get_all_results => storage_profile_results)
+          mock_sp_query = double(:query_runner)
 
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==#{@vapp_name}").and_return(mock_vdc_query)
-          Vcloud::Query.should_receive(:new).with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").and_return(mock_sp_query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          mock_sp_query.should_receive(:run).
+            with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
+            and_return(storage_profile_results)
 
           expect{ @vm.update_storage_profile(storage_profile) }.to raise_error("storage profile not found" )
         end
@@ -329,13 +337,17 @@ module Vcloud
           vdc_results = [
             { :vdcName => 'vdc-test-1' }
           ]
-          mock_vdc_query = double(:query, :get_all_results => vdc_results)
+          mock_vdc_query = double(:query_runner)
 
           storage_profile_results = [ { :id => 'test-href'  }]
-          mock_sp_query = double(:query, :get_all_results => storage_profile_results)
+          mock_sp_query = double(:query_runner)
 
-          Vcloud::Query.should_receive(:new).with('vApp', :filter => "name==#{@vapp_name}").and_return(mock_vdc_query)
-          Vcloud::Query.should_receive(:new).with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").and_return(mock_sp_query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          mock_sp_query.should_receive(:run).
+            with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
+            and_return(storage_profile_results)
 
           expect{ @vm.update_storage_profile(storage_profile) }.to raise_error("storage profile not found" )
         end

@@ -12,8 +12,8 @@ module Vcloud
       end
 
       def self.get_by_name(name)
-        q = Query.new('orgVdc', :filter => "name==#{name}")
-        unless res = q.get_all_results
+        q = QueryRunner.new
+        unless res = q.run('orgVdc', :filter => "name==#{name}")
           raise "Error finding vDC by name #{name}"
         end
         raise "vDc #{name} not found" unless res.size == 1

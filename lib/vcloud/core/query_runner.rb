@@ -46,9 +46,9 @@ module Vcloud
         raise "Access denied: #{e.message}"
       end
 
-      records = key_of_first_record_or_reference(body)
-      body[records] = [body[records]] if body[records].is_a?(Hash)
-      body[records]
+      record_key = key_of_first_record_or_reference(body)
+      body[record_key] = [body[record_key]] if body[record_key].is_a?(Hash)
+      body[record_key]
     end
 
     def key_of_first_record_or_reference(body)

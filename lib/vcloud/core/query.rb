@@ -3,11 +3,11 @@ require 'csv'
 module Vcloud
   class Query
 
-    def initialize(type=nil, options={})
+    def initialize(type=nil, options={}, query_runner = Vcloud::QueryRunner.new)
       @type = type
       @options = options
       @options[:output_format] ||= 'tsv'
-      @query_runner = Vcloud::QueryRunner.new
+      @query_runner = query_runner
     end
 
     def run()

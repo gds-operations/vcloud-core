@@ -4,23 +4,18 @@ describe Vcloud::Query do
   context "attributes" do
 
     context "#run called with no type set on construction" do
-      
-      before(:each) do
-        @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        @query = @query = Vcloud::Query.new()
-      end
 
       it "should get and reformat query types" do
-        @mock_fog_interface.stub(:get_execute_query).and_return( 
-          { :Link => [
-            {:rel=>"down",
-             :href=>"query?type=alice&#38;format=references"},
-            {:rel=>"down",
-             :href=>"query?type=alice&#38;format=records"},
-            {:rel=>"down",
-             :href=>"query?type=bob&#38;format=records"},
-        ]})
+        query_runner = double(Vcloud::QueryRunner)
+        allow(query_runner).to receive(:available_query_types) {
+          [
+            ['alice', 'references'],
+            ['alice', 'records'],
+            ['bob', 'records']
+          ]
+        }
+
+        @query = Vcloud::Query.new(nil, {}, query_runner)
 
         @query.should_receive(:puts).with("alice records,references")
         @query.should_receive(:puts).with("bob   records")
@@ -31,23 +26,26 @@ describe Vcloud::Query do
     end
 
     context "gracefully handle zero results" do
+
       before(:each) do
-        @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        @query = Vcloud::Query.new('bob')
-        @mock_fog_interface.stub(:get_execute_query).and_return({})
+        @query_runner = double(Vcloud::QueryRunner)
+        allow(@query_runner).to receive(:run) { {} }
       end
 
       it "should not output when given tsv output_format" do
-        @query = Vcloud::Query.new('bob', :output_format => 'tsv')
-        @query.should_not_receive(:puts)
-        @query.run()
+        query = Vcloud::Query.new('bob', {:output_format => 'tsv'}, @query_runner)
+
+        query.should_not_receive(:puts)
+
+        query.run()
       end
 
       it "should not output when given csv output_format" do
-        @query = Vcloud::Query.new('bob', :output_format => 'csv')
-        @query.should_not_receive(:puts)
-        @query.run()
+        query = Vcloud::Query.new('bob', {:output_format => 'csv'}, @query_runner)
+
+        query.should_not_receive(:puts)
+
+        query.run()
       end
 
     end
@@ -55,35 +53,31 @@ describe Vcloud::Query do
     context "get results with a single response page" do
 
       before(:each) do
-        @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        @query = Vcloud::Query.new('bob')
-        @mock_fog_interface.stub(:get_execute_query).and_return( { 
-          :WibbleRecord=>
-            [{:field1=>"Stuff 1",
-              :field2=>"Stuff 2",
-              :field3=>"Stuff 3",
-            },
-             {:field1=>"More Stuff 1",
-              :field2=>"More Stuff 2",
-              :field3=>"More Stuff 3",
-            },
-            ]
-        } )
+        @query_runner = double(Vcloud::QueryRunner)
+        allow(@query_runner).to receive(:run) {
+          [
+            {:field1 => "Stuff 1", :field2 => "Stuff 2"},
+            {:field1 => "More Stuff 1", :field2 => "More Stuff 2"}
+          ]
+        }
       end
 
       it "should output a query in tsv when run with a type" do
-        @query = Vcloud::Query.new('bob', :output_format => 'tsv')
-        @query.should_receive(:puts).with("field1\tfield2\tfield3")
-        @query.should_receive(:puts).with("Stuff 1\tStuff 2\tStuff 3")
-        @query.should_receive(:puts).with("More Stuff 1\tMore Stuff 2\tMore Stuff 3")
+        @query = Vcloud::Query.new('bob', {:output_format => 'tsv'}, @query_runner)
+
+        @query.should_receive(:puts).with("field1\tfield2")
+        @query.should_receive(:puts).with("Stuff 1\tStuff 2")
+        @query.should_receive(:puts).with("More Stuff 1\tMore Stuff 2")
+
         @query.run()
       end
 
       it "should output a query in csv when run with a type" do
-        @query = Vcloud::Query.new('bob', :output_format => 'csv')
-        @query.should_receive(:puts).with("field1,field2,field3\n")
-        @query.should_receive(:puts).with("Stuff 1,Stuff 2,Stuff 3\nMore Stuff 1,More Stuff 2,More Stuff 3\n")
+        @query = Vcloud::Query.new('bob', {:output_format => 'csv'}, @query_runner)
+
+        @query.should_receive(:puts).with("field1,field2\n")
+        @query.should_receive(:puts).with("Stuff 1,Stuff 2\nMore Stuff 1,More Stuff 2\n")
+
         @query.run()
       end
 

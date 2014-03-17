@@ -38,13 +38,7 @@ module Vcloud
     end
 
     def get_results_page(page, type, options)
-      raise "Must supply a page number" if page.nil?
-
-      begin
-        body = @fsi.get_execute_query(type, options.merge({:page=>page}))
-      rescue ::Fog::Compute::VcloudDirector::BadRequest, ::Fog::Compute::VcloudDirector::Forbidden => e
-        raise "Access denied: #{e.message}"
-      end
+      body = @fsi.get_execute_query(type, options.merge({:page=>page}))
 
       record_key = key_of_first_record_or_reference(body)
       body[record_key] = [body[record_key]] if body[record_key].is_a?(Hash)

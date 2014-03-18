@@ -36,7 +36,7 @@ describe Vcloud::QueryRunner do
           {:rel  => 'down',
            :href => 'query?type=alice&#38;format=references'},
           {:rel  => 'down',
-           :href => 'query?type=alice&#38;format=references'},
+           :href => 'query?type=bob&#38;format=references'},
         ]})
 
       result = @query_runner.available_query_types

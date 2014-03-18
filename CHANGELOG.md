@@ -1,3 +1,13 @@
+## 0.0.10 (2014-03-17)
+
+Features:
+
+  - separates out the query runner tool that interfaces with fog from the CLI tool
+
+Deprecated:
+
+  - Vcloud::Query.get_all_results should no longer be used - use Vcloud::QueryRunner.run instead
+
 ## 0.0.9 (2014-03-10)
 
 Features:

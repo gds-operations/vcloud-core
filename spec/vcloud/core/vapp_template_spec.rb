@@ -50,10 +50,11 @@ module Vcloud
 
         it 'should raise a RuntimeError if there is no template' do
           q_results = [ ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).
+          mock_query = double(:query_runner)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
-            and_return(mock_query)
+            and_return(q_results)
           expect { VappTemplate.get('test_catalog', 'test_template') }.
             to raise_error('Could not find template vApp')
         end
@@ -65,10 +66,11 @@ module Vcloud
             { :name => 'test_template',
               :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890ab002" },
           ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).
+          mock_query = double(:query_runner)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
-            and_return(mock_query)
+            and_return(q_results)
           expect { VappTemplate.get('test_catalog', 'test_template') }.
             to raise_error('Template test_template is not unique in catalog test_catalog')
         end
@@ -78,10 +80,11 @@ module Vcloud
             { :name => 'test_template',
               :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890abcde" }
           ]
-          mock_query = double(:query, :get_all_results => q_results)
-          Vcloud::Query.should_receive(:new).
+          mock_query = double(:query)
+          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
-            and_return(mock_query)
+            and_return(q_results)
           test_template = VappTemplate.get('test_catalog', 'test_template')
           test_template.id.should == 'vappTemplate-12345678-90ab-cdef-0123-4567890abcde'
         end

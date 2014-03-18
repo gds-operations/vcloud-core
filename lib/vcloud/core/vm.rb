@@ -139,12 +139,12 @@ module Vcloud
       end
 
       def get_storage_profile_href_by_name(storage_profile_name, vapp_name)
-        q = Query.new('vApp', :filter => "name==#{vapp_name}")
-        vdc_results = q.get_all_results
+        q = QueryRunner.new
+        vdc_results = q.run('vApp', :filter => "name==#{vapp_name}")
         vdc_name = vdc_results.first[:vdcName]
 
-        q = Query.new('orgVdcStorageProfile', :filter => "name==#{storage_profile_name};vdcName==#{vdc_name}")
-        sp_results = q.get_all_results
+        q = QueryRunner.new
+        sp_results = q.run('orgVdcStorageProfile', :filter => "name==#{storage_profile_name};vdcName==#{vdc_name}")
 
         if sp_results.empty? or !sp_results.first.has_key?(:href)
           raise "storage profile not found"

@@ -33,9 +33,7 @@ module Vcloud
 
     def output_available_query_types
       available_query_types = @query_runner.available_query_types
-
       available_queries = collate_formats_for_types(available_query_types)
-
       print_query_types(available_queries)
     end
 

@@ -53,7 +53,7 @@ with the potential record types to display (default 'records')
 
 #### Examples:
 
-NB: examples assume FOG_CREDENTIAL has been set accordingly.
+NB: examples assume FOG_CREDENTIAL or FOG_VCLOUD_TOKEN has been set accordingly.
 
     # Get a list of vApps, in YAML
     vcloud-query -o yaml vApp

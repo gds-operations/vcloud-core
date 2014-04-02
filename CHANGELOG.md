@@ -1,3 +1,9 @@
+## 0.0.11 (2014-04-01)
+
+Features:
+
+  - move to require fog v1.21 to allow use of vcloud_token via ENV
+
 ## 0.0.10 (2014-03-17)
 
 Features:

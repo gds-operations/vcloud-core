@@ -1,6 +1,8 @@
 require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
 
+task :default => [:spec, :feature]
+
 RSpec::Core::RakeTask.new(:spec) do |task|
   # Set a bogus Fog credential, otherwise it's possible for the unit
   # tests to accidentially run (and succeed against!) an actual
@@ -10,7 +12,6 @@ RSpec::Core::RakeTask.new(:spec) do |task|
   task.pattern = FileList['spec/vcloud/**/*_spec.rb']
 end
 
-task :default => [:spec]
 Cucumber::Rake::Task.new(:feature) do |t|
   t.cucumber_opts = "--format pretty --no-source"
 end

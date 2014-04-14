@@ -101,3 +101,23 @@ Entity metadata queries have their own subsyntax incorporating the value types:
 
 See http://pubs.vmware.com/vcd-51/topic/com.vmware.vcloud.api.doc_51/GUID-4FD71B6D-6797-4B8E-B9F0-618F4ACBEFAC.html for details.
 
+## Testing
+
+Default target: `bundle exec rake`
+Runs the unit tests
+
+* Unit tests only: `bundle exec rake spec`
+* Integration tests: `bundle exec rake integration`
+
+### setting up and describing your environment for test runs
+
+You need access to a suitable vCloud Director organization to run the integration tests - it also needs some basic
+configuration: an Edge Gateway, and a routed network.
+It is not necessarily safe to run them against an existing environment, unless care is taken with the entities being
+tested.
+
+A number of ENV vars specifying items under test in the environment need to be set for the tests to run successfully.
+
+- `VCLOUD_EDGE_GATEWAY`: _name of edge gateway under test_
+- `VCLOUD_NETWORK1_ID`: _Id of network under test_
+- `VCLOUD_PROVIDER_NETWORK_ID`: _Id of the uplink network (or external network) of the VCLOUD_EDGE_GATEWAY under test_

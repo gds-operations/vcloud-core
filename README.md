@@ -18,18 +18,6 @@ Or install it yourself as:
 
     $ gem install vcloud-core
 
-## Usage
-
-TODO
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
 ## VCloud Query
 
 ### Get results from the vCloud Query API
@@ -121,3 +109,11 @@ A number of ENV vars specifying items under test in the environment need to be s
 - `VCLOUD_EDGE_GATEWAY`: _name of edge gateway under test_
 - `VCLOUD_NETWORK1_ID`: _Id of network under test_
 - `VCLOUD_PROVIDER_NETWORK_ID`: _Id of the uplink network (or external network) of the VCLOUD_EDGE_GATEWAY under test_
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request

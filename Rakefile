@@ -1,4 +1,5 @@
 require 'rspec/core/rake_task'
+require 'cucumber/rake/task'
 
 RSpec::Core::RakeTask.new(:spec) do |task|
   # Set a bogus Fog credential, otherwise it's possible for the unit
@@ -10,6 +11,9 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 task :default => [:spec]
+Cucumber::Rake::Task.new(:feature) do |t|
+  t.cucumber_opts = "--format pretty --no-source"
+end
 
 RSpec::Core::RakeTask.new('integration') do |t|
   t.pattern = FileList['spec/integration/**/*_spec.rb']

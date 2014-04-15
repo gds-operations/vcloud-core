@@ -14,6 +14,7 @@ end
 
 Cucumber::Rake::Task.new(:feature) do |t|
   t.cucumber_opts = "--format pretty --no-source"
+  t.fork = false
 end
 
 RSpec::Core::RakeTask.new('integration') do |t|

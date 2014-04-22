@@ -89,6 +89,16 @@ Entity metadata queries have their own subsyntax incorporating the value types:
 
 See http://pubs.vmware.com/vcd-51/topic/com.vmware.vcloud.api.doc_51/GUID-4FD71B6D-6797-4B8E-B9F0-618F4ACBEFAC.html for details.
 
+## The vCloud API
+
+vCloud Tools currently use version 5.1 of the [vCloud API](http://pubs.vmware.com/vcd-51/index.jsp?topic=%2Fcom.vmware.vcloud.api.doc_51%2FGUID-F4BF9D5D-EF66-4D36-A6EB-2086703F6E37.html). Version 5.5 may work but is not currently supported. You should be able to access the 5.1 API in a 5.5 environment, and this *is* currently supported.
+
+The default version is defined in [Fog](https://github.com/fog/fog/blob/244a049918604eadbcebd3a8eaaf433424fe4617/lib/fog/vcloud_director/compute.rb#L32).
+
+If you want to be sure you are pinning to 5.1, or use 5.5, you can set the API version to use in your fog file, e.g.
+
+`vcloud_director_api_version: 5.1`
+
 ## Debugging
 
 `export EXCON_DEBUG=true` - this will print out the API requests and responses.

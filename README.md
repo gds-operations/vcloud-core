@@ -111,7 +111,7 @@ Default target: `bundle exec rake`
 Runs the unit tests and feature tests.
 
 * Unit tests only: `bundle exec rake spec`
-* Feature tests only: `bundle exec rake feature`
+* Feature tests only: `bundle exec rake features`
 * Integration tests: `bundle exec rake integration`
 
 ### setting up and describing your environment for test runs

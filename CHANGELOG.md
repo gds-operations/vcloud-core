@@ -1,3 +1,9 @@
+## 0.0.12 (2014-04-22)
+
+Bugfix:
+
+  - move to require fog v1.22 to allow for issue with progress task bar exposed with upgrade to vCloud Director 5.5
+
 ## 0.0.11 (2014-04-01)
 
 Features:

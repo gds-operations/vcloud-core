@@ -89,6 +89,12 @@ Entity metadata queries have their own subsyntax incorporating the value types:
 
 See http://pubs.vmware.com/vcd-51/topic/com.vmware.vcloud.api.doc_51/GUID-4FD71B6D-6797-4B8E-B9F0-618F4ACBEFAC.html for details.
 
+## Debugging
+
+`export EXCON_DEBUG=true` - this will print out the API requests and responses.
+
+`export DEBUG=true` - this will show you the stack trace when there is an exception instead of just the message.
+
 ## Testing
 
 Default target: `bundle exec rake`

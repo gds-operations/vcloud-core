@@ -98,6 +98,30 @@ module Vcloud
 
         end
 
+        context "when called with type vAppTemplate and name, vdcName field options" do
+
+          before(:all) do
+            @results = QueryRunner.new.run('vAppTemplate', fields: "name,vdcName")
+          end
+
+          it "result should have a defined href element" do
+            expect(@results.first[:name]).to be_true
+          end
+
+          it "result should have a defined name element" do
+            expect(@results.first[:name]).to be_true
+          end
+
+          it "result should have a defined vdcName element" do
+            expect(@results.first[:vdcName]).to be_true
+          end
+
+          it "result should not have a isDeployed key" do
+            expect(@results.first.key?(:isDeployed)).to be false
+          end
+
+        end
+
       end
 
     end

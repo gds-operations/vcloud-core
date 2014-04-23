@@ -130,6 +130,28 @@ module Vcloud
 
         end
 
+        context "when called with type vAppTemplate and a filter option" do
+
+          before(:all) do
+            @all_results = QueryRunner.new.run('vAppTemplate')
+            @last_result_href = @all_results.last[:href]
+          end
+
+          it "original query must return more than one record for our later test to be valid" do
+            expect(@all_results.size).to be > 1
+          end
+
+          it "should return just the single record when filtered by href" do
+            filtered_result = QueryRunner.new.run(
+              'vAppTemplate',
+              filter: "href==#{@last_result_href}",
+            )
+            expect(filtered_result.size).to be(1)
+            expect(filtered_result.first.fetch(:href)).to eq(@last_result_href)
+          end
+
+        end
+
       end
 
     end

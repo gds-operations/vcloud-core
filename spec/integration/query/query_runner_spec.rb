@@ -56,6 +56,50 @@ module Vcloud
 
       end
 
+      context "#run" do
+
+        context "when called with type vAppTemplate and no options" do
+
+          before(:all) do
+            @results = QueryRunner.new.run('vAppTemplate')
+          end
+
+          it "should have returned a results Array" do
+            expect(@results.class).to eq(Array)
+          end
+
+          it "should have returned at least one result" do
+            expect(@results.size).to be > 1
+          end
+
+          it "each results element should be a Hash" do
+            expect(@results.first.class).to eq(Hash)
+          end
+
+          it "result should have a defined name element" do
+            expect(@results.first[:name]).to be_true
+          end
+
+          it "result should have a defined href element" do
+            expect(@results.first[:href]).to be_true
+          end
+
+          it "result should have a defined vdcName element" do
+            expect(@results.first[:vdcName]).to be_true
+          end
+
+          it "result should have a defined isDeployed element" do
+            expect(@results.first[:isDeployed]).to be_true
+          end
+
+          it "result should not have a 'bogusElement' element" do
+            expect(@results.first.key?(:bogusElement)).to be false
+          end
+
+        end
+
+      end
+
     end
   end
 end

@@ -10,48 +10,56 @@ module Vcloud
           @query_types = QueryRunner.new.available_query_types
         end
 
-        it "should return an Array of available query types" do
-          expect(@query_types.class).to eq(Array)
+        context "confirm accessing the query API is functional" do
+
+          it "should return an Array of available query types" do
+            expect(@query_types.class).to eq(Array)
+          end
+
+          it "should return at least one query type" do
+            expect(@query_types.size).to be >= 1
+          end
+
         end
 
-        it "should return at least one query type" do
-          expect(@query_types.size).to be > 1
-        end
+        context "must support all the vCloud entity types our tools need, in 'records' format" do
 
-        it "should return a vApp type" do
-          expect(@query_types.detect { |a| a.first == "vApp" }).to be_true
-        end
+          it "must support the vApp entity type" do
+            expect(@query_types.detect { |a| a == [ "vApp", "records" ] }).to be_true
+          end
 
-        it "should return a vm type" do
-          expect(@query_types.detect { |a| a.first == "vm" }).to be_true
-        end
+          it "must support the vm entity type" do
+            expect(@query_types.detect { |a| a == [ "vm", "records" ] }).to be_true
+          end
 
-        it "should return an orgVdc type" do
-          expect(@query_types.detect { |a| a.first == "orgVdc" }).to be_true
-        end
+          it "must support the orgVdc entity type" do
+            expect(@query_types.detect { |a| a == [ "orgVdc", "records" ] }).to be_true
+          end
 
-        it "should return an orgVdcNetwork type" do
-          expect(@query_types.detect { |a| a.first == "orgVdcNetwork" }).to be_true
-        end
+          it "must support the orgVdcNetwork entity type" do
+            expect(@query_types.detect { |a| a == [ "orgVdcNetwork", "records" ] }).to be_true
+          end
 
-        it "should return an edgeGateway type" do
-          expect(@query_types.detect { |a| a.first == "edgeGateway" }).to be_true
-        end
+          it "must support the edgeGateway entity type" do
+            expect(@query_types.detect { |a| a == [ "edgeGateway", "records" ] }).to be_true
+          end
 
-        it "should return a task type" do
-          expect(@query_types.detect { |a| a.first == "task" }).to be_true
-        end
+          it "must support the task entity type" do
+            expect(@query_types.detect { |a| a == [ "task", "records" ] }).to be_true
+          end
 
-        it "should return a catalog type" do
-          expect(@query_types.detect { |a| a.first == "catalog" }).to be_true
-        end
+          it "must support the catalog entity type" do
+            expect(@query_types.detect { |a| a == [ "catalog", "records" ] }).to be_true
+          end
 
-        it "should return a catalogItem type" do
-          expect(@query_types.detect { |a| a.first == "catalogItem" }).to be_true
-        end
+          it "must support the catalogItem entity type" do
+            expect(@query_types.detect { |a| a == [ "catalogItem", "records" ] }).to be_true
+          end
 
-        it "should return a vAppTemplate type" do
-          expect(@query_types.detect { |a| a.first == "vAppTemplate" }).to be_true
+          it "must support the vAppTemplate entity type" do
+            expect(@query_types.detect { |a| a == [ "vAppTemplate", "records" ] }).to be_true
+          end
+
         end
 
       end
@@ -98,7 +106,7 @@ module Vcloud
 
         end
 
-        context "when called with type vAppTemplate and name, vdcName field options" do
+        context "when called with type vAppTemplate and output fields limited to name & vdcName" do
 
           before(:all) do
             @results = QueryRunner.new.run('vAppTemplate', fields: "name,vdcName")

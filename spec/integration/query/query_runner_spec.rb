@@ -36,51 +36,51 @@ module Vcloud
 
         context "confirm accessing the query API is functional" do
 
-          it "should return an Array of available query types" do
+          it "returns an Array of available query types" do
             expect(@query_types.class).to eq(Array)
           end
 
-          it "should return at least one query type" do
+          it "returns at least one query type" do
             expect(@query_types.size).to be >= 1
           end
 
         end
 
-        context "must support all the vCloud entity types our tools need, in 'records' format" do
+        context "it supports all the vCloud entity types our tools need" do
 
-          it "must support the vApp entity type" do
+          it "supports the vApp entity type" do
             expect(@query_types.detect { |a| a == [ "vApp", "records" ] }).to be_true
           end
 
-          it "must support the vm entity type" do
+          it "supports the vm entity type" do
             expect(@query_types.detect { |a| a == [ "vm", "records" ] }).to be_true
           end
 
-          it "must support the orgVdc entity type" do
+          it "supports the orgVdc entity type" do
             expect(@query_types.detect { |a| a == [ "orgVdc", "records" ] }).to be_true
           end
 
-          it "must support the orgVdcNetwork entity type" do
+          it "supports the orgVdcNetwork entity type" do
             expect(@query_types.detect { |a| a == [ "orgVdcNetwork", "records" ] }).to be_true
           end
 
-          it "must support the edgeGateway entity type" do
+          it "supports the edgeGateway entity type" do
             expect(@query_types.detect { |a| a == [ "edgeGateway", "records" ] }).to be_true
           end
 
-          it "must support the task entity type" do
+          it "supports the task entity type" do
             expect(@query_types.detect { |a| a == [ "task", "records" ] }).to be_true
           end
 
-          it "must support the catalog entity type" do
+          it "supports the catalog entity type" do
             expect(@query_types.detect { |a| a == [ "catalog", "records" ] }).to be_true
           end
 
-          it "must support the catalogItem entity type" do
+          it "supports the catalogItem entity type" do
             expect(@query_types.detect { |a| a == [ "catalogItem", "records" ] }).to be_true
           end
 
-          it "must support the vAppTemplate entity type" do
+          it "supports the vAppTemplate entity type" do
             expect(@query_types.detect { |a| a == [ "vAppTemplate", "records" ] }).to be_true
           end
 

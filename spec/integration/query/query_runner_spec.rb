@@ -111,7 +111,7 @@ module Vcloud
           end
 
           it "returns at least the number of vApps that we created" do
-            expect(@all_vapps.size).to be > @number_of_vapps_to_create
+            expect(@all_vapps.size).to be >= @number_of_vapps_to_create
           end
 
           it "returns a record with a defined :name field" do

@@ -136,14 +136,10 @@ module Vcloud
 
         end
 
-        context "vApp query output fields can be limited to 'name,vdcName'" do
+        context "Query output fields can be limited by supplying a comma-separated :fields list" do
 
           before(:all) do
             @results = QueryRunner.new.run('vApp', fields: "name,vdcName")
-          end
-
-          it "returns a record with a defined href element" do
-            expect(@results.first[:href]).not_to be_empty
           end
 
           it "returns a record with a defined name element" do
@@ -154,8 +150,31 @@ module Vcloud
             expect(@results.first[:vdcName]).not_to be_empty
           end
 
-          it "does not return a 'status' record" do
+          it "does not return a 'status' record, which we know is available for our vApp type" do
             expect(@results.first.key?(:status)).to be false
+          end
+
+        end
+
+        context "Query API does not support an empty :fields list" do
+
+          it "raises a BadRequest exception, if empty string is supplied for :fields" do
+            expect { QueryRunner.new.run('vApp', fields: "") }.
+              to raise_exception(::Fog::Compute::VcloudDirector::BadRequest)
+          end
+
+        end
+
+        context "Query API returns href field regardless of filter :fields selected" do
+
+          it "returns href as well as name, if just 'name' is asked for" do
+            results = QueryRunner.new.run('vApp', fields: "name")
+            expect(results.first.keys.sort).to eq([:href, :name])
+          end
+
+          it "returns href, name, vdcName if 'name,vdcName' is asked for" do
+            results = QueryRunner.new.run('vApp', fields: "name,vdcName")
+            expect(results.first.keys.sort).to eq([:href, :name, :vdcName])
           end
 
         end

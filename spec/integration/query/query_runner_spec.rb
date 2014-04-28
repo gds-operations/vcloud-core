@@ -6,7 +6,7 @@ module Vcloud
 
       required_env = {
         'VCLOUD_VDC_NAME' =>
-           'to the name of an orgVdc to use to instanciate vApps into',
+           'to the name of an orgVdc to use to instantiate vApps into',
         'VCLOUD_TEMPLATE_NAME' =>
            'to the name of a vAppTemplate to use create vApps in tests',
         'VCLOUD_CATALOG_NAME' =>

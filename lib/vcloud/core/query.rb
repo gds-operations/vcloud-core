@@ -32,9 +32,8 @@ module Vcloud
     end
 
     def output_available_query_types
-      @query_runner.available_query_types.each do |type_record_pair|
-        (type, record_format) = type_record_pair
-        puts type if record_format == "records"
+      @query_runner.available_query_types.each do |entity_type|
+        puts entity_type
       end
     end
 

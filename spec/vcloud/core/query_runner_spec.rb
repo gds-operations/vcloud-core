@@ -8,41 +8,39 @@ describe Vcloud::QueryRunner do
   end
 
   context '#available_query_types' do
-    it 'should return empty array if no data' do
+
+    it 'should return empty array if no query type links are returned from API' do
       @mock_fog_interface.stub(:get_execute_query).and_return({:Link => {}})
-
       result = @query_runner.available_query_types
-
       result.size.should == 0
     end
 
-    it 'should parse the query types returned' do
+    it 'should parse the format=records query hrefs into a list of entity types' do
+      @mock_fog_interface.stub(:get_execute_query).and_return(
+        {:Link => [
+          {:rel  => 'down',
+           :href => 'query?type=alice&#38;format=records'},
+          {:rel  => 'down',
+           :href => 'query?type=bob&#38;format=records'},
+          {:rel  => 'down',
+           :href => 'query?type=charlie&#38;format=records'},
+        ]})
+      expect(@query_runner.available_query_types).to eq(['alice', 'bob', 'charlie'])
+    end
+
+    it 'should ignore query links with format=references and format=idrecords' do
       @mock_fog_interface.stub(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',
            :href => 'query?type=alice&#38;format=references'},
+          {:rel  => 'down',
+           :href => 'query?type=bob&#38;format=idrecords'},
+          {:rel  => 'down',
+           :href => 'query?type=charlie&#38;format=records'},
         ]})
-
-      result = @query_runner.available_query_types
-
-      result.size.should == 1
-      result[0][0].should == 'alice'
-      result[0][1].should == 'references'
+      expect(@query_runner.available_query_types).to eq(['charlie'])
     end
 
-    it 'should return the set of data' do
-      @mock_fog_interface.stub(:get_execute_query).and_return(
-        {:Link => [
-          {:rel  => 'down',
-           :href => 'query?type=alice&#38;format=references'},
-          {:rel  => 'down',
-           :href => 'query?type=bob&#38;format=references'},
-        ]})
-
-      result = @query_runner.available_query_types
-
-      result.size.should == 2
-    end
   end
 
   context '#run' do

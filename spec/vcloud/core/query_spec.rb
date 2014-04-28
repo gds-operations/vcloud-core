@@ -5,22 +5,14 @@ describe Vcloud::Query do
 
     context "#run called with no type set on construction" do
 
-      it "should output all types that are available in 'records' format" do
+      it "should output all types that are available" do
         query_runner = double(Vcloud::QueryRunner)
-        allow(query_runner).to receive(:available_query_types) {
-          [
-            ['alice', 'references'],
-            ['alice', 'records'],
-            ['bob', 'records'],
-            ['charlie', 'references'],
-          ]
-        }
+        allow(query_runner).to receive(:available_query_types) { [ 'alice', 'bob' ] }
 
         @query = Vcloud::Query.new(nil, {}, query_runner)
 
         @query.should_receive(:puts).with("alice")
         @query.should_receive(:puts).with("bob")
-        @query.should_not_receive(:puts).with("charlie")
 
         @query.run
       end

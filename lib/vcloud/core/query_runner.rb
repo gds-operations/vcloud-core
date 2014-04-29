@@ -6,6 +6,7 @@ module Vcloud
     end
 
     def run(type=nil, options={})
+      raise ArgumentError, "Query API :format option is not supported" if options[:format]
       get_all_results(type, options)
     end
 

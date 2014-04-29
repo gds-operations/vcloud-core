@@ -44,6 +44,12 @@ describe Vcloud::QueryRunner do
   end
 
   context '#run' do
+
+    it "should raise an error if a :format option is supplied" do
+      expect { @query_runner.run('vApp', :format => 'references') }.
+        to raise_error(ArgumentError, "Query API :format option is not supported")
+    end
+
     it 'should return no results when fog returns no results' do
       @mock_fog_interface.stub(:get_execute_query).and_return({})
 

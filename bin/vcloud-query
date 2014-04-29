@@ -29,10 +29,6 @@ class App
     options[:fields] = v
   end
 
-  on('--format', '=ATTRIBUTE', 'Data format to retrieve: records, idrecords, references') do |v|
-    options[:format] = v
-  end
-
   on('--filter', '=FILTER', 'Filter expression') do |v|
     options[:filter] = v
   end

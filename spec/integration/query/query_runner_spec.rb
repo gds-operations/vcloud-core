@@ -143,7 +143,7 @@ module Vcloud
           end
 
           it "returns a record with a defined name element" do
-            expect(@results.first[:href]).not_to be_empty
+            expect(@results.first[:name]).not_to be_empty
           end
 
           it "returns a record with a defined vdcName element" do

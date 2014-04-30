@@ -11,7 +11,7 @@ require 'bundler/setup'
 require 'fog'
 
 Fog.credentials = {
-  :vcloud_director_host     => ENV['VCLOUD_HOST'],
-  :vcloud_director_username => ENV['VCLOUD_USERNAME'],
-  :vcloud_director_password => ENV['VCLOUD_PASSWORD'],
+  :vcloud_director_host     => ENV['API_HOST'],
+  :vcloud_director_username => ENV['API_USERNAME'],
+  :vcloud_director_password => ENV['API_PASSWORD'],
 }

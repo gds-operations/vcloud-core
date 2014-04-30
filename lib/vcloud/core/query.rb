@@ -32,30 +32,9 @@ module Vcloud
     end
 
     def output_available_query_types
-      available_query_types = @query_runner.available_query_types
-      available_queries = collate_formats_for_types(available_query_types)
-      print_query_types(available_queries)
-    end
-
-    def collate_formats_for_types(available_queries)
-      queries = Hash.new { |h, k| h[k]=[] }
-      available_queries.each do |type, format|
-        queries[type] << format
+      @query_runner.available_query_types.each do |entity_type|
+        puts entity_type
       end
-      queries
-    end
-
-    def print_query_types(queries)
-      type_width = longest_query_type(queries)
-
-      queries.keys.sort.each do |type|
-        puts "%-#{type_width}s %s" % [type, queries[type].sort.join(',')]
-      end
-    end
-
-    def longest_query_type(queries)
-      return 0 if queries.keys.empty?
-      queries.keys.max_by{|key| key.length}.length
     end
 
     def output_header(results)

@@ -1,3 +1,9 @@
+## 0.0.13 (2014-04-30)
+
+Feature:
+
+  - Remove support for Query API formats - we only ever use 'record' format.
+
 ## 0.0.12 (2014-04-22)
 
 Bugfix:

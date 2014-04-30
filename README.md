@@ -87,7 +87,7 @@ NB: examples assume FOG_CREDENTIAL or FOG_VCLOUD_TOKEN has been set accordingly.
     # Get general usage info
     vcloud-query --help
 
-    # Get a list of all queriable types (left column)
+    # Get a list of all queriable entity types
     vcloud-query
 
     # Get all VMs with VMware Tools less than 9282, that are not a vApp Template:

@@ -6,21 +6,36 @@ module Vcloud
     end
 
     def run(type=nil, options={})
+      raise ArgumentError, "Query API :format option is not supported" if options[:format]
       get_all_results(type, options)
     end
 
     def available_query_types
-      query_list = @fsi.get_execute_query()
-      query_list[:Link].select do |link|
-        link[:rel] == 'down'
-      end.map do |link|
-        href  = Nokogiri::XML.fragment(link[:href])
-        query = CGI.parse(URI.parse(href.text).query)
-        [query['type'].first, query['format'].first]
-      end
+      query_body = @fsi.get_execute_query()
+      get_entity_types_in_record_format(query_body)
     end
 
   private
+
+    def get_entity_types_in_record_format(query_body)
+      query_links = query_body.fetch(:Link).select do |link|
+        link[:rel] == 'down'
+      end
+      entity_types = []
+      query_links.each do |link|
+        (entity_type, query_format) = extract_query_type_and_format_from_link(link)
+        entity_types << entity_type if query_format == 'records'
+      end
+      entity_types
+    end
+
+    def extract_query_type_and_format_from_link(link)
+        href  = Nokogiri::XML.fragment(link[:href])
+        query = CGI.parse(URI.parse(href.text).query)
+        query_format = query['format'].first
+        query_type = query['type'].first
+        [query_type, query_format]
+    end
 
     def get_all_results(type, options)
       results = []

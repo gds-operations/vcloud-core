@@ -114,8 +114,7 @@ module Vcloud
 
       def generate_preamble(script_path, script_post_processor, vars)
         vapp_name = @vapp.name
-        script = ERB.new(File.read(File.expand_path(script_path)), nil, '>-')
-        .result(binding)
+        script = ERB.new(File.read(File.expand_path(script_path)), nil, '>-').result(binding)
         if script_post_processor
           script = Open3.capture2(File.expand_path(script_post_processor),
                                   stdin_data: script).first

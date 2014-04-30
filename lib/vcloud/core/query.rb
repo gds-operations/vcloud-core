@@ -4,7 +4,7 @@ module Vcloud
   module Core
     class Query
 
-      def initialize(type=nil, options={}, query_runner = Vcloud::QueryRunner.new)
+      def initialize(type=nil, options={}, query_runner = Vcloud::Core::QueryRunner.new)
         @type = type
         @options = options
         @options[:output_format] ||= 'tsv'
@@ -19,9 +19,9 @@ module Vcloud
         end
       end
 
-      # <b>DEPRECATED:</b> Please use <tt>Vcloud::QueryRunner.run</tt> instead.
+      # <b>DEPRECATED:</b> Please use <tt>Vcloud::Core::QueryRunner.run</tt> instead.
       def get_all_results
-        warn "[DEPRECATION] `Vcloud::Core::Query::get_all_results` is deprecated.  Please use `Vcloud::QueryRunner.run` instead."
+        warn "[DEPRECATION] `Vcloud::Core::Query::get_all_results` is deprecated.  Please use `Vcloud::Core::QueryRunner.run` instead."
         @query_runner.run(@type, @options)
       end
 

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Vcloud::QueryRunner do
+describe Vcloud::Core::QueryRunner do
   before(:each) do
     @mock_fog_interface = StubFogInterface.new
     Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-    @query_runner = Vcloud::QueryRunner.new()
+    @query_runner = Vcloud::Core::QueryRunner.new()
   end
 
   context '#available_query_types' do

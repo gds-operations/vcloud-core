@@ -15,7 +15,7 @@ describe Vcloud::QueryRunner do
       result.size.should == 0
     end
 
-    it 'should parse the format=records query hrefs into a list of entity types' do
+    it 'returns queriable entity types provided by the API via :href link elements' do
       @mock_fog_interface.stub(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',

@@ -3,6 +3,20 @@ require 'spec_helper'
 module Vcloud
   module Core
     describe EdgeGateway do
+
+      required_env = {
+        'VCLOUD_EDGE_GATEWAY' => 'to name of VSE',
+      }
+
+      error = false
+      required_env.each do |var,message|
+        unless ENV[var]
+          puts "Must set #{var} #{message}" unless ENV[var]
+          error = true
+        end
+      end
+      Kernel.exit(2) if error
+
       it "configure firewall service" do
         configuration = {
             :FirewallService =>

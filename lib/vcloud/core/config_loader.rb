@@ -2,7 +2,7 @@ module Vcloud
   module Core
     class ConfigLoader
 
-      def load_config(config_file, schema = nil)
+      def load_config(config_file, schema = nil, vars_file = nil)
         input_config = YAML::load(File.open(config_file))
 
         # There is no way in YAML or Ruby to symbolize keys in a hash

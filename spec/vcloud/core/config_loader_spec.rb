@@ -31,6 +31,16 @@ module Vcloud
         end
       end
 
+      describe 'config loading with variable interpolation' do
+        it "should create a valid hash when input is YAML with variable file" do
+          input_file = "#{@data_dir}/working_template.yaml"
+          vars_file = "#{@data_dir}/working_variables.yaml"
+          loader = ConfigLoader.new
+          actual_config = loader.load_config(input_file, nil, vars_file)
+          valid_config.should eq(actual_config)
+        end
+      end
+
       describe 'config loading with schema validation' do
         it "should validate correctly against a schema" do
           input_file = "#{@data_dir}/working_with_defaults.yaml"

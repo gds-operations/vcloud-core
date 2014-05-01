@@ -12,7 +12,7 @@ module Vcloud
       end
 
       def self.get_ids_by_name(name)
-        q = QueryRunner.new
+        q = Vcloud::Core::QueryRunner.new
         unless res = q.run('edgeGateway', :filter => "name==#{name}")
           raise "Error finding edgeGateway by name #{name}"
         end

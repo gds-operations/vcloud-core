@@ -14,7 +14,7 @@ class App
   include Vcloud
 
   main do |type|
-    Query.new(type, options).run
+    Vcloud::Core::Query.new(type, options).run
   end
 
   on('-A', '--sort-asc', '=ATTRIBUTE', 'Sort ascending') do |v|

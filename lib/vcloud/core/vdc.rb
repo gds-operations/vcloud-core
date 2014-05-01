@@ -12,7 +12,7 @@ module Vcloud
       end
 
       def self.get_by_name(name)
-        q = QueryRunner.new
+        q = Vcloud::Core::QueryRunner.new
         unless res = q.run('orgVdc', :filter => "name==#{name}")
           raise "Error finding vDC by name #{name}"
         end

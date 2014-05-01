@@ -13,7 +13,7 @@ module Vcloud
       end
 
       def self.get_by_name(name)
-        q = QueryRunner.new
+        q = Vcloud::Core::QueryRunner.new
         unless res = q.run('vApp', :filter => "name==#{name}")
           raise "Error finding vApp by name #{name}"
         end

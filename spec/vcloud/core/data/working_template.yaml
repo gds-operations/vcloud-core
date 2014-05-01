@@ -12,9 +12,9 @@ vapps:
     - size: '8192'
     network_connections:
     - name: Default
-      ip_address:
+      ip_address: {{ ip1 }}
     - name: NetworkTest2
-      ip_address:
+      ip_address: {{ ip2 }}
     bootstrap:
       script_path: 'spec/data/basic_preamble_test.erb'
       vars:

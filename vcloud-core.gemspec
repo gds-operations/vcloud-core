@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'fog', '>= 1.22.0'
   s.add_runtime_dependency 'methadone'
+  s.add_runtime_dependency 'mustache'
   s.add_development_dependency 'aruba', '~> 0.5.3'
   s.add_development_dependency 'cucumber', '~> 1.3.10'
   s.add_development_dependency 'rake'

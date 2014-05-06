@@ -145,12 +145,13 @@ If you want to be sure you are pinning to 5.1, or use 5.5, you can set the API v
 
 ## Testing
 
-Default target: `bundle exec rake`
-Runs the unit tests and feature tests.
+Run the default suite of tests (e.g. lint, unit, features):
 
-* Unit tests only: `bundle exec rake spec`
-* Feature tests only: `bundle exec rake features`
-* Integration tests: `bundle exec rake integration`
+    bundle exec rake
+
+Run the integration tests (slower and requires a real environment):
+
+    bundle exec rake integration
 
 ### setting up and describing your environment for test runs
 

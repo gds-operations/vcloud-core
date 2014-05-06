@@ -136,7 +136,7 @@ module Vcloud
 
           it "should power on a vapp that is not powered on" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8})
+            @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8}, {:status => 4})
             @mock_fog_interface.should_receive(:power_on_vapp).with(vapp.id)
             state = vapp.power_on
             expect(state).to be_true

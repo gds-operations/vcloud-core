@@ -1,3 +1,9 @@
+## Current
+
+Features:
+
+  - Updated vm/vApp logging levels to make use of quiet/normal/verbose operation
+
 ## 0.2.0 (2014-05-06)
 
 Features:

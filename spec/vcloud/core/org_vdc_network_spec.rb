@@ -38,7 +38,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = OrgVdcNetwork.new(@net_id)
-          expect(obj.id) == @net_id
+          expect(obj.id).to eq(@net_id)
         end
 
         it "should raise error if id is not in correct format" do
@@ -136,7 +136,7 @@ module Vcloud
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
-            expect(obj.id) == @net_id
+            expect(obj.id).to eq(@net_id)
           end
 
           it "should handle specification of one ip_ranges" do

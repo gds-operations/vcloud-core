@@ -30,7 +30,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = Vdc.new(@vdc_id)
-          expect(obj.id) == @vdc_id
+          expect(obj.id).to eq(@vdc_id)
         end
 
         it "should raise error if id is not in correct format" do

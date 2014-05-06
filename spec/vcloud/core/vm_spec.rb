@@ -70,7 +70,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = Vm.new(@vm_id, @mock_vapp)
-          expect(obj.id) == @vm_id
+          expect(obj.id).to eq(@vm_id)
         end
 
         it "should raise error if id is not in correct format" do

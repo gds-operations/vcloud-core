@@ -36,7 +36,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = Vapp.new(@vapp_id)
-          expect(obj.id) == @vapp_id
+          expect(obj.id).to eq(@vapp_id)
         end
 
         it "should raise error if id is not in correct format" do
@@ -139,7 +139,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8})
             @mock_fog_interface.should_receive(:power_on_vapp).with(vapp.id)
             state = vapp.power_on
-            expect(state) == true
+            expect(state).to be_true
           end
 
           it "should not power on a vapp that is already powered on, but should return true" do
@@ -147,7 +147,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:get_vapp).and_return({:status => 4})
             @mock_fog_interface.should_not_receive(:power_on_vapp)
             state = vapp.power_on
-            expect(state) == true
+            expect(state).to be_true
           end
         end
 

@@ -165,7 +165,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
           it "should handle specification of two ip_ranges" do
@@ -203,7 +203,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
         end
@@ -245,7 +245,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
         end

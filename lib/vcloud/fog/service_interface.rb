@@ -205,8 +205,8 @@ module Vcloud
         begin
           Vcloud::Core.logger.debug("adding NIC into VM #{vm_id}")
           @fog.put_network_connection_system_section_vapp(vm_id, section)
-        rescue
-          Vcloud::Core.logger.debug("failed to put_network_connection_system_section_vapp for vm : #{vm_id} ")
+        rescue => ex
+          Vcloud::Core.logger.error("failed to put_network_connection_system_section_vapp for vm #{vm_id}: #{ex}")
           Vcloud::Core.logger.debug("requested network section : #{section.inspect}")
           raise
         end
@@ -229,7 +229,8 @@ module Vcloud
             :ComputerName        => vm_name
           }
           @fog.put_guest_customization_section_vapp(vm_id, customization_req)
-        rescue
+        rescue => ex
+          Vcloud::Core.logger.error("Failed to update guest customization section: #{ex}")
           Vcloud::Core.logger.debug("=== interpolated preamble:")
           Vcloud::Core.logger.debug(script)
           raise

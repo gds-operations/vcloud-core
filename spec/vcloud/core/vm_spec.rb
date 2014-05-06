@@ -300,9 +300,9 @@ module Vcloud
           ]
           mock_sp_query = double(:query_runner)
 
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
           mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
           mock_sp_query.should_receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)
@@ -322,9 +322,9 @@ module Vcloud
           storage_profile_results = []
           mock_sp_query = double(:query_runner)
 
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
           mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
           mock_sp_query.should_receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)
@@ -342,9 +342,9 @@ module Vcloud
           storage_profile_results = [ { :id => 'test-href'  }]
           mock_sp_query = double(:query_runner)
 
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
           mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_sp_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
           mock_sp_query.should_receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)

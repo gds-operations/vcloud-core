@@ -31,7 +31,7 @@ module Vcloud
       context "#available_query_types" do
 
         before(:all) do
-          @query_types = QueryRunner.new.available_query_types
+          @query_types = Vcloud::Core::QueryRunner.new.available_query_types
         end
 
         context "confirm accessing the query API is functional" do
@@ -103,7 +103,7 @@ module Vcloud
         context "vApps are queriable with no options specified" do
 
           before(:all) do
-            @all_vapps = QueryRunner.new.run('vApp')
+            @all_vapps = Vcloud::Core::QueryRunner.new.run('vApp')
           end
 
           it "returns an Array" do
@@ -139,7 +139,7 @@ module Vcloud
         context "Query output fields can be limited by supplying a comma-separated :fields list" do
 
           before(:all) do
-            @results = QueryRunner.new.run('vApp', fields: "name,vdcName")
+            @results = Vcloud::Core::QueryRunner.new.run('vApp', fields: "name,vdcName")
           end
 
           it "returns a record with a defined name element" do
@@ -159,7 +159,7 @@ module Vcloud
         context "Query API does not support an empty :fields list" do
 
           it "raises a BadRequest exception, if empty string is supplied for :fields" do
-            expect { QueryRunner.new.run('vApp', fields: "") }.
+            expect { Vcloud::Core::QueryRunner.new.run('vApp', fields: "") }.
               to raise_exception(::Fog::Compute::VcloudDirector::BadRequest)
           end
 
@@ -168,12 +168,12 @@ module Vcloud
         context "Query API returns href field regardless of filter :fields selected" do
 
           it "returns href as well as name, if just 'name' is asked for" do
-            results = QueryRunner.new.run('vApp', fields: "name")
+            results = Vcloud::Core::QueryRunner.new.run('vApp', fields: "name")
             expect(results.first.keys.sort).to eq([:href, :name])
           end
 
           it "returns href, name, vdcName if 'name,vdcName' is asked for" do
-            results = QueryRunner.new.run('vApp', fields: "name,vdcName")
+            results = Vcloud::Core::QueryRunner.new.run('vApp', fields: "name,vdcName")
             expect(results.first.keys.sort).to eq([:href, :name, :vdcName])
           end
 
@@ -183,7 +183,7 @@ module Vcloud
 
           before(:all) do
             @vapp_name = @test_case_vapps.last.name
-            @filtered_results = QueryRunner.new.run('vApp', filter: "name==#{@vapp_name}")
+            @filtered_results = Vcloud::Core::QueryRunner.new.run('vApp', filter: "name==#{@vapp_name}")
           end
 
           it "returns a single record matching our filter on name" do

@@ -49,7 +49,7 @@ module Vcloud
             { :name => 'edgegw-test-1', :href => "/#{@edgegw_id}" }
           ]
           mock_query = double(:query_runner)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
           mock_query.should_receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
           @obj = EdgeGateway.get_by_name('edgegw-test-1')
           expect(@obj.class).to be(Vcloud::Core::EdgeGateway)
@@ -60,7 +60,7 @@ module Vcloud
             { :name => 'edgegw-test-1', :href => "/#{@edgegw_id}" }
           ]
           mock_query = double(:query_runner)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
           mock_query.should_receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
           @obj = EdgeGateway.get_by_name('edgegw-test-1')
           expect(@obj.id) == @edgegw_id
@@ -69,7 +69,7 @@ module Vcloud
         it "should raise an error if no edgegw with that name exists" do
           q_results = [ ]
           mock_query = double(:query_runner)
-          Vcloud::QueryRunner.should_receive(:new).and_return(mock_query)
+          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
           mock_query.should_receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
           expect{ EdgeGateway.get_by_name('edgegw-test-1') }.to raise_exception(RuntimeError, "edgeGateway edgegw-test-1 not found")
         end

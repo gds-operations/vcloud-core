@@ -137,9 +137,8 @@ module Vcloud
       end
 
       def validate_enum
-        unless (acceptable_values = schema[:acceptable_values]) && acceptable_values.is_a?(Array)
-          raise "Must set :acceptable_values for type 'enum'"
-        end
+        acceptable_values = schema[:acceptable_values]
+        raise "Must set :acceptable_values for type 'enum'" unless acceptable_values.is_a?(Array)
         unless acceptable_values.include?(data)
           acceptable_values_string = acceptable_values.collect {|v| "'#{v}'" }.join(', ')
           @errors << "#{key}: #{@data} is not a valid value. Acceptable values are #{acceptable_values_string}."
@@ -163,7 +162,8 @@ module Vcloud
       end
 
       def check_matcher_matches
-        return unless regex = schema[:matcher]
+        regex = schema[:matcher]
+        return unless regex
         raise "#{key}: #{regex} is not a Regexp" unless regex.is_a? Regexp
         unless data =~ regex
           @errors << "#{key}: #{data} does not match"
@@ -192,13 +192,10 @@ module Vcloud
       end
 
       def check_for_unknown_parameters
-        unless internals = schema[:internals]
-          # if there are no parameters specified, then assume all are ok.
-          return true
-        end
-        if schema[:permit_unknown_parameters]
-          return true
-        end
+        internals = schema[:internals]
+        # if there are no parameters specified, then assume all are ok.
+        return true unless internals
+        return true if schema[:permit_unknown_parameters]
         data.keys.each do |k|
           @errors << "#{key}: parameter '#{k}' is invalid" unless internals[k]
         end

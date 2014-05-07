@@ -13,10 +13,9 @@ module Vcloud
 
       def self.get_ids_by_name(name)
         q = Vcloud::Core::QueryRunner.new
-        unless res = q.run('edgeGateway', :filter => "name==#{name}")
-          raise "Error finding edgeGateway by name #{name}"
-        end
-        res.collect do |record| 
+        query_results = q.run('edgeGateway', :filter => "name==#{name}")
+        raise "Error finding edgeGateway by name #{name}" unless query_results
+        query_results.collect do |record|
           record[:href].split('/').last if record.key?(:href)
         end
       end
@@ -58,7 +57,8 @@ module Vcloud
       def interfaces
         gateway_config = vcloud_attributes[:Configuration]
         return [] unless gateway_config[:GatewayInterfaces]
-        return [] unless gateway_interfaces = gateway_config[:GatewayInterfaces][:GatewayInterface]
+        gateway_interfaces = gateway_config[:GatewayInterfaces][:GatewayInterface]
+        return [] unless gateway_interfaces
         gateway_interfaces.map do |vcloud_gateway_interface_hash|
           EdgeGatewayInterface.new(vcloud_gateway_interface_hash)
         end

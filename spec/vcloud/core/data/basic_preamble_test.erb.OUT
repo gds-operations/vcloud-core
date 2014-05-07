@@ -4,5 +4,6 @@
 
 (
 echo "in $*"
+echo "vapp_name: test-vapp-1"
 echo "message: hello world"
 ) >> /PREAMBLE_OUTPUT

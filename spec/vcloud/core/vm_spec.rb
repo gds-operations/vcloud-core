@@ -181,7 +181,7 @@ module Vcloud
       end
 
       context '#generate_preamble' do
-        it "should interpolate vars hash into template" do
+        it "should interpolate vars hash and vapp_name into template" do
           vars = {:message => 'hello world'}
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")

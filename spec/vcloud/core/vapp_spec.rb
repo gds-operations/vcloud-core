@@ -136,7 +136,10 @@ module Vcloud
 
           it "should power on a vapp that is not powered on" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8}, {:status => 4})
+            @mock_fog_interface.should_receive(:get_vapp).twice().and_return(
+              {:status => Vapp::STATUS::POWERED_OFF},
+              {:status => Vapp::STATUS::RUNNING}
+            )
             @mock_fog_interface.should_receive(:power_on_vapp).with(vapp.id)
             state = vapp.power_on
             expect(state).to be_true
@@ -144,7 +147,9 @@ module Vcloud
 
           it "should not power on a vapp that is already powered on, but should return true" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).and_return({:status => 4})
+            @mock_fog_interface.should_receive(:get_vapp).and_return(
+              {:status => Vapp::STATUS::RUNNING}
+            )
             @mock_fog_interface.should_not_receive(:power_on_vapp)
             state = vapp.power_on
             expect(state).to be_true

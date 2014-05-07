@@ -32,6 +32,7 @@ module Vcloud
 
       module STATUS
         RUNNING = 4
+        POWERED_OFF = 8
       end
 
       def name

@@ -61,8 +61,6 @@ module Vcloud
         Vcloud::Fog::ServiceInterface.new.delete_network(id)
       end
 
-      private
-
       def self.construct_network_options(config)
         opts = {}
         opts[:Description] = config[:description] if config.key?(:description)

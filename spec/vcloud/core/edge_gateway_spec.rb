@@ -32,7 +32,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = EdgeGateway.new(@edgegw_id)
-          expect(obj.id) == @edgegw_id
+          expect(obj.id).to eq(@edgegw_id)
         end
 
         it "should raise error if id is not in correct format" do
@@ -63,7 +63,7 @@ module Vcloud
           Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
           mock_query.should_receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
           @obj = EdgeGateway.get_by_name('edgegw-test-1')
-          expect(@obj.id) == @edgegw_id
+          expect(@obj.id).to eq(@edgegw_id)
         end
 
         it "should raise an error if no edgegw with that name exists" do

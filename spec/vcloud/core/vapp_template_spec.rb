@@ -35,7 +35,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = VappTemplate.new(@id)
-          expect(obj.id) == @id
+          expect(obj.id).to eq(@id)
         end
 
         it "should raise error if id is not in correct format" do

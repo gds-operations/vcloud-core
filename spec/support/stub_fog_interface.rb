@@ -8,7 +8,7 @@ class StubFogInterface
 
   def vdc_object_by_name(vdc_name)
     vdc = OpenStruct.new
-    vdc.name = 'test-vdc-1'
+    vdc.name = vdc_name
     vdc
   end
 
@@ -16,7 +16,7 @@ class StubFogInterface
     { :href => '/vappTemplate-12345678-90ab-cdef-0123-4567890abcde' }
   end
 
-  def find_networks(network_names, vdc_name)
+  def find_networks(_network_names, _vdc_name)
     [{
       :name => 'org-vdc-1-net-1',
       :href => '/org-vdc-1-net-1-id',
@@ -24,7 +24,10 @@ class StubFogInterface
   end
 
   def get_vapp(id)
-    { :name => 'test-vapp-1' }
+    {
+      :name => 'test-vapp-1',
+      :href => "/#{id}",
+    }
   end
 
   def get_edge_gateway(id)
@@ -34,11 +37,11 @@ class StubFogInterface
     }
   end
 
-  def vdc(name)
+  def vdc(_name)
     { }
   end
 
-  def post_instantiate_vapp_template(vdc, template, name, params)
+  def post_instantiate_vapp_template(_vdc, _template, _name, _params)
     {
       :href => '/test-vapp-1-id',
       :Children => {
@@ -51,7 +54,7 @@ class StubFogInterface
     { }
   end
 
-  def template(catalog_name, name)
+  def template(_catalog_name, _name)
     { :href => '/vappTemplate-12345678-90ab-cdef-0123-4567890abcde' }
   end
 

@@ -36,7 +36,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = Vapp.new(@vapp_id)
-          expect(obj.id) == @vapp_id
+          expect(obj.id).to eq(@vapp_id)
         end
 
         it "should raise error if id is not in correct format" do
@@ -99,13 +99,13 @@ module Vcloud
 
         context "id" do
           it "should extract id correctly" do
-            @vapp.id.should == @vapp_id
+            expect(@vapp.id).to eq(@vapp_id)
           end
         end
 
         context "vapp should have parent vdc" do
           it "should load parent vdc id from fog attributes" do
-            @vapp.vdc_id.should == '074aea1e-a5e9-4dd1-a028-40db8c98d237'
+            expect(@vapp.vdc_id).to eq('074aea1e-a5e9-4dd1-a028-40db8c98d237')
           end
 
           it "should raise error if vapp without parent vdc found" do
@@ -115,8 +115,8 @@ module Vcloud
         end
 
         it "should return vms" do
-          @vapp.fog_vms.count.should == 1
-          @vapp.fog_vms.first[:href].should == '/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237'
+          expect(@vapp.fog_vms.count).to eq(1)
+          expect(@vapp.fog_vms.first[:href]).to eq('/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237')
         end
       end
 
@@ -136,10 +136,10 @@ module Vcloud
 
           it "should power on a vapp that is not powered on" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8})
+            @mock_fog_interface.should_receive(:get_vapp).twice().and_return({:status => 8}, {:status => 4})
             @mock_fog_interface.should_receive(:power_on_vapp).with(vapp.id)
             state = vapp.power_on
-            expect(state) == true
+            expect(state).to be_true
           end
 
           it "should not power on a vapp that is already powered on, but should return true" do
@@ -147,7 +147,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:get_vapp).and_return({:status => 4})
             @mock_fog_interface.should_not_receive(:power_on_vapp)
             state = vapp.power_on
-            expect(state) == true
+            expect(state).to be_true
           end
         end
 
@@ -158,14 +158,14 @@ module Vcloud
         it "should return nil if fog returns nil" do
           StubFogInterface.any_instance.stub(:get_vapp_by_name_and_vdc_name)
             .with('vapp_name', 'vdc_name').and_return(nil)
-          Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').should == nil
+          expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name')).to be_nil
         end
 
         it "should return vapp instance if found" do
           vcloud_attr_vapp = { :href => "/#{@vapp_id}" }
           StubFogInterface.any_instance.stub(:get_vapp_by_name_and_vdc_name)
             .with('vapp_name', 'vdc_name').and_return(vcloud_attr_vapp)
-          Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class.should == Core::Vapp
+          expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class).to eq(Core::Vapp)
         end
 
       end

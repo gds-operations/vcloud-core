@@ -12,12 +12,14 @@ module Vcloud
       end
 
       def self.provision(config)
-        raise "Must specify a name" unless name = config[:name]
-        raise "Must specify a vdc_name" unless vdc_name = config[:vdc_name]
-
+        raise "Must specify a name" unless config[:name]
+        raise "Must specify a vdc_name" unless config[:vdc_name]
         unless config[:fence_mode] == 'isolated' || config[:fence_mode] == 'natRouted'
           raise "fence_mode #{config[:fence_mode]} not supported. Must be 'isolated' or 'natRouted'"
         end
+
+        name = config[:name]
+        vdc_name = config[:vdc_name]
 
         config[:is_shared] = false unless config[:is_shared]
 
@@ -58,8 +60,6 @@ module Vcloud
       def delete
         Vcloud::Fog::ServiceInterface.new.delete_network(id)
       end
-
-      private
 
       def self.construct_network_options(config)
         opts = {}

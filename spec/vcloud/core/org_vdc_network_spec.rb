@@ -4,7 +4,7 @@ module Vcloud
   module Core
     describe OrgVdcNetwork do
 
-      before (:each) do
+      before(:each) do
         @vdc_id    = '12345678-1234-1234-1234-000000111111'
         @edgegw_id = '12345678-1234-1234-1234-000000222222'
         @net_id    = '12345678-1234-1234-1234-000000333333'
@@ -38,7 +38,7 @@ module Vcloud
 
         it "should store the id specified" do
           obj = OrgVdcNetwork.new(@net_id)
-          expect(obj.id) == @net_id
+          expect(obj.id).to eq(@net_id)
         end
 
         it "should raise error if id is not in correct format" do
@@ -136,7 +136,7 @@ module Vcloud
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
-            expect(obj.id) == @net_id
+            expect(obj.id).to eq(@net_id)
           end
 
           it "should handle specification of one ip_ranges" do
@@ -165,7 +165,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
           it "should handle specification of two ip_ranges" do
@@ -203,7 +203,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
         end
@@ -245,7 +245,7 @@ module Vcloud
             @mock_fog_interface.should_receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
-            obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
+            Vcloud::Core::OrgVdcNetwork.provision(@config)
           end
 
         end

@@ -31,11 +31,11 @@ module Vcloud
               }
           ]
           metadata = MetadataHelper.extract_metadata(metadata_entries)
-          metadata.count.should == 4
-          metadata[:role_name].should == 'james-bond'
-          metadata[:server_number].should == -10
-          metadata[:created_at].should == DateTime.parse("2013-12-16T14:30:05.000Z")
-          metadata[:daily_shutdown].should == false
+          expect(metadata.count).to eq(4)
+          expect(metadata[:role_name]).to eq('james-bond')
+          expect(metadata[:server_number]).to eq(-10)
+          expect(metadata[:created_at]).to eq(DateTime.parse("2013-12-16T14:30:05.000Z"))
+          expect(metadata[:daily_shutdown]).to be_false
         end
 
         it "should skip metadata entry if entry type is not application/vnd.vmware.vcloud.metadata.value+xml" do
@@ -54,7 +54,7 @@ module Vcloud
 
           ]
           metadata = MetadataHelper.extract_metadata(metadata_entries)
-          metadata.count.should == 1
+          expect(metadata.count).to eq(1)
           metadata.keys.should_not include :untyped_key
         end
 
@@ -75,7 +75,7 @@ module Vcloud
 
           ]
           metadata = MetadataHelper.extract_metadata(metadata_entries)
-          metadata.count.should == 2
+          expect(metadata.count).to eq(2)
           metadata.keys.should include :unrecognized_type_key
         end
 

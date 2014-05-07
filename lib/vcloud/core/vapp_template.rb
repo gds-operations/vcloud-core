@@ -26,9 +26,8 @@ module Vcloud
       def self.get_ids_by_name_and_catalog name, catalog_name
         raise "provide Catalog and vAppTemplate name" unless name && catalog_name
         q = Vcloud::Core::QueryRunner.new
-        unless query_results = q.run('vAppTemplate', :filter => "name==#{name};catalogName==#{catalog_name}")
-          raise "Error retreiving #{q.type} query '#{q.filter}'"
-        end
+        query_results = q.run('vAppTemplate', :filter => "name==#{name};catalogName==#{catalog_name}")
+        raise "Error retreiving #{q.type} query '#{q.filter}'" unless query_results
         query_results.collect do |record|
           record[:href].split('/').last if record.key?(:href)
         end

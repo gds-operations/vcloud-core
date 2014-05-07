@@ -12,7 +12,7 @@ describe Vcloud::Core::QueryRunner do
     it 'should return empty array if no query type links are returned from API' do
       @mock_fog_interface.stub(:get_execute_query).and_return({:Link => {}})
       result = @query_runner.available_query_types
-      result.size.should == 0
+      expect(result.size).to eq(0)
     end
 
     it 'returns queriable entity types provided by the API via :href link elements' do
@@ -52,10 +52,7 @@ describe Vcloud::Core::QueryRunner do
 
     it 'should return no results when fog returns no results' do
       @mock_fog_interface.stub(:get_execute_query).and_return({})
-
-      result = @query_runner.run()
-
-      result.should == []
+      expect(@query_runner.run()).to eq([])
     end
 
     it 'return no results when fog results do not include a "Record" or a "Reference"' do
@@ -64,10 +61,7 @@ describe Vcloud::Core::QueryRunner do
           :WibbleBlob => {:field1 => 'Stuff 1'}
         }
       )
-
-      result = @query_runner.run()
-
-      result.size.should == 0
+      expect(@query_runner.run().size).to eq(0)
     end
 
     it 'should return a single result when fog returns a single record' do
@@ -77,11 +71,9 @@ describe Vcloud::Core::QueryRunner do
           :WibbleRecord => [fields]
         }
       )
-
       result = @query_runner.run()
-
-      result.size.should == 1
-      result[0].should == fields
+      expect(result.size).to eq(1)
+      expect(result.first).to eq(fields)
     end
 
     it 'should return a single result when fog returns a single reference' do
@@ -91,11 +83,9 @@ describe Vcloud::Core::QueryRunner do
           :WibbleReference => [fields]
         }
       )
-
       result = @query_runner.run()
-
-      result.size.should == 1
-      result[0].should == fields
+      expect(result.size).to eq(1)
+      expect(result.first).to eq(fields)
     end
 
     it 'should wrap single result from fog in list' do
@@ -105,11 +95,9 @@ describe Vcloud::Core::QueryRunner do
           :WibbleRecord => fields
         }
       )
-
       result = @query_runner.run()
-
-      result.size.should == 1
-      result[0].should == fields
+      expect(result.size).to eq(1)
+      expect(result.first).to eq(fields)
     end
 
     it 'should return all results in a record returned by fog' do
@@ -120,12 +108,10 @@ describe Vcloud::Core::QueryRunner do
           :WibbleRecord => [fields, more_fields]
         }
       )
-
       result = @query_runner.run()
-
-      result.size.should == 2
-      result[0].should == fields
-      result[1].should == more_fields
+      expect(result.size).to eq(2)
+      expect(result[0]).to eq(fields)
+      expect(result[1]).to eq(more_fields)
     end
 
     it 'should return the first item if more than one records provided' do
@@ -137,11 +123,9 @@ describe Vcloud::Core::QueryRunner do
           :WobbleRecord => [fields2]
         }
       )
-
       result = @query_runner.run()
-
-      result.size.should == 1
-      result[0].should == fields1
+      expect(result.size).to eq(1)
+      expect(result.first).to eq(fields1)
     end
 
     it 'should raise error if lastPage is not an integer' do
@@ -162,13 +146,12 @@ describe Vcloud::Core::QueryRunner do
           :lastPage     => 2,
           :WibbleRecord => [fields]
         }
-
       )
       result = @query_runner.run()
-
-      result.size.should == 2
-      result[0].should == fields
-      result[1].should == fields
+      expect(result.size).to eq(2)
+      expect(result[0]).to eq(fields)
+      expect(result[1]).to eq(fields)
     end
+
   end
 end

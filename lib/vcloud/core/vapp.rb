@@ -14,14 +14,13 @@ module Vcloud
 
       def self.get_by_name(name)
         q = Vcloud::Core::QueryRunner.new
-        unless res = q.run('vApp', :filter => "name==#{name}")
-          raise "Error finding vApp by name #{name}"
-        end
-        case res.size
+        query_results = q.run('vApp', :filter => "name==#{name}")
+        raise "Error finding vApp by name #{name}" unless query_results
+        case query_results.size
         when 0
           raise "vApp #{name} not found"
         when 1
-          return self.new(res.first[:href].split('/').last)
+          return self.new(query_results.first[:href].split('/').last)
         else
           raise "found multiple vApp entities with name #{name}!"
         end

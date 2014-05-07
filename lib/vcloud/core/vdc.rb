@@ -13,11 +13,10 @@ module Vcloud
 
       def self.get_by_name(name)
         q = Vcloud::Core::QueryRunner.new
-        unless res = q.run('orgVdc', :filter => "name==#{name}")
-          raise "Error finding vDC by name #{name}"
-        end
-        raise "vDc #{name} not found" unless res.size == 1
-        return self.new(res.first[:href].split('/').last)
+        query_results = q.run('orgVdc', :filter => "name==#{name}")
+        raise "Error finding vDC by name #{name}" unless query_results
+        raise "vDc #{name} not found" unless query_results.size == 1
+        return self.new(query_results.first[:href].split('/').last)
       end
 
       def vcloud_attributes

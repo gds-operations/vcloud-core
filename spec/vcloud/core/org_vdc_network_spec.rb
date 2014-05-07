@@ -4,7 +4,7 @@ module Vcloud
   module Core
     describe OrgVdcNetwork do
 
-      before (:each) do
+      before(:each) do
         @vdc_id    = '12345678-1234-1234-1234-000000111111'
         @edgegw_id = '12345678-1234-1234-1234-000000222222'
         @net_id    = '12345678-1234-1234-1234-000000333333'

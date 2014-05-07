@@ -181,15 +181,23 @@ module Vcloud
       end
 
       context '#generate_preamble' do
-        it "should interpolate vars hash and vapp_name into template" do
-          vars = {:message => 'hello world'}
+        it "should interpolate vars hash, ENV, and vapp_name into template" do
+          vars = {
+            :message => 'hello world',
+            :array_test => [ 'foo', 'bar' ],
+          }
+          ENV['TEST_INTERPOLATED_ENVVAR'] = 'test_interpolated_env'
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
           @vm.generate_preamble(erbfile, nil, vars).should == expected_output
         end
 
-        it "should interpolate vars hash and post-process template" do
-          vars = {:message => 'hello world'}
+        it "should interpolate and post-process template" do
+          vars = {
+            :message => 'hello world',
+            :array_test => [ 'foo', 'bar' ],
+          }
+          ENV['TEST_INTERPOLATED_ENVVAR'] = 'test_interpolated_env'
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
           @vm.generate_preamble(erbfile, '/bin/cat', vars).should == expected_output

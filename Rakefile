@@ -22,7 +22,7 @@ RSpec::Core::RakeTask.new('integration') do |t|
 end
 
 require "gem_publisher"
-task :publish_gem do |t|
+task :publish_gem do
   gem = GemPublisher.publish_if_updated("vcloud-core.gemspec", :rubygems)
   puts "Published #{gem}" if gem
 end

@@ -186,7 +186,7 @@ module Vcloud
             :message => 'hello world',
             :array_test => [ 'foo', 'bar' ],
           }
-          ENV['TEST_INTERPOLATED_ENVVAR'] = 'test_interpolated_env'
+          stub_const('ENV', {'TEST_INTERPOLATED_ENVVAR' => 'test_interpolated_env'})
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
           @vm.generate_preamble(erbfile, nil, vars).should == expected_output
@@ -197,7 +197,7 @@ module Vcloud
             :message => 'hello world',
             :array_test => [ 'foo', 'bar' ],
           }
-          ENV['TEST_INTERPOLATED_ENVVAR'] = 'test_interpolated_env'
+          stub_const('ENV', {'TEST_INTERPOLATED_ENVVAR' => 'test_interpolated_env'})
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
           @vm.generate_preamble(erbfile, '/bin/cat', vars).should == expected_output

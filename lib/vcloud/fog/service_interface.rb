@@ -8,7 +8,7 @@ module Vcloud
       def_delegators :@fog, :get_vapp, :organizations, :org_name, :delete_vapp, :vcloud_token, :end_point,
                      :get_execute_query, :get_vapp_metadata, :power_off_vapp, :shutdown_vapp, :session,
                      :post_instantiate_vapp_template, :put_memory, :put_cpu, :power_on_vapp, :put_vapp_metadata_value,
-                     :put_vm, :get_edge_gateway, :get_network, :delete_network, :post_create_org_vdc_network,
+                     :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
                      :post_configure_edge_gateway_services
 
       #########################
@@ -108,8 +108,8 @@ module Vcloud
           @vcloud.process_task(task)
         end
 
-        def get_network(id)
-          @vcloud.get_network(id).body
+        def get_network_complete(id)
+          @vcloud.get_network_complete(id).body
         end
 
         def delete_network(id)
@@ -121,7 +121,7 @@ module Vcloud
           Vcloud::Core.logger.debug("creating #{options[:fence_mode]} OrgVdcNetwork #{name} in vDC #{vdc_id}")
           attrs = @vcloud.post_create_org_vdc_network(vdc_id, name, options).body
           @vcloud.process_task(attrs[:Tasks][:Task])
-          get_network(extract_id(attrs))
+          get_network_complete(extract_id(attrs))
         end
 
         def post_configure_edge_gateway_services(edgegw_id, config)

@@ -117,7 +117,8 @@ module Vcloud
           vapp_name: vapp_name,
           vars: preamble_vars
         })
-        script = interpolate_erb_file(script_path, erb_vars.instance_eval { binding })
+        erb_vars_binding_object = erb_vars.instance_eval { binding }
+        script = interpolate_erb_file(script_path, erb_vars_binding_object)
         script = post_process_script(script, script_post_processor) if script_post_processor
         script
       end

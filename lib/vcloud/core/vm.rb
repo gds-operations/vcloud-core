@@ -118,9 +118,12 @@ module Vcloud
           vars: preamble_vars
         })
         erb_vars_binding_object = erb_vars.instance_eval { binding }
-        script = interpolate_erb_file(script_path, erb_vars_binding_object)
-        script = post_process_script(script, script_post_processor) if script_post_processor
-        script
+        erb_output = interpolate_erb_file(script_path, erb_vars_binding_object)
+        if script_post_processor
+          post_process_erb_output(erb_output, script_post_processor) if script_post_processor
+        else
+          erb_output
+        end
       end
 
 
@@ -140,10 +143,11 @@ module Vcloud
         ERB.new(File.read(File.expand_path(erb_file)), nil, '>-').result(binding_object)
       end
 
-      def post_process_script(script, script_post_processor)
+      def post_process_erb_output(data_to_process, post_processor_script)
+        # Open3.capture2, as we just need to return STDOUT of the post_processor_script
         Open3.capture2(
-          File.expand_path(script_post_processor),
-          stdin_data: script).first
+          File.expand_path(post_processor_script),
+          stdin_data: data_to_process).first
       end
 
       def virtual_hardware_section

@@ -200,7 +200,7 @@ module Vcloud
           erbfile = "#{@data_dir}/preamble_post_processor_test_input.erb"
           characters_in_file = File.read(erbfile).size
           expect(@vm.generate_preamble(erbfile, '/usr/bin/wc', vars)).
-            to match(/\s#{characters_in_file}\s/)
+            to match(/^\s+\d+\s+\d+\s+#{characters_in_file}\s/)
         end
       end
 

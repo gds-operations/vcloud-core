@@ -46,7 +46,7 @@ module Vcloud
       end
 
       def vcloud_attributes
-        Vcloud::Fog::ServiceInterface.new.get_network(id)
+        Vcloud::Fog::ServiceInterface.new.get_network_complete(id)
       end
 
       def name

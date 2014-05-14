@@ -1,7 +1,9 @@
-## Current
+## 0.3.0 (2014-05-13)
 
 Features:
 
+  - Switch from deprecated Fog get_network request to get_network_complete
+  - Breaking change to OrgVdcNetwork#vcloud_attributes due to Fog deprecation fix
   - Updated vm/vApp logging levels to make use of quiet/normal/verbose operation
 
 ## 0.2.0 (2014-05-06)

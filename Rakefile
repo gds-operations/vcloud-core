@@ -1,7 +1,7 @@
 require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
 
-task :default => [:spec, :features]
+task :default => [:rubocop, :spec, :features]
 
 RSpec::Core::RakeTask.new(:spec) do |task|
   # Set a bogus Fog credential, otherwise it's possible for the unit

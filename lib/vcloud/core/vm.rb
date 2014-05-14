@@ -112,14 +112,20 @@ module Vcloud
         Vcloud::Fog::ServiceInterface.new.put_guest_customization_section(id, name, interpolated_preamble)
       end
 
-      def generate_preamble(script_path, script_post_processor, vars)
-        script = ERB.new(File.read(File.expand_path(script_path)), nil, '>-').result(binding)
+      def generate_preamble(script_path, script_post_processor, preamble_vars)
+        erb_vars = OpenStruct.new({
+          vapp_name: vapp_name,
+          vars: preamble_vars
+        })
+        erb_vars_binding_object = erb_vars.instance_eval { binding }
+        erb_output = interpolate_erb_file(script_path, erb_vars_binding_object)
         if script_post_processor
-          script = Open3.capture2(File.expand_path(script_post_processor),
-                                  stdin_data: script).first
+          post_process_erb_output(erb_output, script_post_processor) if script_post_processor
+        else
+          erb_output
         end
-        script
       end
+
 
       def update_storage_profile storage_profile
         storage_profile_href = get_storage_profile_href_by_name(storage_profile, @vapp.name)
@@ -132,6 +138,18 @@ module Vcloud
       end
 
       private
+
+      def interpolate_erb_file(erb_file, binding_object)
+        ERB.new(File.read(File.expand_path(erb_file)), nil, '>-').result(binding_object)
+      end
+
+      def post_process_erb_output(data_to_process, post_processor_script)
+        # Open3.capture2, as we just need to return STDOUT of the post_processor_script
+        Open3.capture2(
+          File.expand_path(post_processor_script),
+          stdin_data: data_to_process).first
+      end
+
       def virtual_hardware_section
         vcloud_attributes[:'ovf:VirtualHardwareSection'][:'ovf:Item']
       end

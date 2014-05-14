@@ -181,18 +181,26 @@ module Vcloud
       end
 
       context '#generate_preamble' do
-        it "should interpolate vars hash and vapp_name into template" do
-          vars = {:message => 'hello world'}
+        it "should interpolate vars hash, ENV, and vapp_name into template" do
+          vars = {
+            :message => 'hello world',
+            :array_test => [ 'foo', 'bar' ],
+          }
+          stub_const('ENV', {'TEST_INTERPOLATED_ENVVAR' => 'test_interpolated_env'})
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
           @vm.generate_preamble(erbfile, nil, vars).should == expected_output
         end
 
-        it "should interpolate vars hash and post-process template" do
-          vars = {:message => 'hello world'}
-          erbfile = "#{@data_dir}/basic_preamble_test.erb"
-          expected_output = File.read("#{erbfile}.OUT")
-          @vm.generate_preamble(erbfile, '/bin/cat', vars).should == expected_output
+        it "passes the output of ERB through an optional post-processor tool" do
+          # we use 'wc' as post processor since it will give us the character
+          # count in the file, which we can easily match on, and is common
+          # across most OSes.
+          vars = {}
+          erbfile = "#{@data_dir}/preamble_post_processor_test_input.erb"
+          characters_in_file = File.read(erbfile).size
+          expect(@vm.generate_preamble(erbfile, '/usr/bin/wc', vars)).
+            to match(/^\s+\d+\s+\d+\s+#{characters_in_file}\s/)
         end
       end
 

@@ -4,6 +4,9 @@
 
 (
 echo "in $*"
+echo "env_var: test_interpolated_env"
 echo "vapp_name: test-vapp-1"
 echo "message: hello world"
+echo "index0: foo"
+echo "index1: bar"
 ) >> /PREAMBLE_OUTPUT

@@ -4,6 +4,10 @@
 
 (
 echo "in $*"
+echo "env_var: <%= ENV['TEST_INTERPOLATED_ENVVAR'] -%>"
 echo "vapp_name: <%= vapp_name -%>"
 echo "message: <%= vars[:message] -%>"
+<% vars[:array_test].each_with_index do |element, index| -%>
+echo "index<%= index -%>: <%= element -%>"
+<% end -%>
 ) >> /PREAMBLE_OUTPUT

@@ -33,11 +33,11 @@ module Vcloud
         end
       end
 
-      def self.get catalog_name, catalog_item_name
-        ids = self.get_ids_by_name_and_catalog(catalog_item_name, catalog_name)
+      def self.get vapp_template_name, catalog_name
+        ids = self.get_ids_by_name_and_catalog(vapp_template_name, catalog_name)
         raise 'Could not find template vApp' if ids.size == 0
         if ids.size > 1
-          raise "Template #{catalog_item_name} is not unique in catalog #{catalog_name}"
+          raise "Template #{vapp_template_name} is not unique in catalog #{catalog_name}"
         end
         return self.new(ids.first)
       end

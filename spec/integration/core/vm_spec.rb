@@ -34,6 +34,23 @@ describe Vcloud::Core::Vm do
   end
 
   context "#update_memory_size_in_mb" do
+
+    it "can increase the memory size by 512MB" do
+      initial_memory_size = Integer(@vm.memory)  # Vm#memory returns a string
+      memory_to_add_in_mb = 512
+      new_memory_size = initial_memory_size + memory_to_add_in_mb
+      @vm.update_memory_size_in_mb(new_memory_size)
+      expect(Integer(@vm.memory)).to eq(new_memory_size)
+    end
+
+    it "can reduce the memory size by 512MB" do
+      initial_memory_size = Integer(@vm.memory)  # Vm#memory returns a string
+      memory_to_remove_in_mb = 512
+      new_memory_size = initial_memory_size - memory_to_remove_in_mb
+      @vm.update_memory_size_in_mb(new_memory_size)
+      expect(Integer(@vm.memory)).to eq(new_memory_size)
+    end
+
   end
 
   context "#update_name" do

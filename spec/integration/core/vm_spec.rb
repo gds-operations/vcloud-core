@@ -54,6 +54,14 @@ describe Vcloud::Core::Vm do
   end
 
   context "#update_name" do
+
+    it "can update the name of the vm" do
+      current_name = @vm.name
+      new_name = "#{current_name}-updated"
+      @vm.update_name(new_name)
+      expect(@vm.name).to eq(new_name)
+    end
+
   end
 
   context "#vapp_name" do

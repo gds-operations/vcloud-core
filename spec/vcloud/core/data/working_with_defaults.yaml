@@ -6,7 +6,7 @@ vapps:
 - name: vapp-vcloud-tools-tests
   vdc_name: *VDC_NAME
   catalog: CATALOG_NAME
-  catalog_item: CATALOG_ITEM
+  vapp_template: VAPP_TEMPLATE
   vm:
     hardware_config:
       memory: '4096'

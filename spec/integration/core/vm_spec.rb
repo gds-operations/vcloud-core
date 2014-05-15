@@ -92,6 +92,43 @@ describe Vcloud::Core::Vm do
   end
 
   context "#update_metadata" do
+
+    before(:all) do
+      @initial_vm_metadata = Vcloud::Core::Vm.get_metadata(@vm.id)
+      @initial_vapp_metadata = Vcloud::Core::Vapp.get_metadata(@vapp.id)
+    end
+
+    it "updates the Vm metadata, if a single key/value is specified" do
+      @vm.update_metadata({"Test Key" => "test value"})
+      updated_metadata = Vcloud::Core::Vm.get_metadata(@vm.id)
+      # get_metadata is symbolizing the key names
+      expected_metadata = @initial_vm_metadata.merge({
+        :"Test Key" => "test value"
+      })
+      expect(updated_metadata).to eq(expected_metadata)
+    end
+
+    it "adds to the existing Vm metadata, rather than replacing it" do
+      @vm.update_metadata({"Another Test" => "test value 2"})
+      updated_metadata = Vcloud::Core::Vm.get_metadata(@vm.id)
+      # get_metadata is symbolizing the key names
+      expected_metadata = @initial_vm_metadata.merge({
+        :"Test Key" => "test value",
+        :"Another Test" => "test value 2",
+      })
+      expect(updated_metadata).to eq(expected_metadata)
+    end
+
+    it "has also updated parent vApp with the same metadata" do
+      updated_vapp_metadata = Vcloud::Core::Vapp.get_metadata(@vapp.id)
+      # get_metadata is symbolizing the key names
+      expected_vapp_metadata = @initial_vapp_metadata.merge({
+        :"Test Key" => "test value",
+        :"Another Test" => "test value 2",
+      })
+      expect(updated_vapp_metadata).to eq(expected_vapp_metadata)
+    end
+
   end
 
   context "#add_extra_disks" do

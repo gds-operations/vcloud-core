@@ -132,6 +132,31 @@ describe Vcloud::Core::Vm do
   end
 
   context "#add_extra_disks" do
+
+    before(:all) do
+      @fog_model_vm = Vcloud::Fog::ModelInterface.new.get_vm_by_href(@vm.href)
+      @initial_vm_disks = get_vm_hard_disks(@fog_model_vm)
+    end
+
+    it "the VM should already have a single disk assigned" do
+      expect(@initial_vm_disks.size).to eq(1)
+    end
+
+    it "can successfully add a second disk" do
+      extra_disks = [ { size: '20480' } ]
+      @vm.add_extra_disks(extra_disks)
+      updated_vm_disks = get_vm_hard_disks(@fog_model_vm)
+      expect(updated_vm_disks.size).to eq(2)
+    end
+
+    it "can successfully add several disks in one call" do
+      extra_disks = [ { size: '20480' }, { size: '10240' } ]
+      disks_before_update = get_vm_hard_disks(@fog_model_vm)
+      @vm.add_extra_disks(extra_disks)
+      disks_after_update = get_vm_hard_disks(@fog_model_vm)
+      expect(disks_after_update.size).to eq(disks_before_update.size + extra_disks.size)
+    end
+
   end
 
   context "#configure_network_interfaces" do
@@ -142,6 +167,12 @@ describe Vcloud::Core::Vm do
 
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
+  end
+
+  def get_vm_hard_disks(fog_model_vm)
+    # 'disks' Model VM method returns disks + controllers. Disks always have
+    # the name 'Hard Disk {n}' where (n >= 0).
+    fog_model_vm.disks.select { |disk| disk.name =~ /^Hard disk/ }
   end
 
 end

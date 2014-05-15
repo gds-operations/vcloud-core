@@ -65,6 +65,11 @@ describe Vcloud::Core::Vm do
   end
 
   context "#vapp_name" do
+
+    it "can retrieve the name of its parent vApp" do
+      expect(@vm.vapp_name).to eq(@vapp.name)
+    end
+
   end
 
   context "#update_cpu_count" do

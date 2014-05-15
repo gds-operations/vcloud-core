@@ -6,7 +6,7 @@ module Vcloud
 
       def initialize(gateway_interface_hash)
         if gateway_interface_hash.nil?
-          raise "EdgeGatewayInterface: gateway_interface_hash cannot be nil" 
+          raise "EdgeGatewayInterface: gateway_interface_hash cannot be nil"
         end
         unless gateway_interface_hash[:Name] && gateway_interface_hash[:Network]
           raise "EdgeGatewayInterface: bad input: #{gateway_interface_hash}"

@@ -73,6 +73,22 @@ describe Vcloud::Core::Vm do
   end
 
   context "#update_cpu_count" do
+
+    it "can increase the number of CPUs in a VM" do
+      initial_cpu_count = Integer(@vm.cpu) # Vm#cpu returns a string :(
+      new_cpu_count = initial_cpu_count * 2
+      @vm.update_cpu_count(new_cpu_count)
+      expect(Integer(@vm.cpu)).to eq(new_cpu_count)
+    end
+
+    it "can decrease the number of CPUs in a VM to 1" do
+      initial_cpu_count = Integer(@vm.cpu) # Vm#cpu returns a string :(
+      new_cpu_count = 1
+      @vm.update_cpu_count(new_cpu_count)
+      expect(new_cpu_count).not_to eq(initial_cpu_count)
+      expect(Integer(@vm.cpu)).to eq(new_cpu_count)
+    end
+
   end
 
   context "#update_metadata" do

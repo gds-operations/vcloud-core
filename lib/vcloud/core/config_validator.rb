@@ -23,7 +23,7 @@ module Vcloud
   module Core
     class ConfigValidator
 
-      attr_reader :key, :data, :schema, :type, :errors
+      attr_reader :key, :data, :schema, :type, :errors, :warnings
 
       VALID_ALPHABETICAL_VALUES_FOR_IP_RANGE = %w(Any external internal)
 
@@ -35,7 +35,8 @@ module Vcloud
         raise "Nil schema" unless schema
         raise "Invalid schema" unless schema.key?(:type)
         @type = schema[:type].to_s.downcase
-        @errors = []
+        @errors   = []
+        @warnings = []
         @data   = data
         @schema = schema
         @key    = key
@@ -63,6 +64,7 @@ module Vcloud
           element_schema = schema[:each_element_is]
           data.each do |element|
             sub_validator = ConfigValidator.validate(key, element, element_schema)
+            @warnings = warnings + sub_validator.warnings
             unless sub_validator.valid?
               @errors = errors + sub_validator.errors
             end
@@ -119,6 +121,7 @@ module Vcloud
           data[sub_key],
           sub_schema
         )
+        @warnings = warnings + sub_validator.warnings
         unless sub_validator.valid?
           @errors = errors + sub_validator.errors
         end

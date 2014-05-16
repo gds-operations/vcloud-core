@@ -222,9 +222,6 @@ describe Vcloud::Core::Vm do
 
   end
 
-  context "#configure_guest_customization_section" do
-  end
-
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
   end

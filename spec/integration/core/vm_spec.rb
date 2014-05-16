@@ -9,6 +9,10 @@ describe Vcloud::Core::Vm do
     @catalog_name = test_data.catalog
     @vapp_template_name = test_data.vapp_template
     @network_names = [ test_data.network_1, test_data.network_2 ]
+    @network_ips = {
+      test_data.network_1 => test_data.network_1_ip,
+      test_data.network_2 => test_data.network_2_ip,
+    }
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
       1,
       @vdc_name,
@@ -160,6 +164,62 @@ describe Vcloud::Core::Vm do
   end
 
   context "#configure_network_interfaces" do
+
+    it "can configure a single NIC, default DHCP" do
+      network_config = [
+        { :name => @network_names[0] }
+      ]
+      @vm.configure_network_interfaces(network_config)
+      # if number if nics is 1, API returns a Hash.
+      # This is a bug in Fog -- ensure_list! is needed. See
+      # https://github.com/fog/fog/issues/2927
+      vm_nics = @vm.vcloud_attributes[:NetworkConnectionSection][:NetworkConnection]
+      expect(vm_nics).to be_instance_of(Hash)
+      expect(vm_nics[:network]).to eq(network_config[0][:name])
+      expect(vm_nics[:IpAddressAllocationMode]).to eq('DHCP')
+    end
+
+    it "can configure dual NICs, both defaulting to DHCP" do
+      network_config = [
+        { :name => @network_names[0] },
+        { :name => @network_names[1] }
+      ]
+      @vm.configure_network_interfaces(network_config)
+      # if number if nics is 2+, API returns a Array.
+      # See https://github.com/fog/fog/issues/2927
+      vm_nics = @vm.vcloud_attributes[:NetworkConnectionSection][:NetworkConnection]
+      vm_nics = sort_nics_based_on_network_connection_index(vm_nics)
+      expect(vm_nics).to be_instance_of(Array)
+      expect(vm_nics.size).to eq(network_config.size)
+      expect(vm_nics[0][:network]).to eq(network_config[0][:name])
+      expect(vm_nics[0][:IpAddressAllocationMode]).to eq('DHCP')
+      expect(vm_nics[0][:NetworkConnectionIndex]).to eq('0')
+      expect(vm_nics[1][:network]).to eq(network_config[1][:name])
+      expect(vm_nics[1][:IpAddressAllocationMode]).to eq('DHCP')
+      expect(vm_nics[1][:NetworkConnectionIndex]).to eq('1')
+    end
+
+    it "can configure dual NICs with manually assigned IP addresses" do
+      network_config = [
+        { :name => @network_names[0], :ip_address => @network_ips[@network_names[0]] },
+        { :name => @network_names[1], :ip_address => @network_ips[@network_names[1]] },
+      ]
+      @vm.configure_network_interfaces(network_config)
+      # if number if nics is 2+, API returns a Array.
+      vm_nics = @vm.vcloud_attributes[:NetworkConnectionSection][:NetworkConnection]
+      vm_nics = sort_nics_based_on_network_connection_index(vm_nics)
+      expect(vm_nics).to be_instance_of(Array)
+      expect(vm_nics.size).to eq(network_config.size)
+      expect(vm_nics[0][:network]).to eq(network_config[0][:name])
+      expect(vm_nics[0][:IpAddress]).to eq(network_config[0][:ip_address])
+      expect(vm_nics[0][:IpAddressAllocationMode]).to eq('MANUAL')
+      expect(vm_nics[0][:NetworkConnectionIndex]).to eq('0')
+      expect(vm_nics[1][:network]).to eq(network_config[1][:name])
+      expect(vm_nics[1][:IpAddress]).to eq(network_config[1][:ip_address])
+      expect(vm_nics[1][:IpAddressAllocationMode]).to eq('MANUAL')
+      expect(vm_nics[1][:NetworkConnectionIndex]).to eq('1')
+    end
+
   end
 
   context "#configure_guest_customization_section" do
@@ -173,6 +233,16 @@ describe Vcloud::Core::Vm do
     # 'disks' Model VM method returns disks + controllers. Disks always have
     # the name 'Hard Disk {n}' where (n >= 0).
     fog_model_vm.disks.select { |disk| disk.name =~ /^Hard disk/ }
+  end
+
+  def sort_nics_based_on_network_connection_index(network_connection_list)
+    # The :NetworkConnection Array is not (necessarily) ordered when it is
+    # retrieved via the API.
+    # Instead, they are indexed by the :NetworkConnectionIndex value, which
+    # is returned by the API as a number-as-a-string (eg "0", "1")
+    network_connection_list.sort do |x,y|
+      Integer(x[:NetworkConnectionIndex]) <=> Integer(y[:NetworkConnectionIndex])
+    end
   end
 
 end

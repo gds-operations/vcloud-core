@@ -7,6 +7,7 @@ Maint:
 Features:
 
   - Add a 'warnings' variable/method to ConfigValidator.
+  - Support simple parameter deprecations in ConfigValidator.
 
 ## 0.3.0 (2014-05-13)
 

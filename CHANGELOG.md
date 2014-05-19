@@ -1,3 +1,9 @@
+## 0.4.0 (UNRELEASED)
+
+Maint:
+
+  - Breaking changes to the order and name of arguments for VappTemplate#get
+
 ## 0.3.0 (2014-05-13)
 
 Features:

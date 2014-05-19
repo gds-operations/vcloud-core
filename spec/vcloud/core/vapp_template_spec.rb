@@ -8,10 +8,6 @@ module Vcloud
         @id = 'vappTemplate-12345678-1234-1234-1234-000000234121'
         @mock_fog_interface = StubFogInterface.new
         Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        @test_config = {
-            :catalog => 'test_catalog',
-            :catalog_item => 'test_template'
-        }
       end
 
       context "Class public interface" do
@@ -55,7 +51,7 @@ module Vcloud
           mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
-          expect { VappTemplate.get('test_catalog', 'test_template') }.
+          expect { VappTemplate.get('test_template', 'test_catalog') }.
             to raise_error('Could not find template vApp')
         end
 
@@ -71,7 +67,7 @@ module Vcloud
           mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
-          expect { VappTemplate.get('test_catalog', 'test_template') }.
+          expect { VappTemplate.get('test_template', 'test_catalog') }.
             to raise_error('Template test_template is not unique in catalog test_catalog')
         end
 
@@ -85,7 +81,7 @@ module Vcloud
           mock_query.should_receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
-          test_template = VappTemplate.get('test_catalog', 'test_template')
+          test_template = VappTemplate.get('test_template', 'test_catalog')
           test_template.id.should == 'vappTemplate-12345678-90ab-cdef-0123-4567890abcde'
         end
 

@@ -35,10 +35,6 @@ module Vcloud
           @vcloud.get_vapps_in_lease_from_query(options).body
         end
 
-        def get_catalog_item(id)
-          @vcloud.get_catalog_item(id).body
-        end
-
         def post_instantiate_vapp_template(vdc, template, name, params)
           Vcloud::Core.logger.debug("instantiating #{name} vapp in #{vdc[:name]}")
           vapp = @vcloud.post_instantiate_vapp_template(extract_id(vdc), template, name, params).body
@@ -149,10 +145,6 @@ module Vcloud
         def shutdown_vapp(vapp_id)
           task = @vcloud.post_shutdown_vapp(vapp_id).body
           @vcloud.process_task(task)
-        end
-
-        def get_catalog(id)
-          @vcloud.get_catalog(id).body
         end
 
         def put_vapp_metadata_value(id, k, v)

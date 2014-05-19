@@ -201,7 +201,7 @@ module Vcloud
         end
 
         def create_test_case_vapps(quantity, vdc_name, catalog_name, vapp_template_name)
-          vapp_template = VappTemplate.get(catalog_name, vapp_template_name)
+          vapp_template = VappTemplate.get(vapp_template_name, catalog_name)
           timestamp_in_s = Time.new.to_i
           base_vapp_name = "vcloud-core-query-tests-#{timestamp_in_s}-"
           network_names = []

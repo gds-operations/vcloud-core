@@ -13,6 +13,8 @@ describe Vcloud::Core::Vm do
       test_data.network_1 => test_data.network_1_ip,
       test_data.network_2 => test_data.network_2_ip,
     }
+    @default_storage_profile_name = test_data.default_storage_profile_name
+    @new_storage_profile_name = test_data.storage_profile
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
       1,
       @vdc_name,
@@ -218,6 +220,20 @@ describe Vcloud::Core::Vm do
       expect(vm_nics[1][:IpAddress]).to eq(network_config[1][:ip_address])
       expect(vm_nics[1][:IpAddressAllocationMode]).to eq('MANUAL')
       expect(vm_nics[1][:NetworkConnectionIndex]).to eq('1')
+    end
+
+  end
+
+  context "#update_storage_profile" do
+
+    it "can update the storage profile of a VM" do
+      if @new_storage_profile_name == @default_storage_profile_name
+        pending("Storage profiles not available?")
+      end
+      original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
+      @vm.update_storage_profile(@new_storage_profile_name)
+      expect(original_storage_profile_name).to eq(@default_storage_profile_name)
+      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@new_storage_profile_name)
     end
 
   end

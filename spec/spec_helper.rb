@@ -14,6 +14,7 @@ end
 
 require 'bundler/setup'
 require 'vcloud/core'
+require 'vcloud/tools/tester'
 require 'support/stub_fog_interface.rb'
 require 'support/integration_helper'
 

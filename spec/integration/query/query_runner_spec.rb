@@ -92,11 +92,13 @@ module Vcloud
 
         before(:all) do
           @number_of_vapps_to_create = 2
-          @test_case_vapps = create_test_case_vapps(
+          @test_case_vapps = IntegrationHelper.create_test_case_vapps(
             @number_of_vapps_to_create,
             @vdc_name,
             @vapp_template_catalog_name,
             @vapp_template_name,
+            [],
+            "vcloud-core-query-tests-"
           )
         end
 
@@ -194,27 +196,7 @@ module Vcloud
         end
 
         after(:all) do
-          fsi = Vcloud::Fog::ServiceInterface.new()
-          @test_case_vapps.each do |vapp|
-            fsi.delete_vapp(vapp.id)
-          end
-        end
-
-        def create_test_case_vapps(quantity, vdc_name, catalog_name, vapp_template_name)
-          vapp_template = VappTemplate.get(vapp_template_name, catalog_name)
-          timestamp_in_s = Time.new.to_i
-          base_vapp_name = "vcloud-core-query-tests-#{timestamp_in_s}-"
-          network_names = []
-          vapp_list = []
-          quantity.times do |index|
-            vapp_list << Vapp.instantiate(
-              base_vapp_name + index.to_s,
-              network_names,
-              vapp_template.id,
-              vdc_name
-            )
-          end
-          vapp_list
+          IntegrationHelper.delete_vapps(@test_case_vapps)
         end
 
       end

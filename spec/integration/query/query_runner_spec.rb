@@ -98,7 +98,7 @@ module Vcloud
             @vapp_template_catalog_name,
             @vapp_template_name,
             [],
-            "vcloud-core-query-tests-"
+            "vcloud-core-query-tests"
           )
         end
 

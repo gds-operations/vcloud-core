@@ -5,11 +5,11 @@ module IntegrationHelper
                                   catalog_name,
                                   vapp_template_name,
                                   network_names = [],
-                                  prefix = "vcloud-core-tests-"
+                                  prefix = "vcloud-core-tests"
                                  )
     vapp_template = Vcloud::Core::VappTemplate.get(vapp_template_name, catalog_name)
     timestamp_in_s = Time.new.to_i
-    base_vapp_name = "#{prefix}#{timestamp_in_s}-"
+    base_vapp_name = "#{prefix}-#{timestamp_in_s}-"
     vapp_list = []
     number_of_vapps.times do |index|
       vapp_list << Vcloud::Core::Vapp.instantiate(

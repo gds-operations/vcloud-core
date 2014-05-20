@@ -153,18 +153,9 @@ Run the integration tests (slower and requires a real environment):
 
     bundle exec rake integration
 
-### setting up and describing your environment for test runs
-
-You need access to a suitable vCloud Director organization to run the integration tests - it also needs some basic
-configuration: an Edge Gateway, and a routed network.
-It is not necessarily safe to run them against an existing environment, unless care is taken with the entities being
-tested.
-
-A number of ENV vars specifying items under test in the environment need to be set for the tests to run successfully.
-
-- `VCLOUD_EDGE_GATEWAY`: _name of edge gateway under test_
-- `VCLOUD_NETWORK1_ID`: _Id of network under test_
-- `VCLOUD_PROVIDER_NETWORK_ID`: _Id of the uplink network (or external network) of the VCLOUD_EDGE_GATEWAY under test_
+You need access to a suitable vCloud Director organization to run the
+integration tests. See the [integration tests README](/spec/integration/README.md) for
+further details.
 
 ## Contributing
 

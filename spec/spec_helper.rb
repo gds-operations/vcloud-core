@@ -15,6 +15,7 @@ end
 require 'bundler/setup'
 require 'vcloud/core'
 require 'support/stub_fog_interface.rb'
+require 'support/integration_helper'
 
 if ENV['COVERAGE']
   SimpleCov.at_exit do

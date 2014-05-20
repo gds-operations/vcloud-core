@@ -57,6 +57,32 @@ module Vcloud
           expect { loader.load_config(input_file, invalid_schema) }.
             to raise_error('Supplied configuration does not match supplied schema')
         end
+
+        it "should not log warnings if there are none" do
+          input_file = "#{@data_dir}/working_with_defaults.yaml"
+          loader = ConfigLoader.new
+
+          Vcloud::Core.logger.should_not_receive(:warn)
+          loader.load_config(input_file, vapp_config_schema)
+        end
+
+        it "should log warnings if checked against a deprecated schema" do
+          input_file = "#{@data_dir}/working_with_defaults.yaml"
+          loader = ConfigLoader.new
+
+          Vcloud::Core.logger.should_receive(:warn).with("vapps: is deprecated by 'vapps_new'")
+          loader.load_config(input_file, deprecated_schema)
+        end
+
+        it "should log warning before raising error against an invalid and deprecated schema" do
+          input_file = "#{@data_dir}/working_with_defaults.yaml"
+          loader = ConfigLoader.new
+
+          Vcloud::Core.logger.should_receive(:warn).with("vapps: is deprecated by 'vapps_new'")
+          Vcloud::Core.logger.should_receive(:fatal).with("vapps: is not a hash")
+          expect { loader.load_config(input_file, invalid_and_deprecated_schema) }.
+            to raise_error('Supplied configuration does not match supplied schema')
+        end
       end
 
       def vapp_config_schema
@@ -80,6 +106,28 @@ module Vcloud
           permit_unknown_parameters: true,
           internals: {
             vapps: { type: Hash },
+          }
+        }
+      end
+
+      def invalid_and_deprecated_schema
+        {
+          type: 'hash',
+          permit_unknown_parameters: true,
+          internals: {
+            vapps: { type: Hash, deprecated_by: 'vapps_new' },
+            vapps_new: { type: 'array' },
+          }
+        }
+      end
+
+      def deprecated_schema
+        {
+          type: 'hash',
+          permit_unknown_parameters: true,
+          internals: {
+            vapps: { type: 'array', deprecated_by: 'vapps_new' },
+            vapps_new: { type: 'array' },
           }
         }
       end

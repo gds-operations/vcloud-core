@@ -6,13 +6,16 @@ describe Vcloud::Core::Vapp do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
-    @vdc_name = test_data.vdc_1_name
-    @catalog_name = test_data.catalog
-    @vapp_template_name = test_data.vapp_template
-    @network_names = [ test_data.network_1, test_data.network_2 ]
+    @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @network_names = [ @test_data.network_1, @test_data.network_2 ]
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
-      1, @vdc_name, @catalog_name, @vapp_template_name, @network_names, "vcloud-core-vapp-tests")
+      1,
+      @test_data.vdc_1_name,
+      @test_data.catalog,
+      @test_data.vapp_template,
+      @network_names,
+      "vcloud-core-vapp-tests"
+    )
     @vapp = @test_case_vapps.first
   end
 
@@ -69,6 +72,50 @@ describe Vcloud::Core::Vapp do
       expect {
         Vcloud::Core::Vapp.get_by_name(bogus_vapp_name)
       }.to raise_error("vApp #{bogus_vapp_name} not found")
+    end
+
+  end
+
+  context ".instantiate" do
+
+    let(:vapp_template) {
+      Vcloud::Core::VappTemplate.get(@test_data.vapp_template, @test_data.catalog)
+    }
+
+    it "can create a vApp with no networks assigned" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      new_vapp = Vcloud::Core::Vapp.instantiate(
+        vapp_name,
+        [],
+        vapp_template.id,
+        @test_data.vdc_1_name
+      )
+      @test_case_vapps << new_vapp
+      expect(new_vapp.name).to eq(vapp_name)
+    end
+
+    it "can create a vApp with one networks assigned" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      new_vapp = Vcloud::Core::Vapp.instantiate(
+        vapp_name,
+        [ @test_data.network_1 ],
+        vapp_template.id,
+        @test_data.vdc_1_name
+      )
+      @test_case_vapps << new_vapp
+      expect(new_vapp.name).to eq(vapp_name)
+    end
+
+    it "can create a vApp with two networks assigned" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      new_vapp = Vcloud::Core::Vapp.instantiate(
+        vapp_name,
+        [ @test_data.network_1, @test_data.network_2 ],
+        vapp_template.id,
+        @test_data.vdc_1_name
+      )
+      @test_case_vapps << new_vapp
+      expect(new_vapp.name).to eq(vapp_name)
     end
 
   end

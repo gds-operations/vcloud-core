@@ -4,28 +4,12 @@ module Vcloud
   module Core
     describe QueryRunner do
 
-      required_env = {
-        'VCLOUD_VDC_NAME' =>
-           'to the name of an orgVdc to use to instantiate vApps into',
-        'VCLOUD_TEMPLATE_NAME' =>
-           'to the name of a vAppTemplate to use create vApps in tests',
-        'VCLOUD_CATALOG_NAME' =>
-           'to the name of the catalog that VCLOUD_VAPP_TEMPLATE_NAME is stored in',
-      }
-
-      error = false
-      required_env.each do |var,message|
-        unless ENV[var]
-          puts "Must set #{var} #{message}" unless ENV[var]
-          error = true
-        end
-      end
-      Kernel.exit(2) if error
-
       before(:all) do
-        @vapp_template_name = ENV['VCLOUD_TEMPLATE_NAME']
-        @vapp_template_catalog_name = ENV['VCLOUD_CATALOG_NAME']
-        @vdc_name = ENV['VCLOUD_VDC_NAME']
+        config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
+        test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+        @vapp_template_name = test_data.vapp_template
+        @vapp_template_catalog_name = test_data.catalog
+        @vdc_name = test_data.vdc_1_name
       end
 
       context "#available_query_types" do

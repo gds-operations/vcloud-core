@@ -1,0 +1,6 @@
+default:
+  vdc_1_name:
+  catalog:
+  vapp_template:
+  network_1:
+  network_1_ip:

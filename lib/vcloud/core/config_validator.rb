@@ -1,5 +1,9 @@
 require 'ipaddr'
 
+# self::validate is entry point; this class method is called to
+# instantiate ConfigValidator. For example:
+# Core::ConfigValidator.validate(key, data, schema)
+
 module Vcloud
   module Core
     class ConfigValidator
@@ -29,6 +33,7 @@ module Vcloud
 
       private
 
+      # Call the corresponding function in this class (dependant on schema[:type])
       def validate
         self.send("validate_#{type}".to_sym)
       end

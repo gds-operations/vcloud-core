@@ -56,6 +56,23 @@ describe Vcloud::Core::Vapp do
 
   end
 
+  context ".get_by_name" do
+
+    it "can find our fixture vApp by its name" do
+      fixture_vapp_name = @vapp.name
+      looked_up_vapp = Vcloud::Core::Vapp.get_by_name(fixture_vapp_name)
+      expect(@vapp.id).to eq(looked_up_vapp.id)
+    end
+
+    it "raises an error if it cannot find the named vApp" do
+      bogus_vapp_name = "bogus-vapp-name-wefoiuhwef"
+      expect {
+        Vcloud::Core::Vapp.get_by_name(bogus_vapp_name)
+      }.to raise_error("vApp #{bogus_vapp_name} not found")
+    end
+
+  end
+
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
   end

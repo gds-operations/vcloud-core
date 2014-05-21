@@ -17,7 +17,7 @@ module Vcloud
       end
       Kernel.exit(2) if error
 
-      it "configure firewall service" do
+      it "configures a firewall service" do
         configuration = {
             :FirewallService =>
                 {

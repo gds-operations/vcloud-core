@@ -8,6 +8,10 @@ module Vcloud
 
       VALID_ALPHABETICAL_VALUES_FOR_IP_RANGE = %w(Any external internal)
 
+      def self.validate(key, data, schema)
+        new(key, data, schema)
+      end
+
       def initialize(key, data, schema)
         raise "Nil schema" unless schema
         raise "Invalid schema" unless schema.key?(:type)
@@ -21,10 +25,6 @@ module Vcloud
 
       def valid?
         @errors.empty?
-      end
-
-      def self.validate(key, data, schema)
-        new(key, data, schema)
       end
 
       private

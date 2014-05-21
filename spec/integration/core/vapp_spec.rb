@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Vcloud::Core::Vapp do
 
+  let(:uuid_matcher) { "[-0-9a-f]+" }
+
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
     test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
@@ -26,6 +28,30 @@ describe Vcloud::Core::Vapp do
 
     it "has a :href element containing the expected vApp id" do
       expect(@vapp.vcloud_attributes[:href].split('/').last).to eq(@vapp.id)
+    end
+
+  end
+
+  context "#id" do
+
+    it "returns the a valid vApp id" do
+      expect(@vapp.id).to match(/^vapp-#{uuid_matcher}$/)
+    end
+
+  end
+
+  context "#name" do
+
+    it "returns the name of the vApp" do
+      expect(@vapp.name).to match(/^vcloud-core-vapp-tests-/)
+    end
+
+  end
+
+  context "#vdc_id" do
+
+    it "returns a valid uuid" do
+      expect(@vapp.vdc_id).to match(/^#{uuid_matcher}$/)
     end
 
   end

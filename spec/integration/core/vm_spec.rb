@@ -248,8 +248,8 @@ describe Vcloud::Core::Vm do
     # retrieved via the API.
     # Instead, they are indexed by the :NetworkConnectionIndex value, which
     # is returned by the API as a number-as-a-string (eg "0", "1")
-    network_connection_list.sort do |x,y|
-      Integer(x[:NetworkConnectionIndex]) <=> Integer(y[:NetworkConnectionIndex])
+    network_connection_list.sort_by do |n|
+      Integer(n[:NetworkConnectionIndex])
     end
   end
 

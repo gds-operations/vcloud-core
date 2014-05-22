@@ -1,5 +1,7 @@
 #!/bin/bash -x
 set -e
+
+git clean -ffdx
 bundle install --path "${HOME}/bundles/${JOB_NAME}"
 
 # Obtain the integration test parameters

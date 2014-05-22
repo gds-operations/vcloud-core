@@ -4,22 +4,17 @@ describe Vcloud::Core::Vm do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
-    @vdc_name = test_data.vdc_1_name
-    @catalog_name = test_data.catalog
-    @vapp_template_name = test_data.vapp_template
-    @network_names = [ test_data.network_1, test_data.network_2 ]
+    @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @network_names = [ @test_data.network_1, @test_data.network_2 ]
     @network_ips = {
-      test_data.network_1 => test_data.network_1_ip,
-      test_data.network_2 => test_data.network_2_ip,
+      @test_data.network_1 => @test_data.network_1_ip,
+      @test_data.network_2 => @test_data.network_2_ip,
     }
-    @default_storage_profile_name = test_data.default_storage_profile_name
-    @new_storage_profile_name = test_data.storage_profile
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
       1,
-      @vdc_name,
-      @catalog_name,
-      @vapp_template_name,
+      @test_data.vdc_1_name,
+      @test_data.catalog,
+      @test_data.vapp_template,
       @network_names,
       "vcloud-core-vm-tests"
     )
@@ -227,13 +222,13 @@ describe Vcloud::Core::Vm do
   context "#update_storage_profile" do
 
     it "can update the storage profile of a VM" do
-      if @new_storage_profile_name == @default_storage_profile_name
+      if @test_data.storage_profile == @test_data.default_storage_profile_name
         pending("Storage profiles not available?")
       end
       original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
-      @vm.update_storage_profile(@new_storage_profile_name)
-      expect(original_storage_profile_name).to eq(@default_storage_profile_name)
-      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@new_storage_profile_name)
+      @vm.update_storage_profile(@test_data.storage_profile)
+      expect(original_storage_profile_name).to eq(@test_data.default_storage_profile_name)
+      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_data.storage_profile)
     end
 
   end

@@ -4,6 +4,12 @@ Maint:
 
   - Breaking changes to the order and name of arguments for VappTemplate#get
 
+Features:
+
+  - Add a 'warnings' variable/method to ConfigValidator.
+  - Support simple parameter deprecations in ConfigValidator.
+  - Log schema warnings encountered in ConfigLoader.
+
 ## 0.3.0 (2014-05-13)
 
 Features:

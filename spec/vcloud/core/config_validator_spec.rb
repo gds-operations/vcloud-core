@@ -564,7 +564,125 @@ module Vcloud
             expect(v.valid?).to be_true
           end
         end
+      end
 
+      context "deprecated_by" do
+        # For clarification:
+        #
+        # - deprecatee: is the old param with a `deprecated_by` field.
+        # - deprecator: is the new param listed in the `deprecated_by` field.
+        #
+        context "deprecatee is provided and deprecator is not" do
+          let(:data) {{ name: "santa" }}
+
+          it "should validate and warn when deprecator is required" do
+            schema = {
+              type: "Hash",
+              internals: {
+                name: { type: 'string', deprecated_by: 'full_name' },
+                full_name: { type: 'string', required: true },
+              }
+            }
+            v = ConfigValidator.validate(:base, data, schema)
+            expect(v.valid?).to be_true
+            expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
+          end
+
+          it "should validate and warn when deprecator appears before deprecatee in schema" do
+            schema = {
+              type: "Hash",
+              internals: {
+                full_name: { type: 'string', required: true },
+                name: { type: 'string', deprecated_by: 'full_name' },
+              }
+            }
+            v = ConfigValidator.validate(:base, data, schema)
+            expect(v.valid?).to be_true
+            expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
+          end
+
+          it "should warn about deprecatee even when both are not required" do
+            schema = {
+              type: "Hash",
+              internals: {
+                name: { type: 'string', required: false, deprecated_by: 'full_name' },
+                full_name: { type: 'string', required: false },
+              }
+            }
+            v = ConfigValidator.validate(:base, data, schema)
+            expect(v.valid?).to be_true
+            expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
+          end
+        end
+
+        context "neither deprecatee or deprecator are provided" do
+          let(:data) {{ bogus: "blah" }}
+
+          it "should return error for deprecator but not deprecatee if neither are set" do
+            schema = {
+              type: "Hash",
+              internals: {
+                name: { type: 'string', deprecated_by: 'full_name' },
+                full_name: { type: 'string', required: true },
+                bogus: { type: 'string' },
+              }
+            }
+            v = ConfigValidator.validate(:base, data, schema)
+            expect(v.valid?).to be_false
+            expect(v.errors).to eq(["base: missing 'full_name' parameter"])
+          end
+
+          it "should raise exception if deprecator does not exist in schema" do
+            schema = {
+              type: "Hash",
+              internals: {
+                name: { type: 'string', deprecated_by: 'does_not_exist' },
+                bogus: { type: 'string' },
+              }
+            }
+            expect {
+              ConfigValidator.validate(:base, data, schema)
+            }.to raise_error("name: deprecated_by target 'does_not_exist' not found in schema")
+          end
+        end
+
+        context "deprecatee and deprecator are provided and of the wrong type" do
+          let(:data) {{ name: 123, full_name: 123 }}
+
+          it "should return an error for each and a warning for deprecatee" do
+            schema = {
+              type: "Hash",
+              internals: {
+                name: { type: 'string', deprecated_by: 'full_name' },
+                full_name: { type: 'string', required: true },
+              }
+            }
+            v = ConfigValidator.validate(:base, data, schema)
+            expect(v.valid?).to be_false
+            expect(v.errors).to eq([
+              "name: 123 is not a string",
+              "full_name: 123 is not a string",
+            ])
+            expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
+          end
+        end
+
+        it "should not honour deprecation across nested structures" do
+          data = { bogus: "blah" }
+          schema = {
+            type: "Hash",
+            internals: {
+              name: { type: 'string', deprecated_by: 'full_name' },
+              nested: { type: 'hash', internals: {
+                full_name: { type: 'string', required: true },
+              }},
+              bogus: { type: 'string' },
+            }
+          }
+          expect {
+            ConfigValidator.validate(:base, data, schema)
+          }.to raise_error("name: deprecated_by target 'full_name' not found in schema")
+        end
       end
 
     end

@@ -17,7 +17,7 @@ require 'ipaddr'
 #
 #   These methods then recursively instantiate this class by calling
 #   ConfigValidator::validate again (ConfigValidator#validate_hash calls this
-#   indirectly via the ConfigValidator::check_hash_parameter method).
+#   indirectly via the ConfigValidator#check_hash_parameter method).
 
 module Vcloud
   module Core

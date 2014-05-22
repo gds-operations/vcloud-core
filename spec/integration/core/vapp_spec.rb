@@ -119,6 +119,67 @@ describe Vcloud::Core::Vapp do
       expect(new_vapp.name).to eq(vapp_name)
     end
 
+    it "raises a Fog error if the vAppTemplate id refers to a non-existent template" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      expect {
+        Vcloud::Core::Vapp.instantiate(
+          vapp_name,
+          [],
+          "vAppTemplate-12345678-1234-1234-1234-1234567890ab",
+          @test_data.vdc_1_name
+        )
+      }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, "Access is forbidden")
+    end
+
+    it "raises a Fog error if the vAppTemplate id is invalid" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      expect {
+        Vcloud::Core::Vapp.instantiate(
+          vapp_name,
+          [],
+          "invalid-vapp-template-id",
+          @test_data.vdc_1_name
+        )
+      }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, "This operation is denied.")
+    end
+
+    it "raises a Fog error if the vAppTemplate id is nil" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      expect {
+        Vcloud::Core::Vapp.instantiate(
+          vapp_name,
+          [],
+          nil,
+          @test_data.vdc_1_name
+        )
+      }.to raise_error(Fog::Compute::VcloudDirector::BadRequest)
+    end
+
+    it "raises an error if we try to instantiate into a non-existent vDC" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      bogus_vdc_name = "NonExistentVdc asnfiuqwf"
+      expect {
+        Vcloud::Core::Vapp.instantiate(
+          vapp_name,
+          [],
+          vapp_template.id,
+          bogus_vdc_name
+        )
+      }.to raise_error("vdc #{bogus_vdc_name} cannot be found")
+    end
+
+    it "raises an error if the vDC name is nil" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      expect {
+        Vcloud::Core::Vapp.instantiate(
+          vapp_name,
+          [],
+          vapp_template.id,
+          nil
+        )
+      }.to raise_error("vdc  cannot be found")
+    end
+
   end
 
   after(:all) do

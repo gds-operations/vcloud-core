@@ -7,9 +7,10 @@ describe Vcloud::Core::Vapp do
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
     @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    quantity_of_test_case_vapps = 1
     @network_names = [ @test_data.network_1, @test_data.network_2 ]
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
-      1,
+      quantity_of_test_case_vapps,
       @test_data.vdc_1_name,
       @test_data.catalog,
       @test_data.vapp_template,

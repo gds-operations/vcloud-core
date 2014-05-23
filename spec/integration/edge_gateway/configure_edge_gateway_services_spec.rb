@@ -17,38 +17,35 @@ module Vcloud
       end
       Kernel.exit(2) if error
 
-      it "configures a firewall service" do
+      it "updates the edge gateway" do
         configuration = {
             :FirewallService =>
                 {
-                    :IsEnabled => "true",
-                    :DefaultAction => "allow",
+                    :IsEnabled        => "true",
+                    :FirewallRule     => [],
+                    :DefaultAction    => "drop",
                     :LogDefaultAction => "false",
-                    :FirewallRule =>
-                        [
-                            {
-                                :Id => "999",
-                                :IsEnabled => "false",
-                                :MatchOnTranslate => "false",
-                                :Description => "generated from edge_gateway_tests",
-                                :Policy => "drop",
-                                :Protocols => {:Tcp => "true"},
-                                :Port => "3412",
-                                :DestinationPortRange => "3412",
-                                :DestinationIp => "internal",
-                                :SourcePort => "3412",
-                                :SourcePortRange => "3412",
-                                :SourceIp => "internal",
-                                :EnableLogging => "false"
-                            }
-                        ]
-                }
+                },
+            :LoadBalancerService =>
+                {
+                    :IsEnabled      => "true",
+                    :Pool           => [],
+                    :VirtualServer  => [],
+                },
+            :NatService =>
+                {
+                    :IsEnabled  => "true",
+                    :NatRule    => [],
+                },
         }
+
         edge_gateway = EdgeGateway.get_by_name(ENV['VCLOUD_EDGE_GATEWAY'])
         edge_gateway.update_configuration(configuration)
 
         actual_config = edge_gateway.vcloud_attributes[:Configuration][:EdgeGatewayServiceConfiguration]
         actual_config[:FirewallService].should == configuration[:FirewallService]
+        actual_config[:LoadBalancerService].should == configuration[:LoadBalancerService]
+        actual_config[:NatService].should == configuration[:NatService]
       end
     end
   end

@@ -1,14 +1,19 @@
-## 0.4.0 (UNRELEASED)
-
-Maint:
-
-  - Breaking changes to the order and name of arguments for VappTemplate#get
+## 0.4.0 (2014-05-23)
 
 Features:
 
   - Add a 'warnings' variable/method to ConfigValidator.
   - Support simple parameter deprecations in ConfigValidator.
   - Log schema warnings encountered in ConfigLoader.
+
+API changes:
+
+  - Breaking changes to the order and name of arguments for VappTemplate#get
+  - Remove unused methods Vcloud::Fog::ServiceInterface#get_catalog and
+    Vcloud::Fog::ServiceInterface#get_catalog_item, plus associated
+    Vcloud::Fog::ContentTypes constants.
+  - Restrict variable scope available to preamble ERB templates so that they
+    cannot access or modify the Vm object.
 
 ## 0.3.0 (2014-05-13)
 

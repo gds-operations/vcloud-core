@@ -1,9 +1,7 @@
 #!/bin/bash -x
 set -e
 
-rm -f Gemfile.lock
-git clean -fdx
-
+git clean -ffdx
 bundle install --path "${HOME}/bundles/${JOB_NAME}"
 
 # Obtain the integration test parameters

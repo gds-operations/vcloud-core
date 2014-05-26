@@ -29,4 +29,28 @@ module IntegrationHelper
     end
   end
 
+  def self.reset_edge_gateway(edge_gateway)
+    configuration = {
+        :FirewallService =>
+            {
+                :IsEnabled        => "false",
+                :FirewallRule     => [],
+                :DefaultAction    => "drop",
+                :LogDefaultAction => "false",
+            },
+        :LoadBalancerService =>
+            {
+                :IsEnabled      => "false",
+                :Pool           => [],
+                :VirtualServer  => [],
+            },
+        :NatService =>
+            {
+                :IsEnabled  => "false",
+                :NatRule    => [],
+            },
+    }
+
+    edge_gateway.update_configuration(configuration)
+  end
 end

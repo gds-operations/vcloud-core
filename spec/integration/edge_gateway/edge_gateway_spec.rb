@@ -53,9 +53,10 @@ module Vcloud
           edge_gateway.update_configuration(configuration)
 
           actual_config = edge_gateway.vcloud_attributes[:Configuration][:EdgeGatewayServiceConfiguration]
-          actual_config[:FirewallService].should == configuration[:FirewallService]
-          actual_config[:LoadBalancerService].should == configuration[:LoadBalancerService]
-          actual_config[:NatService].should == configuration[:NatService]
+
+          expect(actual_config[:FirewallService]).to      eq(configuration[:FirewallService])
+          expect(actual_config[:LoadBalancerService]).to  eq(configuration[:LoadBalancerService])
+          expect(actual_config[:NatService]).to           eq(configuration[:NatService])
         end
       end
 

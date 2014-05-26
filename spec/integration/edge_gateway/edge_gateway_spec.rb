@@ -5,23 +5,11 @@ module Vcloud
     describe EdgeGateway do
 
       before(:all) do
-        required_env = {
-          'VCLOUD_EDGE_GATEWAY'        => 'to name of VSE',
-          'VCLOUD_PROVIDER_NETWORK_ID' => 'to ID of VSE external network',
-          'VCLOUD_NETWORK1_ID'         => 'to the ID of a VSE internal network',
-        }
-
-        error = false
-        required_env.each do |var,message|
-          unless ENV[var]
-            puts "Must set #{var} #{message}" unless ENV[var]
-            error = true
-          end
-        end
-        Kernel.exit(2) if error
+        config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
+        @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
       end
 
-      let(:edge_gateway) { EdgeGateway.get_by_name(ENV['VCLOUD_EDGE_GATEWAY']) }
+      let(:edge_gateway) { EdgeGateway.get_by_name(@test_data.edge_gateway) }
 
       context "when updating the edge gateway" do
         before(:each) do
@@ -61,16 +49,19 @@ module Vcloud
       end
 
       context "get vCloud attributes for given gateway interface ID" do
+        let(:provider_network_id)  { @test_data.provider_network_id }
+        let(:network_1_id)         { @test_data.network_1_id }
+
         it "returns a provider network" do
-          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(ENV['VCLOUD_PROVIDER_NETWORK_ID'])
+          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(provider_network_id)
           expect(gateway_interface[:Network]).not_to be_nil
-          expect(gateway_interface[:Network][:href]).to include(ENV['VCLOUD_PROVIDER_NETWORK_ID'])
+          expect(gateway_interface[:Network][:href]).to include(provider_network_id)
         end
 
         it "returns an orgVdcNetwork" do
-          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(ENV['VCLOUD_NETWORK1_ID'])
+          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(network_1_id)
           expect(gateway_interface[:Network]).not_to be_nil
-          expect(gateway_interface[:Network][:href]).to include(ENV['VCLOUD_NETWORK1_ID'])
+          expect(gateway_interface[:Network][:href]).to include(network_1_id)
         end
 
         it "returns nil if network with given ID is not found" do

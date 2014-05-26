@@ -5,9 +5,9 @@ module Vcloud
     describe EdgeGateway do
 
       required_env = {
-        'VCLOUD_EDGE_GATEWAY' => 'to name of VSE',
+        'VCLOUD_EDGE_GATEWAY'        => 'to name of VSE',
         'VCLOUD_PROVIDER_NETWORK_ID' => 'to ID of VSE external network',
-        'VCLOUD_NETWORK1_ID' => 'to the ID of a VSE internal network',
+        'VCLOUD_NETWORK1_ID'         => 'to the ID of a VSE internal network',
       }
 
       error = false
@@ -18,6 +18,37 @@ module Vcloud
         end
       end
       Kernel.exit(2) if error
+
+      it "updates the edge gateway" do
+        configuration = {
+            :FirewallService =>
+                {
+                    :IsEnabled        => "true",
+                    :FirewallRule     => [],
+                    :DefaultAction    => "drop",
+                    :LogDefaultAction => "false",
+                },
+            :LoadBalancerService =>
+                {
+                    :IsEnabled      => "true",
+                    :Pool           => [],
+                    :VirtualServer  => [],
+                },
+            :NatService =>
+                {
+                    :IsEnabled  => "true",
+                    :NatRule    => [],
+                },
+        }
+
+        edge_gateway = EdgeGateway.get_by_name(ENV['VCLOUD_EDGE_GATEWAY'])
+        edge_gateway.update_configuration(configuration)
+
+        actual_config = edge_gateway.vcloud_attributes[:Configuration][:EdgeGatewayServiceConfiguration]
+        actual_config[:FirewallService].should == configuration[:FirewallService]
+        actual_config[:LoadBalancerService].should == configuration[:LoadBalancerService]
+        actual_config[:NatService].should == configuration[:NatService]
+      end
 
       context "get vcloud attributes for given gateway interface id " do
         before(:all) do

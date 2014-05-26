@@ -59,7 +59,7 @@ module Vcloud
         end
       end
 
-      context "get vcloud attributes for given gateway interface id " do
+      context "get vcloud attributes for given gateway interface id" do
         it "should return provider network" do
           gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(ENV['VCLOUD_PROVIDER_NETWORK_ID'])
           expect(gateway_interface[:Network]).not_to be_nil

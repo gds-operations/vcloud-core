@@ -59,20 +59,20 @@ module Vcloud
         end
       end
 
-      context "get vcloud attributes for given gateway interface id" do
-        it "should return provider network" do
+      context "get vCloud attributes for given gateway interface ID" do
+        it "returns a provider network" do
           gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(ENV['VCLOUD_PROVIDER_NETWORK_ID'])
           expect(gateway_interface[:Network]).not_to be_nil
           expect(gateway_interface[:Network][:href]).to include(ENV['VCLOUD_PROVIDER_NETWORK_ID'])
         end
 
-        it "should return orgVdcNetwork" do
+        it "returns an orgVdcNetwork" do
           gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(ENV['VCLOUD_NETWORK1_ID'])
           expect(gateway_interface[:Network]).not_to be_nil
           expect(gateway_interface[:Network][:href]).to include(ENV['VCLOUD_NETWORK1_ID'])
         end
 
-        it "return nil if network with given id is not found" do
+        it "returns nil if network with given ID is not found" do
           gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(SecureRandom.uuid)
           expect(gateway_interface).to be_nil
         end

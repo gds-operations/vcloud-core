@@ -4,20 +4,22 @@ module Vcloud
   module Core
     describe EdgeGateway do
 
-      required_env = {
-        'VCLOUD_EDGE_GATEWAY'        => 'to name of VSE',
-        'VCLOUD_PROVIDER_NETWORK_ID' => 'to ID of VSE external network',
-        'VCLOUD_NETWORK1_ID'         => 'to the ID of a VSE internal network',
-      }
+      before(:all) do
+        required_env = {
+          'VCLOUD_EDGE_GATEWAY'        => 'to name of VSE',
+          'VCLOUD_PROVIDER_NETWORK_ID' => 'to ID of VSE external network',
+          'VCLOUD_NETWORK1_ID'         => 'to the ID of a VSE internal network',
+        }
 
-      error = false
-      required_env.each do |var,message|
-        unless ENV[var]
-          puts "Must set #{var} #{message}" unless ENV[var]
-          error = true
+        error = false
+        required_env.each do |var,message|
+          unless ENV[var]
+            puts "Must set #{var} #{message}" unless ENV[var]
+            error = true
+          end
         end
+        Kernel.exit(2) if error
       end
-      Kernel.exit(2) if error
 
       let(:edge_gateway) { EdgeGateway.get_by_name(ENV['VCLOUD_EDGE_GATEWAY']) }
 

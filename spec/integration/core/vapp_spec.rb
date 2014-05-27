@@ -60,6 +60,16 @@ describe Vcloud::Core::Vapp do
 
   end
 
+  context "#networks" do
+
+    it "returns hashes for each network, plus the weird 'none' placeholder network hash that the API returns" do
+      network_output = @vapp.networks
+      expect(network_output.map { |network| network[:ovf_name] }).
+        to match_array(@network_names + ["none"])
+    end
+
+  end
+
   context ".get_by_name" do
 
     it "can find our fixture vApp by its name" do
@@ -93,6 +103,7 @@ describe Vcloud::Core::Vapp do
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
+      expect(sanitize_networks_output(new_vapp.networks).size).to eq(0)
     end
 
     it "can create a vApp with one networks assigned" do
@@ -105,6 +116,7 @@ describe Vcloud::Core::Vapp do
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
+      expect(sanitize_networks_output(new_vapp.networks).size).to eq(1)
     end
 
     it "can create a vApp with two networks assigned" do
@@ -117,6 +129,7 @@ describe Vcloud::Core::Vapp do
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
+      expect(sanitize_networks_output(new_vapp.networks).size).to eq(2)
     end
 
     it "raises a Fog error if the vAppTemplate id refers to a non-existent template" do
@@ -184,6 +197,15 @@ describe Vcloud::Core::Vapp do
 
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
+  end
+
+  def sanitize_networks_output(networks_output)
+    networks_output = [ networks_output ] if networks_output.is_a?(Hash)
+    new_output = []
+    networks_output.each do |network_hash|
+      new_output << network_hash unless network_hash[:ovf_name] == 'none'
+    end
+    new_output
   end
 
 end

@@ -53,20 +53,20 @@ module Vcloud
         let(:network_1_id)         { @test_data.network_1_id }
 
         it "returns a provider network" do
-          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(provider_network_id)
-          expect(gateway_interface[:Network]).not_to be_nil
-          expect(gateway_interface[:Network][:href]).to include(provider_network_id)
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(provider_network_id)
+          expect(network_interface[:Network]).not_to be_nil
+          expect(network_interface[:Network][:href]).to include(provider_network_id)
         end
 
         it "returns an orgVdcNetwork" do
-          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(network_1_id)
-          expect(gateway_interface[:Network]).not_to be_nil
-          expect(gateway_interface[:Network][:href]).to include(network_1_id)
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(network_1_id)
+          expect(network_interface[:Network]).not_to be_nil
+          expect(network_interface[:Network][:href]).to include(network_1_id)
         end
 
         it "returns nil if network with given ID is not found" do
-          gateway_interface = edge_gateway.vcloud_gateway_interface_by_id(SecureRandom.uuid)
-          expect(gateway_interface).to be_nil
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(SecureRandom.uuid)
+          expect(network_interface).to be_nil
         end
       end
     end

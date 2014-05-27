@@ -70,6 +70,16 @@ describe Vcloud::Core::Vapp do
 
   end
 
+  context "#power_on" do
+
+    it "powers up a powered down Vapp" do
+      expect(Integer(@vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::POWERED_OFF)
+      expect(@vapp.power_on).to be_true
+      expect(Integer(@vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::RUNNING)
+    end
+
+  end
+
   context ".get_by_name" do
 
     it "can find our fixture vApp by its name" do

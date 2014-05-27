@@ -24,7 +24,12 @@ module IntegrationHelper
 
   def self.delete_vapps(vapp_list)
     fsi = Vcloud::Fog::ServiceInterface.new()
+    vcloud = ::Fog::Compute::VcloudDirector.new
     vapp_list.each do |vapp|
+      if Integer(vapp.vcloud_attributes[:status]) == Vcloud::Core::Vapp::STATUS::RUNNING
+        task = vcloud.post_undeploy_vapp(vapp.id).body
+        vcloud.process_task(task)
+      end
       fsi.delete_vapp(vapp.id)
     end
   end

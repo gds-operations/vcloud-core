@@ -222,12 +222,16 @@ describe Vcloud::Core::Vm do
   context "#update_storage_profile" do
 
     it "can update the storage profile of a VM" do
-      if @test_data.storage_profile == @test_data.default_storage_profile_name
-        pending("Storage profiles not available?")
+      available_storage_profiles = Vcloud::Core::QueryRunner.new.run(
+        'orgVdcStorageProfile',
+        filter: "vdcName==#{@test_data.vdc_1_name}"
+      )
+      if available_storage_profiles.size == 1
+        pending("There is only one StorageProfile in vDC #{@test_data.vdc_1_name}: cannot test.")
       end
       original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
-      @vm.update_storage_profile(@test_data.storage_profile)
       expect(original_storage_profile_name).to eq(@test_data.default_storage_profile_name)
+      @vm.update_storage_profile(@test_data.storage_profile)
       expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_data.storage_profile)
     end
 

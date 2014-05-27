@@ -193,6 +193,22 @@ describe Vcloud::Core::Vapp do
       }.to raise_error("vdc  cannot be found")
     end
 
+    it "skips bogus network names specified in the network_names array" do
+      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
+      new_vapp = Vcloud::Core::Vapp.instantiate(
+        vapp_name,
+        ['bogus-network-name-ijwioewiwego', 'bogus-network-name-asofijqweof'],
+        vapp_template.id,
+        @test_data.vdc_1_name
+      )
+      @test_case_vapps << new_vapp
+      expect(new_vapp.networks).to eq({
+        :ovf_name => "none",
+        :"ovf:Description" =>
+          "This is a special place-holder used for disconnected network interfaces."
+      })
+    end
+
   end
 
   after(:all) do

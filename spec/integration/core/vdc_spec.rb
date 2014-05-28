@@ -9,7 +9,7 @@ describe Vcloud::Core::Vdc do
     @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
   end
 
-  context ".get_by_name" do
+  describe ".get_by_name" do
 
     subject { Vcloud::Core::Vdc.get_by_name(name) }
 
@@ -43,7 +43,7 @@ describe Vcloud::Core::Vdc do
 
   end
 
-  context ".new" do
+  describe ".new" do
 
     subject { Vcloud::Core::Vdc.new(vdc_id) }
 

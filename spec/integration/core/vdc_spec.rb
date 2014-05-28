@@ -25,6 +25,10 @@ describe Vcloud::Core::Vdc do
         expect(subject.id).to match(/\A#{uuid_matcher}\Z/)
       end
 
+      it "returns a Vdc object with our expected name" do
+        expect(subject.name).to eq(name)
+      end
+
     end
 
   end

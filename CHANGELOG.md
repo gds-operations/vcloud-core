@@ -1,3 +1,10 @@
+## 0.5.0 (UNRELEASED)
+
+Features:
+
+  - `vcloud-query --version` now only returns the version string and no
+    usage information.
+
 ## 0.4.0 (2014-05-23)
 
 Features:

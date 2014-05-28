@@ -21,6 +21,9 @@ module Vcloud
 
         if schema
           validation = Core::ConfigValidator.validate(:base, config, schema)
+          validation.warnings.each do |warning|
+            Vcloud::Core.logger.warn(warning)
+          end
           unless validation.valid?
             validation.errors.each do |error|
               Vcloud::Core.logger.fatal(error)

@@ -23,7 +23,7 @@ module Vcloud
   module Core
     class ConfigValidator
 
-      attr_reader :key, :data, :schema, :type, :errors
+      attr_reader :key, :data, :schema, :type, :errors, :warnings
 
       VALID_ALPHABETICAL_VALUES_FOR_IP_RANGE = %w(Any external internal)
 
@@ -35,7 +35,8 @@ module Vcloud
         raise "Nil schema" unless schema
         raise "Invalid schema" unless schema.key?(:type)
         @type = schema[:type].to_s.downcase
-        @errors = []
+        @errors   = []
+        @warnings = []
         @data   = data
         @schema = schema
         @key    = key
@@ -63,6 +64,7 @@ module Vcloud
           element_schema = schema[:each_element_is]
           data.each do |element|
             sub_validator = ConfigValidator.validate(key, element, element_schema)
+            @warnings = warnings + sub_validator.warnings
             unless sub_validator.valid?
               @errors = errors + sub_validator.errors
             end
@@ -77,11 +79,41 @@ module Vcloud
         end
         return unless check_emptyness_ok
         check_for_unknown_parameters
+
         if schema.key?(:internals)
-          internals = schema[:internals]
-          internals.each do |param_key,param_schema|
-            check_hash_parameter(param_key, param_schema)
+          check_for_invalid_deprecations
+          deprecations_used = get_deprecations_used
+          warn_on_deprecations_used(deprecations_used)
+
+          schema[:internals].each do |param_key,param_schema|
+            ignore_required = (
+              param_schema[:deprecated_by] ||
+              deprecations_used.key?(param_key)
+            )
+            check_hash_parameter(param_key, param_schema, ignore_required)
           end
+        end
+      end
+
+      # Return a hash of deprecated params referenced in @data. Where the
+      # structure is: `{ :deprecator => :deprecatee }`
+      def get_deprecations_used
+        used = {}
+        schema[:internals].each do |param_key,param_schema|
+          deprecated_by = param_schema[:deprecated_by]
+          if deprecated_by && data[param_key]
+            used[deprecated_by.to_sym] = param_key
+          end
+        end
+
+        used
+      end
+
+      # Append warnings for any deprecations used. Takes the output of
+      # `#get_deprecations_used`.
+      def warn_on_deprecations_used(deprecations_used)
+        deprecations_used.each do |deprecator, deprecatee|
+          @warnings << "#{deprecatee}: is deprecated by '#{deprecator}'"
         end
       end
 
@@ -95,6 +127,17 @@ module Vcloud
         true
       end
 
+      # Raise an exception if any `deprecated_by` params refer to params
+      # that don't exist in the schema.
+      def check_for_invalid_deprecations
+        schema[:internals].each do |param_key,param_schema|
+          deprecated_by = param_schema[:deprecated_by]
+          if deprecated_by && !schema[:internals].key?(deprecated_by.to_sym)
+            raise "#{param_key}: deprecated_by target '#{deprecated_by}' not found in schema"
+          end
+        end
+      end
+
       def check_for_unknown_parameters
         internals = schema[:internals]
         # if there are no parameters specified, then assume all are ok.
@@ -105,20 +148,22 @@ module Vcloud
         end
       end
 
-      def check_hash_parameter(sub_key, sub_schema)
-        if sub_schema.key?(:required) && sub_schema[:required] == false
-          # short circuit out if we do not have the key, but it's not required.
-          return true unless data.key?(sub_key)
-        end
+      def check_hash_parameter(sub_key, sub_schema, ignore_required=false)
         unless data.key?(sub_key)
+          if sub_schema[:required] == false || ignore_required
+            return true
+          end
+
           @errors << "#{key}: missing '#{sub_key}' parameter"
           return false
         end
+
         sub_validator = ConfigValidator.validate(
           sub_key,
           data[sub_key],
           sub_schema
         )
+        @warnings = warnings + sub_validator.warnings
         unless sub_validator.valid?
           @errors = errors + sub_validator.errors
         end

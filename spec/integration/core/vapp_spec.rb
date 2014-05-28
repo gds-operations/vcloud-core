@@ -226,7 +226,12 @@ describe Vcloud::Core::Vapp do
   end
 
   def sanitize_networks_output(networks_output)
-    networks_output = [ networks_output ] if networks_output.is_a?(Hash)
+    if networks_output.is_a?(Hash)
+      # Fog currently has a bug (https://github.com/fog/fog/issues/2927) that
+      # means the output from Vapp#networks can be a hash or array.
+      # Work around this by converting to a single element Array.
+      networks_output = [ networks_output ]
+    end
     new_output = []
     networks_output.each do |network_hash|
       new_output << network_hash unless network_hash[:ovf_name] == 'none'

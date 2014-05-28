@@ -28,7 +28,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#vcloud_attributes" do
+  describe "#vcloud_attributes" do
 
     it "has a :href element containing the expected vApp id" do
       expect(@vapp.vcloud_attributes[:href].split('/').last).to eq(@vapp.id)
@@ -36,7 +36,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#id" do
+  describe "#id" do
 
     it "returns the a valid vApp id" do
       expect(@vapp.id).to match(/^vapp-#{uuid_matcher}$/)
@@ -44,7 +44,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#name" do
+  describe "#name" do
 
     it "returns the name of the vApp" do
       expect(@vapp.name).to match(/^vcloud-core-vapp-tests-/)
@@ -52,7 +52,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#vdc_id" do
+  describe "#vdc_id" do
 
     it "returns a valid uuid" do
       expect(@vapp.vdc_id).to match(/^#{uuid_matcher}$/)
@@ -60,7 +60,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#networks" do
+  describe "#networks" do
 
     it "returns hashes for each network, plus the weird 'none' placeholder network hash that the API returns" do
       network_output = @vapp.networks
@@ -70,7 +70,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context "#power_on" do
+  describe "#power_on" do
 
     it "powers up a powered down Vapp" do
       expect(Integer(@vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::POWERED_OFF)
@@ -80,7 +80,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context ".get_by_name" do
+  describe ".get_by_name" do
 
     it "can find our fixture vApp by its name" do
       fixture_vapp_name = @vapp.name
@@ -97,7 +97,7 @@ describe Vcloud::Core::Vapp do
 
   end
 
-  context ".instantiate" do
+  describe ".instantiate" do
 
     let(:vapp_template) {
       Vcloud::Core::VappTemplate.get(@test_data.vapp_template, @test_data.catalog)

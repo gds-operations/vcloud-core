@@ -43,4 +43,49 @@ describe Vcloud::Core::Vdc do
 
   end
 
+  context ".new" do
+
+    subject { Vcloud::Core::Vdc.new(vdc_id) }
+
+    context "when instantiating with a valid ID" do
+
+      let(:vdc_id) { Vcloud::Core::Vdc.get_by_name(@test_data.vdc_1_name).id }
+
+      it "returns a valid Vdc object" do
+        expect(subject).to be_instance_of(Vcloud::Core::Vdc)
+      end
+
+      it "has our expected #id" do
+        expect(subject.id).to eq(vdc_id)
+      end
+
+      it "has our expected #name" do
+        expect(subject.name).to eq(@test_data.vdc_1_name)
+      end
+
+    end
+
+    context "when instantiating with a valid UUID, that does not refer to a Vdc" do
+
+      let(:vdc_id) { '12345678-1234-1234-1234-123456789012' }
+
+      it "returns a valid Vdc object" do
+        expect(subject).to be_instance_of(Vcloud::Core::Vdc)
+      end
+
+      it "has our expected #id" do
+        expect(subject.id).to eq(vdc_id)
+      end
+
+      it "throws a Forbidden error when trying to access the #name of the Vdc" do
+        expect { subject.name }.to raise_error(
+          Fog::Compute::VcloudDirector::Forbidden,
+          /\ANo access to entity /
+        )
+      end
+
+    end
+
+  end
+
 end

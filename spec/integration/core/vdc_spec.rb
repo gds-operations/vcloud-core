@@ -31,6 +31,16 @@ describe Vcloud::Core::Vdc do
 
     end
 
+    context "when looking up an invalid vDC name" do
+
+      let(:name) { "bogus Vdc name 12p412irjof" }
+
+      it "throws an error" do
+        expect { subject }.to raise_error("vDc #{name} not found")
+      end
+
+    end
+
   end
 
 end

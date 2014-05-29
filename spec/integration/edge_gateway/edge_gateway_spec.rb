@@ -20,24 +20,24 @@ module Vcloud
 
         it "updates as expected" do
           configuration = {
-              :FirewallService =>
-                  {
-                      :IsEnabled        => "true",
-                      :FirewallRule     => [],
-                      :DefaultAction    => "drop",
-                      :LogDefaultAction => "false",
-                  },
-              :LoadBalancerService =>
-                  {
-                      :IsEnabled      => "true",
-                      :Pool           => [],
-                      :VirtualServer  => [],
-                  },
-              :NatService =>
-                  {
-                      :IsEnabled  => "true",
-                      :NatRule    => [],
-                  },
+            :FirewallService =>
+            {
+              :IsEnabled        => "true",
+              :FirewallRule     => [],
+              :DefaultAction    => "drop",
+              :LogDefaultAction => "false",
+            },
+            :LoadBalancerService =>
+            {
+              :IsEnabled      => "true",
+              :Pool           => [],
+              :VirtualServer  => [],
+            },
+            :NatService =>
+            {
+              :IsEnabled  => "true",
+              :NatRule    => [],
+            },
           }
 
           edge_gateway.update_configuration(configuration)

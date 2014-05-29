@@ -12,6 +12,7 @@ module Vcloud
       let(:edge_gateway)      { EdgeGateway.get_by_name(@test_data.edge_gateway) }
       let(:edge_gateway_name) { @test_data.edge_gateway }
       let(:edge_gateway_id)   { @test_data.edge_gateway_id }
+      let(:spurious_id)       { "12345678-1234-1234-1234-123456789012" }
 
       context "when updating the edge gateway" do
         before(:each) do
@@ -67,7 +68,7 @@ module Vcloud
         end
 
         it "returns nil if network with given ID is not found" do
-          network_interface = edge_gateway.vcloud_gateway_interface_by_id(SecureRandom.uuid)
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(spurious_id)
           expect(network_interface).to be_nil
         end
       end

@@ -241,6 +241,39 @@ module Vcloud
           @vm.configure_network_interfaces(network_config)
         end
 
+        it "should configure nic from pool" do
+          network_config = [{:name => 'Default', :allocation_mode => 'pool'}]
+          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+              :PrimaryNetworkConnectionIndex => 0,
+              :NetworkConnection => [
+                  {
+                      :network => 'Default',
+                      :needsCustomization => true,
+                      :NetworkConnectionIndex => 0,
+                      :IsConnected => true,
+                      :IpAddressAllocationMode => "POOL"
+                  }
+              ]})
+          @vm.configure_network_interfaces(network_config)
+        end
+
+        it "should prefer configuring nic with static address" do
+          network_config = [{:name => 'Default', :allocation_mode => 'dhcp', :ip_address => '192.168.1.1'}]
+          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+              :PrimaryNetworkConnectionIndex => 0,
+              :NetworkConnection => [
+                  {
+                      :network => 'Default',
+                      :needsCustomization => true,
+                      :NetworkConnectionIndex => 0,
+                      :IsConnected => true,
+                      :IpAddress => "192.168.1.1",
+                      :IpAddressAllocationMode => "MANUAL"
+                  }
+              ]})
+          @vm.configure_network_interfaces(network_config)
+        end
+
         it "should configure single nic" do
           network_config = [{:name => 'Default', :ip_address => '192.168.1.1'}]
           @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {

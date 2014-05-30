@@ -89,9 +89,14 @@ module Vcloud
               NetworkConnectionIndex: i,
               IsConnected: true
           }
-          ip_address = network[:ip_address]
-          connection[:IpAddress] = ip_address unless ip_address.nil?
-          connection[:IpAddressAllocationMode] = ip_address ? 'MANUAL' : 'DHCP'
+          ip_address      = network[:ip_address]
+          allocation_mode = network[:allocation_mode]
+
+          allocation_mode = 'manual' if ip_address
+          allocation_mode = 'dhcp' unless %w{dhcp manual pool}.include?(allocation_mode)
+
+          connection[:IpAddressAllocationMode] = allocation_mode.upcase
+          connection[:IpAddress] = ip_address if ip_address
           connection
         end
         Vcloud::Fog::ServiceInterface.new.put_network_connection_system_section_vapp(id, section)

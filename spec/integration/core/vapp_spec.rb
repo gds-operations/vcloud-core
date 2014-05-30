@@ -87,9 +87,8 @@ describe Vcloud::Core::Vapp do
   describe ".get_by_name" do
 
     it "can find our fixture vApp by its name" do
-      fixture_vapp_name = @vapp.name
-      looked_up_vapp = Vcloud::Core::Vapp.get_by_name(fixture_vapp_name)
-      expect(@vapp.id).to eq(looked_up_vapp.id)
+      retrieved_vapp = Vcloud::Core::Vapp.get_by_name(@vapp.name)
+      expect(retrieved_vapp.id).to eq(@vapp.id)
     end
 
     it "raises an error if it cannot find the named vApp" do

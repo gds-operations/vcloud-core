@@ -62,8 +62,12 @@ describe Vcloud::Core::Vapp do
 
   describe "#networks" do
 
-    it "returns hashes for each network, plus the weird 'none' placeholder network hash that the API returns" do
+    it "returns hashes for each network, plus the 'none' placeholder network" do
       network_output = @vapp.networks
+      # The API return a 'placeholder' network hash as well as
+      # any configured networks, for any VMs that have disconnected interfaces.
+      # This has the :ovf_name of 'none'. So, we expect our @network_names, plus 'none'.
+      #
       expect(network_output.map { |network| network[:ovf_name] }).
         to match_array(@network_names + ["none"])
     end

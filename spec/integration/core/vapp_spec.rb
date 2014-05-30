@@ -21,10 +21,12 @@ describe Vcloud::Core::Vapp do
     @vapp = @test_case_vapps.first
   end
 
+  subject(:fixture_vapp) { @vapp }
+
   context "before the integration tests run" do
 
     it "ensures we have a valid vApp fixture, for subsequent tests to run against" do
-      expect(@vapp).to be_instance_of(Vcloud::Core::Vapp)
+      expect(fixture_vapp).to be_instance_of(Vcloud::Core::Vapp)
     end
 
   end
@@ -32,7 +34,7 @@ describe Vcloud::Core::Vapp do
   describe "#vcloud_attributes" do
 
     it "has a :href element containing the expected vApp id" do
-      expect(@vapp.vcloud_attributes[:href].split('/').last).to eq(@vapp.id)
+      expect(fixture_vapp.vcloud_attributes[:href].split('/').last).to eq(fixture_vapp.id)
     end
 
   end
@@ -40,7 +42,7 @@ describe Vcloud::Core::Vapp do
   describe "#id" do
 
     it "returns the a valid vApp id" do
-      expect(@vapp.id).to match(/^vapp-#{uuid_matcher}$/)
+      expect(fixture_vapp.id).to match(/^vapp-#{uuid_matcher}$/)
     end
 
   end
@@ -48,7 +50,7 @@ describe Vcloud::Core::Vapp do
   describe "#name" do
 
     it "returns the name of the vApp" do
-      expect(@vapp.name).to include(@vapp_name_prefix)
+      expect(fixture_vapp.name).to include(@vapp_name_prefix)
     end
 
   end
@@ -56,7 +58,7 @@ describe Vcloud::Core::Vapp do
   describe "#vdc_id" do
 
     it "returns a valid uuid" do
-      expect(@vapp.vdc_id).to match(/^#{uuid_matcher}$/)
+      expect(fixture_vapp.vdc_id).to match(/^#{uuid_matcher}$/)
     end
 
   end
@@ -64,7 +66,7 @@ describe Vcloud::Core::Vapp do
   describe "#networks" do
 
     it "returns hashes for each network, plus the 'none' placeholder network" do
-      network_output = @vapp.networks
+      network_output = fixture_vapp.networks
       # The API return a 'placeholder' network hash as well as
       # any configured networks, for any VMs that have disconnected interfaces.
       # This has the :ovf_name of 'none'. So, we expect our @network_names, plus 'none'.
@@ -78,9 +80,9 @@ describe Vcloud::Core::Vapp do
   describe "#power_on" do
 
     it "powers up a powered down Vapp" do
-      expect(Integer(@vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::POWERED_OFF)
-      expect(@vapp.power_on).to be_true
-      expect(Integer(@vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::RUNNING)
+      expect(Integer(fixture_vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::POWERED_OFF)
+      expect(fixture_vapp.power_on).to be_true
+      expect(Integer(fixture_vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::RUNNING)
     end
 
   end
@@ -88,8 +90,8 @@ describe Vcloud::Core::Vapp do
   describe ".get_by_name" do
 
     it "can find our fixture vApp by its name" do
-      retrieved_vapp = Vcloud::Core::Vapp.get_by_name(@vapp.name)
-      expect(retrieved_vapp.id).to eq(@vapp.id)
+      retrieved_vapp = Vcloud::Core::Vapp.get_by_name(fixture_vapp.name)
+      expect(retrieved_vapp.id).to eq(fixture_vapp.id)
     end
 
     it "raises an error if it cannot find the named vApp" do

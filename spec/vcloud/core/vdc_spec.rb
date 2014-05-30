@@ -7,11 +7,11 @@ module Vcloud
       before(:each) do
         @vdc_id = '12345678-1234-1234-1234-000000111232'
         @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
+        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
       end
 
       context "Class public interface" do
-        it { Vdc.should respond_to(:get_by_name) }
+        it { expect(Vdc).to respond_to(:get_by_name) }
       end
 
       context "Instance public interface" do
@@ -47,8 +47,8 @@ module Vcloud
             { :name => 'vdc-test-1', :href => @vdc_id }
           ]
           mock_query = double(:query_runner)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).with('orgVdc', :filter => "name==vdc-test-1").and_return(q_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).with('orgVdc', :filter => "name==vdc-test-1").and_return(q_results)
           obj = Vdc.get_by_name('vdc-test-1')
           expect(obj.class).to be(Vcloud::Core::Vdc)
         end
@@ -56,8 +56,8 @@ module Vcloud
         it "should raise an error if no vDC with that name exists" do
           q_results = [ ]
           mock_query = double(:query_runner)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).with('orgVdc', :filter => "name==vdc-test-1").and_return(q_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).with('orgVdc', :filter => "name==vdc-test-1").and_return(q_results)
           expect{ Vdc.get_by_name('vdc-test-1') }.to raise_exception(RuntimeError, "vDc vdc-test-1 not found")
         end
 

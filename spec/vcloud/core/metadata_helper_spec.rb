@@ -55,7 +55,7 @@ module Vcloud
           ]
           metadata = MetadataHelper.extract_metadata(metadata_entries)
           expect(metadata.count).to eq(1)
-          metadata.keys.should_not include :untyped_key
+          expect(metadata.keys).not_to include :untyped_key
         end
 
         it "should include unrecognized metadata types" do
@@ -76,7 +76,7 @@ module Vcloud
           ]
           metadata = MetadataHelper.extract_metadata(metadata_entries)
           expect(metadata.count).to eq(2)
-          metadata.keys.should include :unrecognized_type_key
+          expect(metadata.keys).to include :unrecognized_type_key
         end
 
 

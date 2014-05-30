@@ -6,13 +6,13 @@ module Vcloud
       before(:each) do
         @vapp_id = 'vapp-12345678-1234-1234-1234-000000111111'
         @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
+        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
       end
 
       context "Class public interface" do
-        it { Vapp.should respond_to(:instantiate) }
-        it { Vapp.should respond_to(:get_by_name) }
-        it { Vapp.should respond_to(:get_metadata) }
+        it { expect(Vapp).to respond_to(:instantiate) }
+        it { expect(Vapp).to respond_to(:get_by_name) }
+        it { expect(Vapp).to respond_to(:get_metadata) }
       end
 
       context "Instance public interface" do
@@ -53,8 +53,8 @@ module Vcloud
             { :name => 'vapp-test-1', :href => @vapp_id }
           ]
           mock_query = double(:query)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           obj = Vapp.get_by_name('vapp-test-1')
           expect(obj.class).to be(Vcloud::Core::Vapp)
         end
@@ -62,8 +62,8 @@ module Vcloud
         it "should raise an error if no vApp with that name exists" do
           q_results = [ ]
           mock_query = double(:query_runner)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
         end
 
@@ -73,8 +73,8 @@ module Vcloud
             { :name => 'vapp-test-1', :href => '/bogus' },
           ]
           mock_query = double(:query)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
           expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
         end
 
@@ -92,10 +92,10 @@ module Vcloud
                         }],
               :Children => {:Vm => [{:href => '/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237'}]}
           }
-          StubFogInterface.any_instance.stub(:get_vapp).and_return(@stub_attrs)
+          allow_any_instance_of(StubFogInterface).to receive(:get_vapp).and_return(@stub_attrs)
           @vapp = Vapp.new(@vapp_id)
         }
-        it { @vapp.name.should == 'Webserver vapp-1' }
+        it { expect(@vapp.name).to eq('Webserver vapp-1') }
 
         context "id" do
           it "should extract id correctly" do
@@ -110,7 +110,7 @@ module Vcloud
 
           it "should raise error if vapp without parent vdc found" do
             @stub_attrs[:Link] = []
-            lambda { @vapp.vdc_id }.should raise_error('a vapp without parent vdc found')
+            expect { @vapp.vdc_id }.to raise_error('a vapp without parent vdc found')
           end
         end
 
@@ -136,21 +136,21 @@ module Vcloud
 
           it "should power on a vapp that is not powered on" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).twice().and_return(
+            expect(@mock_fog_interface).to receive(:get_vapp).twice().and_return(
               {:status => Vcloud::Core::Vapp::STATUS::POWERED_OFF},
               {:status => Vcloud::Core::Vapp::STATUS::RUNNING}
             )
-            @mock_fog_interface.should_receive(:power_on_vapp).with(vapp.id)
+            expect(@mock_fog_interface).to receive(:power_on_vapp).with(vapp.id)
             state = vapp.power_on
             expect(state).to be_true
           end
 
           it "should not power on a vapp that is already powered on, but should return true" do
             vapp = Vapp.new(@vapp_id)
-            @mock_fog_interface.should_receive(:get_vapp).and_return(
+            expect(@mock_fog_interface).to receive(:get_vapp).and_return(
               {:status => Vcloud::Core::Vapp::STATUS::RUNNING}
             )
-            @mock_fog_interface.should_not_receive(:power_on_vapp)
+            expect(@mock_fog_interface).not_to receive(:power_on_vapp)
             state = vapp.power_on
             expect(state).to be_true
           end
@@ -161,14 +161,14 @@ module Vcloud
       context "#get_by_name_and_vdc_name" do
 
         it "should return nil if fog returns nil" do
-          StubFogInterface.any_instance.stub(:get_vapp_by_name_and_vdc_name)
+          allow_any_instance_of(StubFogInterface).to receive(:get_vapp_by_name_and_vdc_name)
             .with('vapp_name', 'vdc_name').and_return(nil)
           expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name')).to be_nil
         end
 
         it "should return vapp instance if found" do
           vcloud_attr_vapp = { :href => "/#{@vapp_id}" }
-          StubFogInterface.any_instance.stub(:get_vapp_by_name_and_vdc_name)
+          allow_any_instance_of(StubFogInterface).to receive(:get_vapp_by_name_and_vdc_name)
             .with('vapp_name', 'vdc_name').and_return(vcloud_attr_vapp)
           expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class).to eq(Core::Vapp)
         end

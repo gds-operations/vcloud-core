@@ -12,14 +12,14 @@ describe Vcloud::Fog::ModelInterface do
     org = double(:hr, :name => 'HR ORG', :vdcs => [vdc])
 
     vcloud = double(:mock_vcloud, :org_name => 'HR', :organizations => double(:orgs, :get_by_name => org))
-    vcloud.should_receive(:get_vms_in_lease_from_query).with({:filter => "href==#{vm_href}"}).and_return(
+    expect(vcloud).to receive(:get_vms_in_lease_from_query).with({:filter => "href==#{vm_href}"}).and_return(
         double(
             :vm_query_record,
             :body => {:VMRecord => [{:href => vm_href, :containerName => 'vapp-1', :vdc => vdc_href}]}
         )
     )
-    Fog::Compute::VcloudDirector.should_receive(:new).and_return(vcloud)
+    expect(Fog::Compute::VcloudDirector).to receive(:new).and_return(vcloud)
 
-    Vcloud::Fog::ModelInterface.new.get_vm_by_href(vm_href).should == vm
+    expect(Vcloud::Fog::ModelInterface.new.get_vm_by_href(vm_href)).to eq(vm)
   end
 end

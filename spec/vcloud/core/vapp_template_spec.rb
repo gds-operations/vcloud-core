@@ -7,11 +7,11 @@ module Vcloud
       before(:each) do
         @id = 'vappTemplate-12345678-1234-1234-1234-000000234121'
         @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
+        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
       end
 
       context "Class public interface" do
-        it { VappTemplate.should respond_to(:get) }
+        it { expect(VappTemplate).to respond_to(:get) }
       end
 
       context "Instance public interface" do
@@ -47,8 +47,8 @@ module Vcloud
         it 'should raise a RuntimeError if there is no template' do
           q_results = [ ]
           mock_query = double(:query_runner)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
           expect { VappTemplate.get('test_template', 'test_catalog') }.
@@ -63,8 +63,8 @@ module Vcloud
               :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890ab002" },
           ]
           mock_query = double(:query_runner)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
           expect { VappTemplate.get('test_template', 'test_catalog') }.
@@ -77,12 +77,12 @@ module Vcloud
               :href => "/vappTemplate-12345678-90ab-cdef-0123-4567890abcde" }
           ]
           mock_query = double(:query)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_query)
-          mock_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+          expect(mock_query).to receive(:run).
             with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
             and_return(q_results)
           test_template = VappTemplate.get('test_template', 'test_catalog')
-          test_template.id.should == 'vappTemplate-12345678-90ab-cdef-0123-4567890abcde'
+          expect(test_template.id).to eq('vappTemplate-12345678-90ab-cdef-0123-4567890abcde')
         end
 
       end

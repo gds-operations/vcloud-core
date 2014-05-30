@@ -3,20 +3,20 @@ require 'spec_helper'
 describe Vcloud::Core::QueryRunner do
   before(:each) do
     @mock_fog_interface = StubFogInterface.new
-    Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
+    allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
     @query_runner = Vcloud::Core::QueryRunner.new()
   end
 
   context '#available_query_types' do
 
     it 'should return empty array if no query type links are returned from API' do
-      @mock_fog_interface.stub(:get_execute_query).and_return({:Link => {}})
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return({:Link => {}})
       result = @query_runner.available_query_types
       expect(result.size).to eq(0)
     end
 
     it 'returns queriable entity types provided by the API via :href link elements' do
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',
            :href => 'query?type=alice&#38;format=records'},
@@ -29,7 +29,7 @@ describe Vcloud::Core::QueryRunner do
     end
 
     it 'should ignore query links with format=references and format=idrecords' do
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',
            :href => 'query?type=alice&#38;format=references'},
@@ -51,12 +51,12 @@ describe Vcloud::Core::QueryRunner do
     end
 
     it 'should return no results when fog returns no results' do
-      @mock_fog_interface.stub(:get_execute_query).and_return({})
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return({})
       expect(@query_runner.run()).to eq([])
     end
 
     it 'return no results when fog results do not include a "Record" or a "Reference"' do
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleBlob => {:field1 => 'Stuff 1'}
         }
@@ -66,7 +66,7 @@ describe Vcloud::Core::QueryRunner do
 
     it 'should return a single result when fog returns a single record' do
       fields = {:field1 => 'Stuff 1'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleRecord => [fields]
         }
@@ -78,7 +78,7 @@ describe Vcloud::Core::QueryRunner do
 
     it 'should return a single result when fog returns a single reference' do
       fields = {:field1 => 'Stuff 1'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleReference => [fields]
         }
@@ -90,7 +90,7 @@ describe Vcloud::Core::QueryRunner do
 
     it 'should wrap single result from fog in list' do
       fields = {:field1 => 'Stuff 1'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleRecord => fields
         }
@@ -103,7 +103,7 @@ describe Vcloud::Core::QueryRunner do
     it 'should return all results in a record returned by fog' do
       fields      = {:field1 => 'Stuff 1'}
       more_fields = {:field1 => 'More Stuff 1'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleRecord => [fields, more_fields]
         }
@@ -117,7 +117,7 @@ describe Vcloud::Core::QueryRunner do
     it 'should return the first item if more than one records provided' do
       fields1 = {:field1 => 'Stuff 1'}
       fields2 = {:field1 => 'Stuff 2'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :WibbleRecord => [fields1],
           :WobbleRecord => [fields2]
@@ -129,7 +129,7 @@ describe Vcloud::Core::QueryRunner do
     end
 
     it 'should raise error if lastPage is not an integer' do
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :lastPage     => :qwerty,
           :WibbleRecord => []
@@ -141,7 +141,7 @@ describe Vcloud::Core::QueryRunner do
 
     it 'should get each page and collect the results' do
       fields = {:field1 => 'Stuff 1'}
-      @mock_fog_interface.stub(:get_execute_query).and_return(
+      allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
           :lastPage     => 2,
           :WibbleRecord => [fields]

@@ -10,8 +10,8 @@ module Vcloud
       it 'should raise a exception if named vdc not found in the data returned' do
 
         fog_facade = double(:FogFacade)
-        expect(fog_facade).to receive(:session).and_return { FOG_SESSION_RESPONSE }
-        expect(fog_facade).to receive(:get_organization).and_return { FOG_ORGANIZATION_RESPONSE }
+        expect(fog_facade).to receive(:session) { FOG_SESSION_RESPONSE }
+        expect(fog_facade).to receive(:get_organization) { FOG_ORGANIZATION_RESPONSE }
 
         service_interface = ServiceInterface.new(fog_facade)
 
@@ -22,25 +22,25 @@ module Vcloud
         before(:each) do
           @config = { :Blah => 'TestData' }
           @vcloud = double(:vcloud)
-          ::Fog::Compute::VcloudDirector.should_receive(:new).and_return(@vcloud)
+          expect(::Fog::Compute::VcloudDirector).to receive(:new).and_return(@vcloud)
         end
 
         it "should configure firewall for given edge gateway id" do
           task = double(:task)
-          Vcloud::Core::logger.should_receive(:info).with("Updating EdgeGateway 1234")
-          @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
+          expect(Vcloud::Core::logger).to receive(:info).with("Updating EdgeGateway 1234")
+          expect(@vcloud).to receive(:post_configure_edge_gateway_services).with("1234", @config).
               and_return(double(:response, :body =>  task ))
-          @vcloud.should_receive(:process_task).with(task)
+          expect(@vcloud).to receive(:process_task).with(task)
 
           ServiceInterface.new.post_configure_edge_gateway_services "1234", @config
         end
 
 
         it "should log and return exceptions without swallowing" do
-          Vcloud::Core::logger.should_receive(:info).with("Updating EdgeGateway 1234")
+          expect(Vcloud::Core::logger).to receive(:info).with("Updating EdgeGateway 1234")
           runtime_error = RuntimeError.new('Test Error')
-          Vcloud::Core::logger.should_receive(:error).with("Could not update EdgeGateway 1234 : #{runtime_error}")
-          @vcloud.should_receive(:post_configure_edge_gateway_services).with("1234", @config).
+          expect(Vcloud::Core::logger).to receive(:error).with("Could not update EdgeGateway 1234 : #{runtime_error}")
+          expect(@vcloud).to receive(:post_configure_edge_gateway_services).with("1234", @config).
               and_raise(runtime_error)
           expect{ ServiceInterface.new.post_configure_edge_gateway_services("1234", @config) }.to raise_error("Test Error")
         end

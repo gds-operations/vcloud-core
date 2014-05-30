@@ -21,8 +21,8 @@ module Vcloud
         @mock_vm_cpu_count = 1
         @fog_interface = StubFogInterface.new
         @mock_vapp = double(:vappm, :name => @vapp_name, :id => @vapp_id)
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@fog_interface)
-        @fog_interface.stub(:get_vapp).with(@vm_id).and_return({
+        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@fog_interface)
+        allow(@fog_interface).to receive(:get_vapp).with(@vm_id).and_return({
             :name => "#{@vm_name}",
             :href => "vm-href/#{@vm_id}",
             :'ovf:VirtualHardwareSection' => {
@@ -82,42 +82,42 @@ module Vcloud
 
       context "update memory in VM" do
         it "should not allow memory size < 64MB" do
-          @fog_interface.should_not_receive(:put_memory)
+          expect(@fog_interface).not_to receive(:put_memory)
           @vm.update_memory_size_in_mb(63)
         end
         it "should not update memory if is size has not changed" do
-          @fog_interface.should_not_receive(:put_memory)
+          expect(@fog_interface).not_to receive(:put_memory)
           @vm.update_memory_size_in_mb(@mock_vm_memory_size)
         end
         it "should gracefully handle a nil memory size" do
-          @fog_interface.should_not_receive(:put_memory)
+          expect(@fog_interface).not_to receive(:put_memory)
           @vm.update_memory_size_in_mb(nil)
         end
         it "should set memory size 64MB" do
-          @fog_interface.should_receive(:put_memory).with(@vm_id, 64)
+          expect(@fog_interface).to receive(:put_memory).with(@vm_id, 64)
           @vm.update_memory_size_in_mb(64)
         end
         it "should set memory size 4096MB" do
-          @fog_interface.should_receive(:put_memory).with(@vm_id, 4096)
+          expect(@fog_interface).to receive(:put_memory).with(@vm_id, 4096)
           @vm.update_memory_size_in_mb(4096)
         end
       end
 
       context "update the number of cpus in vm" do
         it "should gracefully handle nil cpu count" do
-          @fog_interface.should_not_receive(:put_cpu)
+          expect(@fog_interface).not_to receive(:put_cpu)
           @vm.update_cpu_count(nil)
         end
         it "should not update cpu if is count has not changed" do
-          @fog_interface.should_not_receive(:put_cpu)
+          expect(@fog_interface).not_to receive(:put_cpu)
           @vm.update_cpu_count(@mock_vm_cpu_count)
         end
         it "should not allow a zero cpu count" do
-          @fog_interface.should_not_receive(:put_cpu)
+          expect(@fog_interface).not_to receive(:put_cpu)
           @vm.update_cpu_count(0)
         end
         it "should update cpu count in input is ok" do
-          @fog_interface.should_receive(:put_cpu).with(@vm_id, 2)
+          expect(@fog_interface).to receive(:put_cpu).with(@vm_id, 2)
           @vm.update_cpu_count(2)
         end
       end
@@ -132,13 +132,13 @@ module Vcloud
             vars: { bob: 'hello', mary: 'hello' },
           }
           extra_disks = []
-          @vm.should_receive(:generate_preamble).
+          expect(@vm).to receive(:generate_preamble).
             with('hello_world.erb', 'remove_hello.rb', {
               bob: "hello",
               mary: "hello",
               extra_disks: [] }).
             and_return('RETURNED_PREAMBLE')
-          @fog_interface.should_receive(:put_guest_customization_section).
+          expect(@fog_interface).to receive(:put_guest_customization_section).
             with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
           @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
         end
@@ -147,8 +147,8 @@ module Vcloud
           name = 'test-vm'
           bootstrap_config = nil
           extra_disks = nil
-          @vm.should_not_receive(:generate_preamble)
-          @fog_interface.should_receive(:put_guest_customization_section).
+          expect(@vm).not_to receive(:generate_preamble)
+          expect(@fog_interface).to receive(:put_guest_customization_section).
             with(@vm_id, 'test-vm', '')
           @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
         end
@@ -157,8 +157,8 @@ module Vcloud
           name = 'test-vm'
           bootstrap_config = {}
           extra_disks = nil
-          @vm.should_not_receive(:generate_preamble)
-          @fog_interface.should_receive(:put_guest_customization_section).
+          expect(@vm).not_to receive(:generate_preamble)
+          expect(@fog_interface).to receive(:put_guest_customization_section).
             with(@vm_id, 'test-vm', '')
           @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
         end
@@ -170,10 +170,10 @@ module Vcloud
             script_post_processor: 'remove_hello.rb',
           }
           extra_disks = []
-          @vm.should_receive(:generate_preamble).
+          expect(@vm).to receive(:generate_preamble).
             with('hello_world.erb', 'remove_hello.rb', { extra_disks: [] }).
             and_return('RETURNED_PREAMBLE')
-          @fog_interface.should_receive(:put_guest_customization_section).
+          expect(@fog_interface).to receive(:put_guest_customization_section).
             with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
           @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
         end
@@ -189,7 +189,7 @@ module Vcloud
           stub_const('ENV', {'TEST_INTERPOLATED_ENVVAR' => 'test_interpolated_env'})
           erbfile = "#{@data_dir}/basic_preamble_test.erb"
           expected_output = File.read("#{erbfile}.OUT")
-          @vm.generate_preamble(erbfile, nil, vars).should == expected_output
+          expect(@vm.generate_preamble(erbfile, nil, vars)).to eq(expected_output)
         end
 
         it "passes the output of ERB through an optional post-processor tool" do
@@ -206,20 +206,20 @@ module Vcloud
 
       context "update metadata" do
         it "should handle empty metadata hash" do
-          @fog_interface.should_not_receive(:put_vapp_metadata_value)
+          expect(@fog_interface).not_to receive(:put_vapp_metadata_value)
           @vm.update_metadata(nil)
         end
         it "should handle metadata of multiple types" do
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vm_id, :foo, 'bar')
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vm_id, :false_thing, false)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vm_id, :true_thing, true)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vm_id, :number, 53)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vm_id, :zero, 0)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vapp_id, :foo, 'bar')
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vapp_id, :false_thing, false)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vapp_id, :true_thing, true)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vapp_id, :number, 53)
-          @fog_interface.should_receive(:put_vapp_metadata_value).with(@vapp_id, :zero, 0)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vm_id, :foo, 'bar')
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vm_id, :false_thing, false)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vm_id, :true_thing, true)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vm_id, :number, 53)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vm_id, :zero, 0)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vapp_id, :foo, 'bar')
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vapp_id, :false_thing, false)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vapp_id, :true_thing, true)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vapp_id, :number, 53)
+          expect(@fog_interface).to receive(:put_vapp_metadata_value).with(@vapp_id, :zero, 0)
           @vm.update_metadata(@mock_metadata)
         end
       end
@@ -227,7 +227,7 @@ module Vcloud
       context "configure vm network interfaces" do
         it "should configure single nic without an IP" do
           network_config = [{:name => 'Default'}]
-          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+          expect(@fog_interface).to receive(:put_network_connection_system_section_vapp).with(@vm_id, {
               :PrimaryNetworkConnectionIndex => 0,
               :NetworkConnection => [
                   {
@@ -243,7 +243,7 @@ module Vcloud
 
         it "should configure nic from pool" do
           network_config = [{:name => 'Default', :allocation_mode => 'pool'}]
-          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+          expect(@fog_interface).to receive(:put_network_connection_system_section_vapp).with(@vm_id, {
               :PrimaryNetworkConnectionIndex => 0,
               :NetworkConnection => [
                   {
@@ -259,7 +259,7 @@ module Vcloud
 
         it "should prefer configuring nic with static address" do
           network_config = [{:name => 'Default', :allocation_mode => 'dhcp', :ip_address => '192.168.1.1'}]
-          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+          expect(@fog_interface).to receive(:put_network_connection_system_section_vapp).with(@vm_id, {
               :PrimaryNetworkConnectionIndex => 0,
               :NetworkConnection => [
                   {
@@ -276,7 +276,7 @@ module Vcloud
 
         it "should configure single nic" do
           network_config = [{:name => 'Default', :ip_address => '192.168.1.1'}]
-          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+          expect(@fog_interface).to receive(:put_network_connection_system_section_vapp).with(@vm_id, {
               :PrimaryNetworkConnectionIndex => 0,
               :NetworkConnection => [
                   {
@@ -297,7 +297,7 @@ module Vcloud
               {:name => 'Monitoring', :ip_address => '192.168.2.1'}
           ]
 
-          @fog_interface.should_receive(:put_network_connection_system_section_vapp).with(@vm_id, {
+          expect(@fog_interface).to receive(:put_network_connection_system_section_vapp).with(@vm_id, {
               :PrimaryNetworkConnectionIndex => 0,
               :NetworkConnection => [
                   {
@@ -322,7 +322,7 @@ module Vcloud
 
         it "should configure no nics" do
           network_config = nil
-          @fog_interface.should_not_receive(:put_network_connection_system_section_vapp)
+          expect(@fog_interface).not_to receive(:put_network_connection_system_section_vapp)
           @vm.configure_network_interfaces(network_config)
         end
 
@@ -341,16 +341,16 @@ module Vcloud
           ]
           mock_sp_query = double(:query_runner)
 
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
-          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
-          mock_sp_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_vdc_query)
+          expect(mock_vdc_query).to receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_sp_query)
+          expect(mock_sp_query).to receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)
 
           generated_storage_profile = { name: 'storage_profile_name', href: 'test-href' }
-          @fog_interface.should_receive(:put_vm).with(@vm_id, @vm_name, { :StorageProfile => generated_storage_profile} ).and_return(true)
-          @vm.update_storage_profile(storage_profile).should == true
+          expect(@fog_interface).to receive(:put_vm).with(@vm_id, @vm_name, { :StorageProfile => generated_storage_profile} ).and_return(true)
+          expect(@vm.update_storage_profile(storage_profile)).to eq(true)
         end
 
         it "should raise an error if storage profile is not found" do
@@ -363,10 +363,10 @@ module Vcloud
           storage_profile_results = []
           mock_sp_query = double(:query_runner)
 
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
-          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
-          mock_sp_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_vdc_query)
+          expect(mock_vdc_query).to receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_sp_query)
+          expect(mock_sp_query).to receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)
 
@@ -383,10 +383,10 @@ module Vcloud
           storage_profile_results = [ { :id => 'test-href'  }]
           mock_sp_query = double(:query_runner)
 
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_vdc_query)
-          mock_vdc_query.should_receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
-          Vcloud::Core::QueryRunner.should_receive(:new).and_return(mock_sp_query)
-          mock_sp_query.should_receive(:run).
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_vdc_query)
+          expect(mock_vdc_query).to receive(:run).with('vApp', :filter => "name==#{@vapp_name}").and_return(vdc_results)
+          expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_sp_query)
+          expect(mock_sp_query).to receive(:run).
             with('orgVdcStorageProfile', :filter => "name==storage_profile_name;vdcName==vdc-test-1").
             and_return(storage_profile_results)
 

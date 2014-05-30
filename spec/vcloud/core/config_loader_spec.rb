@@ -13,21 +13,21 @@ module Vcloud
           input_file = "#{@data_dir}/working.json"
           loader = ConfigLoader.new
           actual_config = loader.load_config(input_file)
-          valid_config.should eq(actual_config)
+          expect(valid_config).to eq(actual_config)
         end
 
         it "should create a valid hash when input is YAML" do
           input_file = "#{@data_dir}/working.yaml"
           loader = ConfigLoader.new
           actual_config = loader.load_config(input_file)
-          valid_config.should eq(actual_config)
+          expect(valid_config).to eq(actual_config)
         end
 
         it "should create a valid hash when input is YAML with anchor defaults" do
           input_file = "#{@data_dir}/working_with_defaults.yaml"
           loader = ConfigLoader.new
           actual_config = loader.load_config(input_file)
-          valid_config['vapps'].should eq(actual_config['vapps'])
+          expect(valid_config['vapps']).to eq(actual_config['vapps'])
         end
       end
 
@@ -37,7 +37,7 @@ module Vcloud
           vars_file = "#{@data_dir}/working_variables.yaml"
           loader = ConfigLoader.new
           actual_config = loader.load_config(input_file, nil, vars_file)
-          valid_config.should eq(actual_config)
+          expect(valid_config).to eq(actual_config)
         end
       end
 
@@ -47,13 +47,13 @@ module Vcloud
           loader = ConfigLoader.new
           schema = vapp_config_schema
           actual_config = loader.load_config(input_file, schema)
-          valid_config['vapps'].should eq(actual_config['vapps'])
+          expect(valid_config['vapps']).to eq(actual_config['vapps'])
         end
 
         it "should raise an error if checked against an invalid schema" do
           input_file = "#{@data_dir}/working_with_defaults.yaml"
           loader = ConfigLoader.new
-          Vcloud::Core.logger.should_receive(:fatal).with("vapps: is not a hash")
+          expect(Vcloud::Core.logger).to receive(:fatal).with("vapps: is not a hash")
           expect { loader.load_config(input_file, invalid_schema) }.
             to raise_error('Supplied configuration does not match supplied schema')
         end
@@ -62,7 +62,7 @@ module Vcloud
           input_file = "#{@data_dir}/working_with_defaults.yaml"
           loader = ConfigLoader.new
 
-          Vcloud::Core.logger.should_not_receive(:warn)
+          expect(Vcloud::Core.logger).not_to receive(:warn)
           loader.load_config(input_file, vapp_config_schema)
         end
 
@@ -70,7 +70,7 @@ module Vcloud
           input_file = "#{@data_dir}/working_with_defaults.yaml"
           loader = ConfigLoader.new
 
-          Vcloud::Core.logger.should_receive(:warn).with("vapps: is deprecated by 'vapps_new'")
+          expect(Vcloud::Core.logger).to receive(:warn).with("vapps: is deprecated by 'vapps_new'")
           loader.load_config(input_file, deprecated_schema)
         end
 
@@ -78,8 +78,8 @@ module Vcloud
           input_file = "#{@data_dir}/working_with_defaults.yaml"
           loader = ConfigLoader.new
 
-          Vcloud::Core.logger.should_receive(:warn).with("vapps: is deprecated by 'vapps_new'")
-          Vcloud::Core.logger.should_receive(:fatal).with("vapps: is not a hash")
+          expect(Vcloud::Core.logger).to receive(:warn).with("vapps: is deprecated by 'vapps_new'")
+          expect(Vcloud::Core.logger).to receive(:fatal).with("vapps: is not a hash")
           expect { loader.load_config(input_file, invalid_and_deprecated_schema) }.
             to raise_error('Supplied configuration does not match supplied schema')
         end

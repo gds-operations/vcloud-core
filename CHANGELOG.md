@@ -1,9 +1,10 @@
-## 0.5.0 (UNRELEASED)
+## 0.5.0 (2014-05-30)
 
 Features:
 
   - `vcloud-query --version` now only returns the version string and no
     usage information.
+  - Support 'pool' mode for VM IP address allocation.
 
 ## 0.4.0 (2014-05-23)
 

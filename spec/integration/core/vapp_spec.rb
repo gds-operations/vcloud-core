@@ -20,9 +20,9 @@ describe Vcloud::Core::Vapp do
     @vapp = @test_case_vapps.first
   end
 
-  context "ensure our fixtures are as expected" do
+  context "before the integration tests run" do
 
-    it "ensures we have a test case vApp" do
+    it "ensures we have a valid vApp fixture, for subsequent tests to run against" do
       expect(@vapp).to be_instance_of(Vcloud::Core::Vapp)
     end
 

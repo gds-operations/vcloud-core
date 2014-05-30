@@ -9,7 +9,7 @@ module Vcloud
                      :get_execute_query, :get_vapp_metadata, :power_off_vapp, :shutdown_vapp, :session,
                      :post_instantiate_vapp_template, :put_memory, :put_cpu, :power_on_vapp, :put_vapp_metadata_value,
                      :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
-                     :post_configure_edge_gateway_services, :get_vdc
+                     :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp
 
       #########################
       # FogFacade Inner class to represent a logic free facade over our interactions with Fog
@@ -97,6 +97,11 @@ module Vcloud
 
         def org_name
           @vcloud.org_name
+        end
+
+        def post_undeploy_vapp(vapp_id)
+          task = @vcloud.post_undeploy_vapp(vapp_id).body
+          @vcloud.process_task(task)
         end
 
         def delete_vapp(vapp_id)

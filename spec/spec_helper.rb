@@ -17,6 +17,12 @@ require 'vcloud/tools/tester'
 require 'support/stub_fog_interface.rb'
 require 'support/integration_helper'
 
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+end
+
 if ENV['COVERAGE']
   SimpleCov.at_exit do
     SimpleCov.result.format!

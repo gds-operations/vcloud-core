@@ -7,6 +7,7 @@ describe Vcloud::Core::Vapp do
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
     @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @vapp_name_prefix = "vcloud-core-vapp-tests"
     quantity_of_test_case_vapps = 1
     @network_names = [ @test_data.network_1, @test_data.network_2 ]
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
@@ -15,7 +16,7 @@ describe Vcloud::Core::Vapp do
       @test_data.catalog,
       @test_data.vapp_template,
       @network_names,
-      "vcloud-core-vapp-tests"
+      @vapp_name_prefix
     )
     @vapp = @test_case_vapps.first
   end
@@ -47,7 +48,7 @@ describe Vcloud::Core::Vapp do
   describe "#name" do
 
     it "returns the name of the vApp" do
-      expect(@vapp.name).to match(/^vcloud-core-vapp-tests-/)
+      expect(@vapp.name).to include(@vapp_name_prefix)
     end
 
   end
@@ -106,8 +107,9 @@ describe Vcloud::Core::Vapp do
       Vcloud::Core::VappTemplate.get(@test_data.vapp_template, @test_data.catalog)
     }
 
+    let(:vapp_name) { "#{@vapp_name_prefix}-instantiate-#{Time.new.to_i}" }
+
     it "can create a vApp with no networks assigned" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
         [],
@@ -120,7 +122,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "can create a vApp with one networks assigned" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
         [ @test_data.network_1 ],
@@ -133,7 +134,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "can create a vApp with two networks assigned" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
         [ @test_data.network_1, @test_data.network_2 ],
@@ -146,7 +146,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "raises a Fog error if the vAppTemplate id refers to a non-existent template" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       expect {
         Vcloud::Core::Vapp.instantiate(
           vapp_name,
@@ -158,7 +157,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "raises a Fog error if the vAppTemplate id is invalid" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       expect {
         Vcloud::Core::Vapp.instantiate(
           vapp_name,
@@ -170,7 +168,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "raises a Fog error if the vAppTemplate id is nil" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       expect {
         Vcloud::Core::Vapp.instantiate(
           vapp_name,
@@ -182,7 +179,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "raises an error if we try to instantiate into a non-existent vDC" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       bogus_vdc_name = "NonExistentVdc asnfiuqwf"
       expect {
         Vcloud::Core::Vapp.instantiate(
@@ -195,7 +191,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "raises an error if the vDC name is nil" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       expect {
         Vcloud::Core::Vapp.instantiate(
           vapp_name,
@@ -207,7 +202,6 @@ describe Vcloud::Core::Vapp do
     end
 
     it "skips bogus network names specified in the network_names array" do
-      vapp_name = "vcloud-core-vapp-instantiate-tests-#{Time.new.to_i}"
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
         ['bogus-network-name-ijwioewiwego', 'bogus-network-name-asofijqweof'],

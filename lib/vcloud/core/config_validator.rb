@@ -8,17 +8,17 @@ require 'ipaddr'
 #
 # = Recursion in this class
 #
-#   Note that this class will recursively call itself in order to validate deep
-#   hash and array structures.
+# Note that this class will recursively call itself in order to validate deep
+# hash and array structures.
 #
-#   The +data+ variable is usually either an array or hash and so will pass
-#   through the ConfigValidator#validate_array and
-#   ConfigValidator#validate_hash methods respectively.
+# The +data+ variable is usually either an array or hash and so will pass
+# through the ConfigValidator#validate_array and
+# ConfigValidator#validate_hash methods respectively.
 #
-#   These methods then recursively instantiate this class by calling
-#   ConfigValidator::validate again (ConfigValidator#validate_hash calls this
-#   indirectly via the ConfigValidator#check_hash_parameter method).
-
+# These methods then recursively instantiate this class by calling
+# ConfigValidator::validate again (ConfigValidator#validate_hash calls this
+# indirectly via the ConfigValidator#check_hash_parameter method).
+#
 module Vcloud
   module Core
     class ConfigValidator

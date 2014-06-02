@@ -1,26 +1,26 @@
 require 'ipaddr'
 
-##
-# self::validate is entry point; this class method is called to
-# instantiate ConfigValidator. For example:
-#
-# Core::ConfigValidator.validate(key, data, schema)
-#
-# = Recursion in this class
-#
-#   Note that this class will recursively call itself in order to validate deep
-#   hash and array structures.
-#
-#   The +data+ variable is usually either an array or hash and so will pass
-#   through the ConfigValidator#validate_array and
-#   ConfigValidator#validate_hash methods respectively.
-#
-#   These methods then recursively instantiate this class by calling
-#   ConfigValidator::validate again (ConfigValidator#validate_hash calls this
-#   indirectly via the ConfigValidator#check_hash_parameter method).
-
 module Vcloud
   module Core
+    ##
+    # self::validate is entry point; this class method is called to
+    # instantiate ConfigValidator. For example:
+    #
+    # Core::ConfigValidator.validate(key, data, schema)
+    #
+    # = Recursion in this class
+    #
+    # Note that this class will recursively call itself in order to validate deep
+    # hash and array structures.
+    #
+    # The +data+ variable is usually either an array or hash and so will pass
+    # through the ConfigValidator#validate_array and
+    # ConfigValidator#validate_hash methods respectively.
+    #
+    # These methods then recursively instantiate this class by calling
+    # ConfigValidator::validate again (ConfigValidator#validate_hash calls this
+    # indirectly via the ConfigValidator#check_hash_parameter method).
+    #
     class ConfigValidator
 
       attr_reader :key, :data, :schema, :type, :errors, :warnings

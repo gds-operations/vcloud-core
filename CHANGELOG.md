@@ -4,7 +4,7 @@ Features:
 
   - `vcloud-query --version` now only returns the version string and no
     usage information.
-  - Support 'pool' mode for VM IP address allocation.
+  - Support 'pool' mode for VM IP address allocation. Thanks @geriBatai.
 
 ## 0.4.0 (2014-05-23)
 

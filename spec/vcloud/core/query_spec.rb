@@ -11,8 +11,8 @@ describe Vcloud::Core::Query do
 
         @query = Vcloud::Core::Query.new(nil, {}, query_runner)
 
-        @query.should_receive(:puts).with("alice")
-        @query.should_receive(:puts).with("bob")
+        expect(@query).to receive(:puts).with("alice")
+        expect(@query).to receive(:puts).with("bob")
 
         @query.run
       end
@@ -29,7 +29,7 @@ describe Vcloud::Core::Query do
       it "should not output when given tsv output_format" do
         query = Vcloud::Core::Query.new('bob', {:output_format => 'tsv'}, @query_runner)
 
-        query.should_not_receive(:puts)
+        expect(query).not_to receive(:puts)
 
         query.run()
       end
@@ -37,7 +37,7 @@ describe Vcloud::Core::Query do
       it "should not output when given csv output_format" do
         query = Vcloud::Core::Query.new('bob', {:output_format => 'csv'}, @query_runner)
 
-        query.should_not_receive(:puts)
+        expect(query).not_to receive(:puts)
 
         query.run()
       end
@@ -59,9 +59,9 @@ describe Vcloud::Core::Query do
       it "should output a query in tsv when run with a type" do
         @query = Vcloud::Core::Query.new('bob', {:output_format => 'tsv'}, @query_runner)
 
-        @query.should_receive(:puts).with("field1\tfield2")
-        @query.should_receive(:puts).with("Stuff 1\tStuff 2")
-        @query.should_receive(:puts).with("More Stuff 1\tMore Stuff 2")
+        expect(@query).to receive(:puts).with("field1\tfield2")
+        expect(@query).to receive(:puts).with("Stuff 1\tStuff 2")
+        expect(@query).to receive(:puts).with("More Stuff 1\tMore Stuff 2")
 
         @query.run()
       end
@@ -69,8 +69,8 @@ describe Vcloud::Core::Query do
       it "should output a query in csv when run with a type" do
         @query = Vcloud::Core::Query.new('bob', {:output_format => 'csv'}, @query_runner)
 
-        @query.should_receive(:puts).with("field1,field2\n")
-        @query.should_receive(:puts).with("Stuff 1,Stuff 2\nMore Stuff 1,More Stuff 2\n")
+        expect(@query).to receive(:puts).with("field1,field2\n")
+        expect(@query).to receive(:puts).with("Stuff 1,Stuff 2\nMore Stuff 1,More Stuff 2\n")
 
         @query.run()
       end

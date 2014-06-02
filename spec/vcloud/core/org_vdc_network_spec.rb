@@ -11,14 +11,14 @@ module Vcloud
         @vdc_name  = 'test-vdc-1'
         @net_name  = 'test-net-1'
         @mock_fog_interface = StubFogInterface.new
-        Vcloud::Fog::ServiceInterface.stub(:new).and_return(@mock_fog_interface)
-        Vdc.any_instance.stub(:id).and_return(@vdc_id)
+        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
+        allow_any_instance_of(Vdc).to receive(:id).and_return(@vdc_id)
         @mock_vdc = double(:vdc, :id => @vdc_id)
-        Vdc.stub(:get_by_name).and_return(@mock_vdc)
+        allow(Vdc).to receive(:get_by_name).and_return(@mock_vdc)
       end
 
       context "Class public interface" do
-        it { OrgVdcNetwork.should respond_to(:provision) }
+        it { expect(OrgVdcNetwork).to respond_to(:provision) }
       end
 
       context "Object public interface" do
@@ -51,7 +51,7 @@ module Vcloud
 
       context "#delete" do
         it "should call down to Fog::ServiceInterface.delete_network with the correct id" do
-          @mock_fog_interface.should_receive(:delete_network).with(@net_id)
+          expect(@mock_fog_interface).to receive(:delete_network).with(@net_id)
           OrgVdcNetwork.new(@net_id).delete
         end
       end
@@ -65,7 +65,7 @@ module Vcloud
             :href => "/#{@vdc_id}",
             :name => @vdc_name
           )
-          Vdc.stub(:get_by_name).and_return(@mock_vdc)
+          allow(Vdc).to receive(:get_by_name).and_return(@mock_vdc)
         end
 
         context "should fail gracefully on bad input" do
@@ -131,8 +131,8 @@ module Vcloud
                 }
               },
             }
-            Vcloud::Core.logger.should_receive(:info)
-            @mock_fog_interface.should_receive(:post_create_org_vdc_network).
+            expect(Vcloud::Core.logger).to receive(:info)
+            expect(@mock_fog_interface).to receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             obj = Vcloud::Core::OrgVdcNetwork.provision(@config)
@@ -161,8 +161,8 @@ module Vcloud
                 }
               }
             }
-            Vcloud::Core.logger.should_receive(:info)
-            @mock_fog_interface.should_receive(:post_create_org_vdc_network).
+            expect(Vcloud::Core.logger).to receive(:info)
+            expect(@mock_fog_interface).to receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             Vcloud::Core::OrgVdcNetwork.provision(@config)
@@ -199,8 +199,8 @@ module Vcloud
                 }
               },
             }
-            Vcloud::Core.logger.should_receive(:info)
-            @mock_fog_interface.should_receive(:post_create_org_vdc_network).
+            expect(Vcloud::Core.logger).to receive(:info)
+            expect(@mock_fog_interface).to receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             Vcloud::Core::OrgVdcNetwork.provision(@config)
@@ -226,7 +226,7 @@ module Vcloud
           it "should handle lack of ip_ranges on natRouted networks" do
             @config[:edge_gateway] = 'test gateway'
             mock_edgegw = Vcloud::Core::EdgeGateway.new(@edgegw_id)
-            Vcloud::Core::EdgeGateway.stub(:get_by_name).and_return(mock_edgegw)
+            allow(Vcloud::Core::EdgeGateway).to receive(:get_by_name).and_return(mock_edgegw)
 
             expected_vcloud_attrs = {
               :IsShared => false,
@@ -241,8 +241,8 @@ module Vcloud
               },
               :EdgeGateway => { :href => "/#{@edgegw_id}" },
             }
-            Vcloud::Core.logger.should_receive(:info)
-            @mock_fog_interface.should_receive(:post_create_org_vdc_network).
+            expect(Vcloud::Core.logger).to receive(:info)
+            expect(@mock_fog_interface).to receive(:post_create_org_vdc_network).
                 with(@vdc_id, @config[:name], expected_vcloud_attrs).
                 and_return({ :href => "/#{@net_id}" })
             Vcloud::Core::OrgVdcNetwork.provision(@config)

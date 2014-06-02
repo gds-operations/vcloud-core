@@ -24,11 +24,11 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'fog', '>= 1.22.0'
   s.add_runtime_dependency 'mustache'
+  s.add_development_dependency 'gem_publisher', '1.2.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.14.1'
-  s.add_development_dependency 'rubocop'
+  s.add_development_dependency 'rubocop', '~> 0.23.0'
   s.add_development_dependency 'simplecov', '~> 0.8.2'
-  s.add_development_dependency 'gem_publisher', '1.2.0'
   s.add_development_dependency 'vcloud-tools-tester', '0.0.6'
 end

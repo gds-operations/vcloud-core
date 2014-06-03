@@ -22,7 +22,8 @@ We really welcome contributions.
 
 4. Add your functionality or bug fix and a test for your change. Only refactoring and
    documentation changes do not require tests. If the functionality is at all complicated
-   then it is likely that more than one test will be required.
+   then it is likely that more than one test will be required. If you would like help
+   with writing tests please do ask us.
 
 5. Make sure all the tests pass, including the integration tests if possible.
 
@@ -49,7 +50,7 @@ If you feel your pull request has been outstanding too long, please feel free to
 
 ## In order for a pull request to be accepted, it MUST
 
-- Include at least one test (unless it is documentation or refactoring)
+- Include at least one test (unless it is documentation or refactoring). If you have any questions about how to write tests, please ask us, we will be happy to help
 - Follow our [Git style guide](https://github.com/alphagov/styleguides/blob/master/git.md)
 - Include a clear summary in the pull request comments as to what the change is and why
   you are making it

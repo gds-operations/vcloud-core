@@ -35,9 +35,17 @@ We really welcome contributions.
 
 ## How soon will we respond?
 
-We will comment on your pull request within two working days. However, we might not merge immediately. We may come back to you with comments and suggestions, and if we would like you to make changes, we will close the pull request as well as adding details of the changes we'd like you to make.
+We will comment on your pull request within two working days. However, we might not be able to review it immediately.
+
+We may come back to you with comments and suggestions, and if we would like you to make changes, we will close the pull request as well as adding details of the changes we'd like you to make.
 
 If you feel your pull request has been outstanding too long, please feel free to bump it by making a comment on it.
+
+## Guidelines for making a pull request
+
+    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+    "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+    interpreted as described in RFC 2119.
 
 ## In order for a pull request to be accepted, it MUST
 

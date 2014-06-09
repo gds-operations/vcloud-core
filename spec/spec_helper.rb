@@ -1,3 +1,4 @@
+# SimpleCov must run _first_ according to its README
 if ENV['COVERAGE']
   require 'simplecov'
 

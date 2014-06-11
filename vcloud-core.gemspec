@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = ['anna.shipman@digital.cabinet-office.gov.uk']
   s.summary     = 'Core tools for interacting with VMware vCloud Director'
   s.description = 'Core tools for interacting with VMware vCloud Director. Includes VCloud Query, a light wrapper round the vCloud Query API.'
-  s.homepage    = 'http://github.com/alphagov/vcloud-core'
+  s.homepage    = 'http://github.com/gds-operations/vcloud-core'
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split($/)

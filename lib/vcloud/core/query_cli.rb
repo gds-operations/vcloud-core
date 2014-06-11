@@ -34,7 +34,7 @@ Query types map to vCloud entities, for example: vApp, vm, orgVdc, orgVdcNetwork
 
 Without a type argument, returns a list of available Entity Types to query.
 
-See https://github.com/alphagov/vcloud-tools/blob/master/README.md for more info.
+See https://github.com/gds-operations/vcloud-tools/blob/master/README.md for more info.
 
 Example use:
 

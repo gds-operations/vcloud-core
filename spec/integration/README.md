@@ -15,7 +15,7 @@
   and update with parameters suitable for your environment.
 
 - You need to include the set-up for your testing environment in your
-  [fog file](https://github.com/alphagov/vcloud-core#credentials).
+  [fog file](https://github.com/gds-operations/vcloud-core#credentials).
 
 - The tests use the [vCloud Tools Tester](http://rubygems.org/gems/vcloud-tools-tester) gem.
   You do not need to install this, `bundler` will do this for you.

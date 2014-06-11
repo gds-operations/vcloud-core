@@ -1,8 +1,8 @@
-# VCloud Core
+# vCloud Core
 
-VCloud Core is a gem that supports automatated provisioning of VMWare vCloud Director. It uses Fog under the hood. Primarily developed to support [VCloud Walker](https://github.com/gds-operations/vcloud-walker) and [VCloud Tools](https://github.com/gds-operations/vcloud-tools).
+vCloud Core is a gem that supports automatated provisioning of VMWare vCloud Director. It uses Fog under the hood. Primarily developed to support [vCloud Walker](https://github.com/gds-operations/vcloud-walker) and [vCloud Tools](https://github.com/gds-operations/vcloud-tools).
 
-VCloud Core includes VCloud Query and a command-line wrapper for VCloud Query.
+vCloud Core includes vCloud Query and a command-line wrapper for vCloud Query.
 
 ## Installation
 
@@ -56,11 +56,11 @@ credentials that allow it to talk to a vCloud Director environment.
   password in the fog file. This is **not recommended**.
 
 
-## VCloud Query
+## vCloud Query
 
 ### Get results from the vCloud Query API
 
-VCloud Query is a light wrapper around the vCloud Query API.
+vCloud Query is a light wrapper around the vCloud Query API.
 
 Any, or all, records of a particular 'type' can be returned. These types map to 
 entities in the vCloud system itself, eg: 'vm', 'vApp', 'orgVdc', 'edgeGateway'.

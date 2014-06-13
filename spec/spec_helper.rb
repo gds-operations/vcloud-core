@@ -1,3 +1,4 @@
+# SimpleCov must run _first_ according to its README
 if ENV['COVERAGE']
   require 'simplecov'
 
@@ -8,15 +9,14 @@ if ENV['COVERAGE']
     end
   end
 
-  SimpleCov.profiles.define 'gem' do
+  SimpleCov.adapters.define 'gem' do
     add_filter '/spec/'
     add_filter '/vendor/'
 
     add_group 'Libraries', '/lib/'
   end
 
-  SimpleCov.minimum_coverage(80)
-  SimpleCov.maximum_coverage_drop(20)
+  SimpleCov.minimum_coverage(84)
   SimpleCov.start 'gem'
 end
 

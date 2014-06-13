@@ -252,7 +252,7 @@ module Vcloud
 
       def validate_string
         unless @data.is_a? String
-          errors << "#{key}: #{@data} is not a string"
+          @errors << "#{key}: #{@data} is not a string"
           return
         end
         return unless check_emptyness_ok

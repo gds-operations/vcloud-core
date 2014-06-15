@@ -73,6 +73,13 @@ module Vcloud
           expect(v.valid?).to be_true
         end
 
+        it "should return error for nil value with allowed_empty: true)" do
+          data = nil
+          schema = { type: 'string', allowed_empty: true }
+          v = ConfigValidator.validate(:base, data, schema)
+          expect(v.errors).to eq([ 'base:  is not a string'] )
+        end
+
         it "should validate ok with a :matcher regex specified" do
           data = "name-1234"
           schema = { type: 'string', matcher: /^name-\d+$/ }

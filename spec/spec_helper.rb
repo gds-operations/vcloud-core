@@ -32,11 +32,9 @@ RSpec.configure do |config|
   end
 end
 
-# Set FOG_MOCK=true to enable Fog Mock mode.
-# NB: Your test data will need to reflect the 'initial data structure' in 
-#     https://github.com/fog/fog/blob/master/lib/fog/vcloud_director/compute.rb#L483
-# 
-# Use FOG_CREDENTIAL=fog_mock in vcloud_tools_tester
+# To enable Fog Mock mode use FOG_CREDENTIAL=fog_mock and FOG_MOCK=true
+# If you do not have configuration for fog_mock in your vcloud_tools_testing_config.yaml,
+# the test data is defined here: https://github.com/fog/fog/blob/master/lib/fog/vcloud_director/compute.rb#L483-L733
 # 
 if ENV['FOG_MOCK']
   Fog.mock!

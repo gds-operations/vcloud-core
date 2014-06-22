@@ -19,8 +19,8 @@ module Vcloud
           @vcloud = ::Fog::Compute::VcloudDirector.new
         end
 
-        def get_vdc(name)
-          @vcloud.get_vdc(name).body
+        def get_vdc(id)
+          @vcloud.get_vdc(id).body
         end
 
         def get_organization (name)

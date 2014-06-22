@@ -4,7 +4,7 @@ describe Vcloud::Core::Vm do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
     @network_names = [ @test_params.network_1, @test_params.network_2 ]
     @network_ips = {
       @test_params.network_1 => @test_params.network_1_ip,

@@ -6,7 +6,7 @@ module Vcloud
 
       before(:all) do
         config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-        @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
+        @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
       end
 
       let(:edge_gateway) { EdgeGateway.get_by_name(@test_params.edge_gateway) }

@@ -6,7 +6,7 @@ describe Vcloud::Core::Vapp do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
     @vapp_name_prefix = "vcloud-core-vapp-tests"
     quantity_of_test_case_vapps = 1
     @network_names = [ @test_params.network_1, @test_params.network_2 ]

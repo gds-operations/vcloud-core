@@ -6,10 +6,10 @@ module Vcloud
 
       before(:all) do
         config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-        @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+        @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
       end
 
-      let(:edge_gateway) { EdgeGateway.get_by_name(@test_data.edge_gateway) }
+      let(:edge_gateway) { EdgeGateway.get_by_name(@test_params.edge_gateway) }
       let(:spurious_id)  { "12345678-1234-1234-1234-123456789012" }
 
       context "when updating the edge gateway" do
@@ -51,15 +51,15 @@ module Vcloud
 
       context "get vCloud attributes for given gateway interface ID" do
         it "returns a provider network" do
-          network_interface = edge_gateway.vcloud_gateway_interface_by_id(@test_data.provider_network_id)
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(@test_params.provider_network_id)
           expect(network_interface[:Network]).not_to be_nil
-          expect(network_interface[:Network][:href]).to include(@test_data.provider_network_id)
+          expect(network_interface[:Network][:href]).to include(@test_params.provider_network_id)
         end
 
         it "returns an orgVdcNetwork" do
-          network_interface = edge_gateway.vcloud_gateway_interface_by_id(@test_data.network_1_id)
+          network_interface = edge_gateway.vcloud_gateway_interface_by_id(@test_params.network_1_id)
           expect(network_interface[:Network]).not_to be_nil
-          expect(network_interface[:Network][:href]).to include(@test_data.network_1_id)
+          expect(network_interface[:Network][:href]).to include(@test_params.network_1_id)
         end
 
         it "returns nil if network with given ID is not found" do
@@ -72,7 +72,7 @@ module Vcloud
         it "returns the an edge gateway object for that name" do
           # See `let` statement above which calls EdgeGateway::get_by_name
           expect(edge_gateway).to    be_a(Vcloud::Core::EdgeGateway)
-          expect(edge_gateway.id).to eq(@test_data.edge_gateway_id)
+          expect(edge_gateway.id).to eq(@test_params.edge_gateway_id)
         end
 
         it "raise an exception if edge gateway with given ID is not found" do
@@ -83,8 +83,8 @@ module Vcloud
 
       context "when retrieving edge gateway IDs (plural) by name" do
         it "returns the correct ID for that name" do
-          ids = Vcloud::Core::EdgeGateway.get_ids_by_name(@test_data.edge_gateway)
-          expect(ids.first).to eq(@test_data.edge_gateway_id)
+          ids = Vcloud::Core::EdgeGateway.get_ids_by_name(@test_params.edge_gateway)
+          expect(ids.first).to eq(@test_params.edge_gateway_id)
         end
 
         it "returns an empty array if edge gateway with given ID is not found" do
@@ -97,27 +97,27 @@ module Vcloud
       context "when retrieving vCloud attributes" do
         it "returns the correct edge gateway for a given ID" do
           vcloud_attributes = edge_gateway.vcloud_attributes
-          expect(vcloud_attributes[:href]).to include(@test_data.edge_gateway_id)
+          expect(vcloud_attributes[:href]).to include(@test_params.edge_gateway_id)
         end
 
         it "returns the correct href for a given edge gateway" do
           href = edge_gateway.href
-          expect(href).to include(@test_data.edge_gateway_id)
+          expect(href).to include(@test_params.edge_gateway_id)
         end
 
         it "returns the correct name for a given edge gateway" do
           name = edge_gateway.name
-          expect(name).to eq(@test_data.edge_gateway)
+          expect(name).to eq(@test_params.edge_gateway)
         end
       end
 
       context "when retrieving a gateway's interfaces" do
         it "returns an array of interface objects" do
           interfaces = edge_gateway.interfaces
-          network_1_interface = interfaces.detect { |i| i.name == @test_data.network_1 }
+          network_1_interface = interfaces.detect { |i| i.name == @test_params.network_1 }
 
           expect(interfaces.first).to         be_a(Vcloud::Core::EdgeGatewayInterface)
-          expect(network_1_interface.name).to eq(@test_data.network_1)
+          expect(network_1_interface.name).to eq(@test_params.network_1)
         end
       end
     end

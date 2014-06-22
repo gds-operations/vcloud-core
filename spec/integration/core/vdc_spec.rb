@@ -6,7 +6,7 @@ describe Vcloud::Core::Vdc do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
   end
 
   describe ".get_by_name" do
@@ -15,7 +15,7 @@ describe Vcloud::Core::Vdc do
 
     context "when looking up a valid vDC name" do
 
-      let(:name) { @test_data.vdc_1_name }
+      let(:name) { @test_params.vdc_1_name }
 
       it "returns a Vcloud::Core::Vdc object" do
         expect(subject).to be_instance_of(Vcloud::Core::Vdc)
@@ -49,7 +49,7 @@ describe Vcloud::Core::Vdc do
 
     context "when instantiating with a valid ID" do
 
-      let(:vdc_id) { Vcloud::Core::Vdc.get_by_name(@test_data.vdc_1_name).id }
+      let(:vdc_id) { Vcloud::Core::Vdc.get_by_name(@test_params.vdc_1_name).id }
 
       it "returns a valid Vdc object" do
         expect(subject).to be_instance_of(Vcloud::Core::Vdc)
@@ -60,7 +60,7 @@ describe Vcloud::Core::Vdc do
       end
 
       it "has our expected #name" do
-        expect(subject.name).to eq(@test_data.vdc_1_name)
+        expect(subject.name).to eq(@test_params.vdc_1_name)
       end
 
     end

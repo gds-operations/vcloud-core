@@ -6,10 +6,10 @@ module Vcloud
 
       before(:all) do
         config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-        test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
-        @vapp_template_name = test_data.vapp_template
-        @vapp_template_catalog_name = test_data.catalog
-        @vdc_name = test_data.vdc_1_name
+        test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
+        @vapp_template_name = test_params.vapp_template
+        @vapp_template_catalog_name = test_params.catalog
+        @vdc_name = test_params.vdc_1_name
       end
 
       context "#available_query_types" do

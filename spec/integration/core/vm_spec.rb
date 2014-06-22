@@ -4,17 +4,17 @@ describe Vcloud::Core::Vm do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
-    @network_names = [ @test_data.network_1, @test_data.network_2 ]
+    @test_params = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @network_names = [ @test_params.network_1, @test_params.network_2 ]
     @network_ips = {
-      @test_data.network_1 => @test_data.network_1_ip,
-      @test_data.network_2 => @test_data.network_2_ip,
+      @test_params.network_1 => @test_params.network_1_ip,
+      @test_params.network_2 => @test_params.network_2_ip,
     }
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
       1,
-      @test_data.vdc_1_name,
-      @test_data.catalog,
-      @test_data.vapp_template,
+      @test_params.vdc_1_name,
+      @test_params.catalog,
+      @test_params.vapp_template,
       @network_names,
       "vcloud-core-vm-tests"
     )
@@ -224,15 +224,15 @@ describe Vcloud::Core::Vm do
     it "can update the storage profile of a VM" do
       available_storage_profiles = Vcloud::Core::QueryRunner.new.run(
         'orgVdcStorageProfile',
-        filter: "vdcName==#{@test_data.vdc_1_name}"
+        filter: "vdcName==#{@test_params.vdc_1_name}"
       )
       if available_storage_profiles.size == 1
-        pending("There is only one StorageProfile in vDC #{@test_data.vdc_1_name}: cannot test.")
+        pending("There is only one StorageProfile in vDC #{@test_params.vdc_1_name}: cannot test.")
       end
       original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
-      expect(original_storage_profile_name).to eq(@test_data.default_storage_profile_name)
-      @vm.update_storage_profile(@test_data.storage_profile)
-      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_data.storage_profile)
+      expect(original_storage_profile_name).to eq(@test_params.default_storage_profile_name)
+      @vm.update_storage_profile(@test_params.storage_profile)
+      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_params.storage_profile)
     end
 
   end

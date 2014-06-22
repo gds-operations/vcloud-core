@@ -23,8 +23,8 @@ module Vcloud
           @vcloud.get_vdc(id).body
         end
 
-        def get_organization (name)
-          @vcloud.get_organization(name).body
+        def get_organization (id)
+          @vcloud.get_organization(id).body
         end
 
         def session

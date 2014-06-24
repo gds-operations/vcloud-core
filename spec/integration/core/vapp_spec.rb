@@ -6,15 +6,15 @@ describe Vcloud::Core::Vapp do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_data = Vcloud::Tools::Tester::TestParameters.new(config_file)
+    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
     @vapp_name_prefix = "vcloud-core-vapp-tests"
     quantity_of_test_case_vapps = 1
-    @network_names = [ @test_data.network_1, @test_data.network_2 ]
+    @network_names = [ @test_params.network_1, @test_params.network_2 ]
     @test_case_vapps = IntegrationHelper.create_test_case_vapps(
       quantity_of_test_case_vapps,
-      @test_data.vdc_1_name,
-      @test_data.catalog,
-      @test_data.vapp_template,
+      @test_params.vdc_1_name,
+      @test_params.catalog,
+      @test_params.vapp_template,
       @network_names,
       @vapp_name_prefix
     )
@@ -106,7 +106,7 @@ describe Vcloud::Core::Vapp do
   describe ".instantiate" do
 
     let(:vapp_template) {
-      Vcloud::Core::VappTemplate.get(@test_data.vapp_template, @test_data.catalog)
+      Vcloud::Core::VappTemplate.get(@test_params.vapp_template, @test_params.catalog)
     }
 
     let(:vapp_name) { "#{@vapp_name_prefix}-instantiate-#{Time.new.to_i}" }
@@ -116,7 +116,7 @@ describe Vcloud::Core::Vapp do
         vapp_name,
         [],
         vapp_template.id,
-        @test_data.vdc_1_name
+        @test_params.vdc_1_name
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
@@ -126,9 +126,9 @@ describe Vcloud::Core::Vapp do
     it "can create a vApp with one networks assigned" do
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
-        [ @test_data.network_1 ],
+        [ @test_params.network_1 ],
         vapp_template.id,
-        @test_data.vdc_1_name
+        @test_params.vdc_1_name
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
@@ -138,9 +138,9 @@ describe Vcloud::Core::Vapp do
     it "can create a vApp with two networks assigned" do
       new_vapp = Vcloud::Core::Vapp.instantiate(
         vapp_name,
-        [ @test_data.network_1, @test_data.network_2 ],
+        [ @test_params.network_1, @test_params.network_2 ],
         vapp_template.id,
-        @test_data.vdc_1_name
+        @test_params.vdc_1_name
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.name).to eq(vapp_name)
@@ -153,7 +153,7 @@ describe Vcloud::Core::Vapp do
           vapp_name,
           [],
           "vAppTemplate-12345678-1234-1234-1234-1234567890ab",
-          @test_data.vdc_1_name
+          @test_params.vdc_1_name
         )
       }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, "Access is forbidden")
     end
@@ -164,7 +164,7 @@ describe Vcloud::Core::Vapp do
           vapp_name,
           [],
           "invalid-vapp-template-id",
-          @test_data.vdc_1_name
+          @test_params.vdc_1_name
         )
       }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, "This operation is denied.")
     end
@@ -175,7 +175,7 @@ describe Vcloud::Core::Vapp do
           vapp_name,
           [],
           nil,
-          @test_data.vdc_1_name
+          @test_params.vdc_1_name
         )
       }.to raise_error(Fog::Compute::VcloudDirector::BadRequest)
     end
@@ -208,7 +208,7 @@ describe Vcloud::Core::Vapp do
         vapp_name,
         ['bogus-network-name-ijwioewiwego', 'bogus-network-name-asofijqweof'],
         vapp_template.id,
-        @test_data.vdc_1_name
+        @test_params.vdc_1_name
       )
       @test_case_vapps << new_vapp
       expect(new_vapp.networks).to eq({

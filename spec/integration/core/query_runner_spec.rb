@@ -6,7 +6,13 @@ module Vcloud
 
       before(:all) do
         config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-        test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
+        required_user_params = [
+          "catalog",
+          "vapp_template",
+          "vdc_1_name",
+        ]
+
+        test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, required_user_params).test_params
         @vapp_template_name = test_params.vapp_template
         @vapp_template_catalog_name = test_params.catalog
         @vdc_name = test_params.vdc_1_name

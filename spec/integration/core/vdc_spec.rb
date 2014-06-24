@@ -6,7 +6,9 @@ describe Vcloud::Core::Vdc do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
+    required_user_params = %w{ vdc_1_name }
+
+    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, required_user_params).test_params
   end
 
   describe ".get_by_name" do

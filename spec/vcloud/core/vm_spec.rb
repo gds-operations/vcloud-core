@@ -58,7 +58,6 @@ module Vcloud
         it { should respond_to(:add_extra_disks) }
         it { should respond_to(:configure_network_interfaces) }
         it { should respond_to(:configure_guest_customization_section) }
-        it { should respond_to(:generate_preamble) }
       end
 
       context "#initialize" do
@@ -123,84 +122,17 @@ module Vcloud
       end
 
       context '#configure_guest_customization_section' do
-
-        it "should handle complete configuration" do
-          name = 'test-vm'
-          bootstrap_config = {
-            script_path: 'hello_world.erb',
-            script_post_processor: 'remove_hello.rb',
-            vars: { bob: 'hello', mary: 'hello' },
-          }
-          extra_disks = []
-          expect(@vm).to receive(:generate_preamble).
-            with('hello_world.erb', 'remove_hello.rb', {
-              bob: "hello",
-              mary: "hello",
-              extra_disks: [] }).
-            and_return('RETURNED_PREAMBLE')
-          expect(@fog_interface).to receive(:put_guest_customization_section).
-            with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
-          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
+        let(:preamble) do
+          <<-'EOF'
+          #!/usr/bin/env bash
+          echo "Hello World"
+          EOF
         end
 
-        it "should handle nil configuration" do
-          name = 'test-vm'
-          bootstrap_config = nil
-          extra_disks = nil
-          expect(@vm).not_to receive(:generate_preamble)
-          expect(@fog_interface).to receive(:put_guest_customization_section).
-            with(@vm_id, 'test-vm', '')
-          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
-        end
+        it 'passes a pre-generated preamble to fog' do
+          expect(@fog_interface).to receive(:put_guest_customization_section).with(@vm_id, @vapp_name, preamble)
 
-        it "should handle empty configuration" do
-          name = 'test-vm'
-          bootstrap_config = {}
-          extra_disks = nil
-          expect(@vm).not_to receive(:generate_preamble)
-          expect(@fog_interface).to receive(:put_guest_customization_section).
-            with(@vm_id, 'test-vm', '')
-          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
-        end
-
-        it "should handle bootstrap vars being missing" do
-          name = 'test-vm'
-          bootstrap_config = {
-            script_path: 'hello_world.erb',
-            script_post_processor: 'remove_hello.rb',
-          }
-          extra_disks = []
-          expect(@vm).to receive(:generate_preamble).
-            with('hello_world.erb', 'remove_hello.rb', { extra_disks: [] }).
-            and_return('RETURNED_PREAMBLE')
-          expect(@fog_interface).to receive(:put_guest_customization_section).
-            with(@vm_id, 'test-vm', 'RETURNED_PREAMBLE')
-          @vm.configure_guest_customization_section(name, bootstrap_config, extra_disks)
-        end
-
-      end
-
-      context '#generate_preamble' do
-        it "should interpolate vars hash, ENV, and vapp_name into template" do
-          vars = {
-            :message => 'hello world',
-            :array_test => [ 'foo', 'bar' ],
-          }
-          stub_const('ENV', {'TEST_INTERPOLATED_ENVVAR' => 'test_interpolated_env'})
-          erbfile = "#{@data_dir}/basic_preamble_test.erb"
-          expected_output = File.read("#{erbfile}.OUT")
-          expect(@vm.generate_preamble(erbfile, nil, vars)).to eq(expected_output)
-        end
-
-        it "passes the output of ERB through an optional post-processor tool" do
-          # we use 'wc' as post processor since it will give us the character
-          # count in the file, which we can easily match on, and is common
-          # across most OSes.
-          vars = {}
-          erbfile = "#{@data_dir}/preamble_post_processor_test_input.erb"
-          characters_in_file = File.read(erbfile).size
-          expect(@vm.generate_preamble(erbfile, '/usr/bin/wc', vars)).
-            to match(/^\s+\d+\s+\d+\s+#{characters_in_file}\s/)
+          @vm.configure_guest_customization_section(preamble)
         end
       end
 

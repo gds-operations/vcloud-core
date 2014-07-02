@@ -4,7 +4,19 @@ describe Vcloud::Core::Vm do
 
   before(:all) do
     config_file = File.join(File.dirname(__FILE__), "../vcloud_tools_testing_config.yaml")
-    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, []).test_params
+    required_user_params = [
+      "catalog",
+      "default_storage_profile_name",
+      "network_1",
+      "network_1_ip",
+      "network_2",
+      "network_2_ip",
+      "storage_profile",
+      "vapp_template",
+      "vdc_1_name",
+    ]
+
+    @test_params = Vcloud::Tools::Tester::TestSetup.new(config_file, required_user_params).test_params
     @network_names = [ @test_params.network_1, @test_params.network_2 ]
     @network_ips = {
       @test_params.network_1 => @test_params.network_1_ip,

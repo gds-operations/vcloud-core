@@ -1,3 +1,12 @@
+## 0.6.0 (2014-07-14)
+
+API changes:
+
+  - The minimum required Ruby version is now 1.9.3.
+  - The interface to `Vcloud::Core::Vm#configure_guest_customization_section`
+    has changed and much of its logic has moved to the vCloud Launcher gem.
+    Thanks to @bazbremner for this contribution.
+
 ## 0.5.0 (2014-05-30)
 
 Features:

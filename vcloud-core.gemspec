@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'fog', '>= 1.22.0'
   s.add_runtime_dependency 'mustache'
+  s.add_runtime_dependency 'highline'
   s.add_development_dependency 'gem_publisher', '1.2.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'

@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'vcloud/core'
+
+Vcloud::Core::LoginCli.new(ARGV).run

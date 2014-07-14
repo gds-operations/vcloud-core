@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class CommandRun
+class QueryCommandRun
   attr_accessor :stdout, :stderr, :exitstatus
 
   def initialize(args)
@@ -27,7 +27,7 @@ class CommandRun
 end
 
 describe Vcloud::Core::QueryCli do
-  subject { CommandRun.new(args) }
+  subject { QueryCommandRun.new(args) }
   let(:mock_query) {
     double(:query, :run => true)
   }

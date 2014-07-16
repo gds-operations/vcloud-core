@@ -37,10 +37,11 @@ module Vcloud
 
       def self.get_token(pass)
         ENV.delete(TOKEN_ENV_VAR_NAME)
-        ::Fog.credentials[FOG_CREDS_PASS_NAME] = pass
-        fsi = Vcloud::Fog::ServiceInterface.new
+        vcloud = ::Fog::Compute::VcloudDirector.new({
+          FOG_CREDS_PASS_NAME => pass,
+        })
 
-        return fsi.vcloud_token
+        return vcloud.vcloud_token
       end
     end
   end

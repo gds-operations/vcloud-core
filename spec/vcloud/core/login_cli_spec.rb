@@ -34,7 +34,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{} }
 
       it "should pass no args, print output, and exit normally" do
-        expect(Vcloud::Core::Login).to receive(:token_export).
+        expect(Vcloud::Fog::Login).to receive(:token_export).
           with(no_args()).and_return('export FOO=BAR')
         expect(subject.stdout).to eq("export FOO=BAR")
         expect(subject.exitstatus).to eq(0)
@@ -45,7 +45,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{--version} }
 
       it "should not call Login" do
-        expect(Vcloud::Core::Login).not_to receive(:token_export)
+        expect(Vcloud::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print version and exit normally" do
@@ -58,7 +58,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{--help} }
 
       it "should not call Login" do
-        expect(Vcloud::Core::Login).not_to receive(:token_export)
+        expect(Vcloud::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print usage and exit normally" do
@@ -71,7 +71,7 @@ describe Vcloud::Core::LoginCli do
   describe "incorrect usage" do
     shared_examples "print usage and exit abnormally" do |error|
       it "should not call Login" do
-        expect(Vcloud::Core::Login).not_to receive(:token_export)
+        expect(Vcloud::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print error message and usage" do
@@ -101,7 +101,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{} }
 
       it "should print error without backtrace and exit abnormally" do
-        expect(Vcloud::Core::Login).to receive(:token_export).
+        expect(Vcloud::Fog::Login).to receive(:token_export).
           with(no_args()).and_raise('something went horribly wrong')
         expect(subject.stderr).to eq("something went horribly wrong")
         expect(subject.exitstatus).to eq(1)

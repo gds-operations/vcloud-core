@@ -2,7 +2,7 @@ require 'fog'
 require 'highline'
 
 module Vcloud
-  module Core
+  module Fog
     module Login
       TOKEN_ENV_VAR_NAME = 'FOG_VCLOUD_TOKEN'
       FOG_CREDS_PASS_NAME = :vcloud_director_password

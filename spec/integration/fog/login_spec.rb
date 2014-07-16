@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Vcloud::Core::Login do
+describe Vcloud::Fog::Login do
   let(:mock_env) { ENV }
 
   before(:each) do

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'stringio'
 
-describe Vcloud::Core::Login do
+describe Vcloud::Fog::Login do
   describe "#token" do
     before(:each) do
       expect(subject).to receive(:check_plaintext_pass)

@@ -11,7 +11,7 @@ module Vcloud
 
       def run
         begin
-          puts Vcloud::Core::Login.token_export
+          puts Vcloud::Fog::Login.token_export
         rescue => e
           $stderr.puts(e)
           exit 1

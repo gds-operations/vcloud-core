@@ -1,5 +1,4 @@
 require 'fog'
-require 'highline'
 
 module Vcloud
   module Fog
@@ -7,9 +6,8 @@ module Vcloud
       TOKEN_ENV_VAR_NAME = 'FOG_VCLOUD_TOKEN'
       FOG_CREDS_PASS_NAME = :vcloud_director_password
 
-      def self.token(pass=nil)
+      def self.token(pass)
         check_plaintext_pass
-        pass ||= read_pass
         token = get_token(pass)
 
         return token
@@ -26,17 +24,6 @@ module Vcloud
         unless pass.nil? || pass.empty?
           raise "Found plaintext #{FOG_CREDS_PASS_NAME} entry. Please set it to an empty string"
         end
-      end
-
-      def self.read_pass
-        hl = HighLine.new($stdin, $stderr)
-        if STDIN.tty?
-          pass = hl.ask("vCloud password: ") { |q| q.echo = "*" }
-        else
-          pass = hl.ask("Reading password from pipe..")
-        end
-
-        return pass
       end
 
       def self.get_token(pass)

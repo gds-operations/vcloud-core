@@ -3,10 +3,15 @@ require 'spec_helper'
 class LoginCommandRun
   attr_accessor :stdout, :stderr, :exitstatus
 
-  def initialize(args)
+  def initialize(args, stdin=nil)
     out = StringIO.new
     err = StringIO.new
 
+    if stdin
+      $stdin = StringIO.new
+      $stdin << stdin
+      $stdin.rewind
+    end
     $stdout = out
     $stderr = err
 
@@ -21,23 +26,44 @@ class LoginCommandRun
     @stdout = out.string.strip
     @stderr = err.string.strip
 
+    if stdin
+      $stdin = STDIN
+    end
     $stdout = STDOUT
     $stderr = STDERR
   end
 end
 
 describe Vcloud::Core::LoginCli do
-  subject { LoginCommandRun.new(args) }
+  let(:stdin) { nil }
+  subject { LoginCommandRun.new(args, stdin) }
 
   describe "normal usage" do
-    context "when given no arguments" do
+    context "when given no arguments and a password on stdin" do
       let(:args) { %w{} }
+      let(:pass) { 'supersekret' }
+      let(:stdin) { pass }
 
-      it "should pass no args, print output, and exit normally" do
-        expect(Vcloud::Fog::Login).to receive(:token_export).
-          with(no_args()).and_return('export FOO=BAR')
-        expect(subject.stdout).to eq("export FOO=BAR")
-        expect(subject.exitstatus).to eq(0)
+      context "interactive tty" do
+        before(:each) do
+          expect(STDIN).to receive(:tty?).and_return(true)
+        end
+
+        it "should prompt on stderr so that stdout can be scripted and mask password input" do
+          expect(Vcloud::Fog::Login).to receive(:token_export).with(pass)
+          expect(subject.stderr).to eq("vCloud password: " + "*" * pass.size)
+        end
+      end
+
+      context "non-interactive tty" do
+        before(:each) do
+          expect(STDIN).to receive(:tty?).and_return(false)
+        end
+
+        it "should write stderr message to say that it's reading from pipe and not echo any input" do
+          expect(Vcloud::Fog::Login).to receive(:token_export).with(pass)
+          expect(subject.stderr).to eq("Reading password from pipe..")
+        end
       end
     end
 
@@ -99,11 +125,12 @@ describe Vcloud::Core::LoginCli do
   describe "error handling" do
     context "when underlying code raises an exception" do
       let(:args) { %w{} }
+      let(:stdin) { "" }
 
       it "should print error without backtrace and exit abnormally" do
         expect(Vcloud::Fog::Login).to receive(:token_export).
-          with(no_args()).and_raise('something went horribly wrong')
-        expect(subject.stderr).to eq("something went horribly wrong")
+          with("").and_raise('something went horribly wrong')
+        expect(subject.stderr).to eq("vCloud password: \nsomething went horribly wrong")
         expect(subject.exitstatus).to eq(1)
       end
     end

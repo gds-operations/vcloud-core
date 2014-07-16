@@ -1,4 +1,5 @@
 require 'optparse'
+require 'highline'
 
 module Vcloud
   module Core
@@ -11,7 +12,8 @@ module Vcloud
 
       def run
         begin
-          puts Vcloud::Fog::Login.token_export
+          pass = read_pass
+          puts Vcloud::Fog::Login.token_export(pass)
         rescue => e
           $stderr.puts(e)
           exit 1
@@ -60,6 +62,15 @@ entered interactively or piped in, for example from an environment variable:
           exit_error_usage("too many arguments")
         elsif args.size == 1
           @type = args.first
+        end
+      end
+
+      def read_pass
+        hl = HighLine.new($stdin, $stderr)
+        if STDIN.tty?
+          hl.ask("vCloud password: ") { |q| q.echo = "*" }
+        else
+          hl.ask("Reading password from pipe..")
         end
       end
 

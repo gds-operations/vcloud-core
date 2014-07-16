@@ -31,8 +31,10 @@ shell `export` command that can be consumed with:
     eval $(FOG_CREDENTIAL=example #{$0})
 
 It requires a Fog credentials file (e.g. `~/.fog`) with the host and user
-set, but the password set to an empty string. The password will be prompted
-for interactively.
+set, but the password set to an empty string. The password can either be
+entered interactively or piped in, for example from an environment variable:
+
+    printenv PASSWORD_VAR | FOG_CREDENTIAL=example #{$0}
 
           EOS
 

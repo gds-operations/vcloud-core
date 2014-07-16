@@ -9,7 +9,7 @@ module Vcloud
 
       def self.token(pass=nil)
         check_plaintext_pass
-        pass ||= prompt_pass
+        pass ||= read_pass
         token = get_token(pass)
 
         return token
@@ -28,9 +28,13 @@ module Vcloud
         end
       end
 
-      def self.prompt_pass
+      def self.read_pass
         hl = HighLine.new($stdin, $stderr)
-        pass = hl.ask("Enter vCloud password: ") { |q| q.echo = "*" }
+        if STDIN.tty?
+          pass = hl.ask("vCloud password: ") { |q| q.echo = "*" }
+        else
+          pass = hl.ask("Reading password from pipe..")
+        end
 
         return pass
       end

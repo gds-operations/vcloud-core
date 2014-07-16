@@ -8,16 +8,16 @@ describe Vcloud::Fog::Login do
     end
 
     context "password not supplied" do
-      it "should call prompt_pass and return token" do
-        expect(subject).to receive(:prompt_pass).and_return('supersekret')
+      it "should call read_pass and return token" do
+        expect(subject).to receive(:read_pass).and_return('supersekret')
         expect(subject).to receive(:get_token).and_return('mekmitasdigoat')
         expect(subject.token).to eq("mekmitasdigoat")
       end
     end
 
     context "password supplied" do
-      it "should return token without calling prompt_pass" do
-        expect(subject).not_to receive(:prompt_pass)
+      it "should return token without calling read_pass" do
+        expect(subject).not_to receive(:read_pass)
         expect(subject).to receive(:get_token).and_return('mekmitasdigoat')
         expect(subject.token("supersekret")).to eq("mekmitasdigoat")
       end
@@ -70,7 +70,7 @@ describe Vcloud::Fog::Login do
     end
   end
 
-  describe "#prompt_pass" do
+  describe "#read_pass" do
     let(:pass) { 'supersekret' }
 
     before(:each) do
@@ -83,21 +83,44 @@ describe Vcloud::Fog::Login do
       $stdin = STDIN
     end
 
-    it "should prompt for password on stderr so that stdout can be scripted" do
-      expect($stderr).to receive(:write).with("Enter vCloud password: ")
-      allow($stderr).to receive(:write)
-      subject.prompt_pass
+    context "interactive tty" do
+      before(:each) do
+        expect(STDIN).to receive(:tty?).and_return(true)
+      end
+
+      it "should prompt for password on stderr so that stdout can be scripted" do
+        expect($stderr).to receive(:write).with("vCloud password: ")
+        allow($stderr).to receive(:write)
+        subject.read_pass
+      end
+
+      it "should mask password with asterisks" do
+        expect($stderr).to receive(:write).with("*").exactly(pass.size).times
+        allow($stderr).to receive(:write)
+        subject.read_pass
+      end
+
+      it "should return password from stdin" do
+        allow($stderr).to receive(:write)
+        expect(subject.read_pass).to eq(pass)
+      end
     end
 
-    it "should mask password with asterisks" do
-      expect($stderr).to receive(:write).with("*").exactly(pass.size).times
-      allow($stderr).to receive(:write)
-      subject.prompt_pass
-    end
+    context "non-interactive tty" do
+      before(:each) do
+        expect(STDIN).to receive(:tty?).and_return(false)
+      end
 
-    it "should return password from stdin" do
-      allow($stderr).to receive(:write)
-      expect(subject.prompt_pass).to eq(pass)
+      it "should write stderr message to say that it's reading from pipe and not echo any input" do
+        expect($stderr).to receive(:write).with("Reading password from pipe..")
+        expect($stderr).to receive(:write).with("\n")
+        subject.read_pass
+      end
+
+      it "should return password from stdin" do
+        allow($stderr).to receive(:write)
+        expect(subject.read_pass).to eq(pass)
+      end
     end
   end
 end

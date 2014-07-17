@@ -20,7 +20,15 @@ module Vcloud
       private
 
       def self.check_plaintext_pass
-        pass = ::Fog.credentials[FOG_CREDS_PASS_NAME]
+        begin
+          pass = ::Fog.credentials[FOG_CREDS_PASS_NAME]
+        rescue ::Fog::Errors::LoadError
+          # Assume no password if Fog has been unable to load creds.
+          # Suppresses a noisy error about missing credentials. We get a
+          # more succinct error in get_token()
+          return
+        end
+
         unless pass.nil? || pass.empty?
           raise "Found plaintext #{FOG_CREDS_PASS_NAME} entry. Please set it to an empty string"
         end

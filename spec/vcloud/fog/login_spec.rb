@@ -21,7 +21,8 @@ describe Vcloud::Fog::Login do
     context "vcloud_director_password not set" do
       it "should not raise an exception" do
         expect(Fog).to receive(:credentials).and_return({})
-        expect { subject.check_plaintext_pass }.not_to raise_error
+        expect(subject).to receive(:get_token)
+        expect { subject.token('supersekret') }.not_to raise_error
       end
     end
 
@@ -30,7 +31,8 @@ describe Vcloud::Fog::Login do
         expect(Fog).to receive(:credentials).and_return({
           :vcloud_director_password => '',
         })
-        expect { subject.check_plaintext_pass }.not_to raise_error
+        expect(subject).to receive(:get_token)
+        expect { subject.token('supersekret') }.not_to raise_error
       end
     end
 
@@ -39,7 +41,8 @@ describe Vcloud::Fog::Login do
         expect(Fog).to receive(:credentials).and_return({
           :vcloud_director_password => 'supersekret',
         })
-        expect { subject.check_plaintext_pass }.to raise_error(
+        expect(subject).to_not receive(:get_token)
+        expect { subject.token('supersekret') }.to raise_error(
           RuntimeError,
           "Found plaintext vcloud_director_password entry. Please set it to an empty string"
         )

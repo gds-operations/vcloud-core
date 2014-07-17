@@ -9,7 +9,7 @@ describe Vcloud::Fog::Login do
 
   describe "#token" do
     context "fog credentials without password" do
-      let(:token_regex) { /^.{44}$/ }
+      let(:token_length) { 44 }
       let(:env_var_name) { 'FOG_VCLOUD_TOKEN' }
       let!(:mock_fog_creds) { ::Fog.credentials.clone }
 
@@ -21,7 +21,8 @@ describe Vcloud::Fog::Login do
       context "environment variable VCLOUD_FOG_TOKEN not set" do
         it "should login and return a token" do
           mock_env.delete(env_var_name)
-          expect(subject.token(@real_password)).to match(token_regex)
+          token = subject.token(@real_password)
+          expect(token.size).to eq(token_length)
         end
       end
 
@@ -32,7 +33,7 @@ describe Vcloud::Fog::Login do
           mock_env[env_var_name] = old_token
           new_token = subject.token(@real_password)
           expect(new_token).to_not eq(old_token)
-          expect(new_token).to match(token_regex)
+          expect(new_token.size).to eq(token_length)
         end
       end
     end

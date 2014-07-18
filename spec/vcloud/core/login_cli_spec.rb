@@ -133,7 +133,9 @@ describe Vcloud::Core::LoginCli do
       it "should print error without backtrace and exit abnormally" do
         expect(Vcloud::Fog::Login).to receive(:token_export).
           and_raise('something went horribly wrong')
-        expect(subject.stderr).to eq("vCloud password: \nsomething went horribly wrong")
+        expect(subject.stderr).to match(
+          /(vCloud password: |Reading password from pipe\.\.)\nsomething went horribly wrong/
+        )
         expect(subject.exitstatus).to eq(1)
       end
     end

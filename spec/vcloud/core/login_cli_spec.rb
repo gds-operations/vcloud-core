@@ -125,11 +125,14 @@ describe Vcloud::Core::LoginCli do
   describe "error handling" do
     context "when underlying code raises an exception" do
       let(:args) { %w{} }
-      let(:stdin) { "" }
+      # We have to pass a string here to prevent highline blowing up. This
+      # appears to be related to swapping out $stdin for StringIO and can't
+      # be reproduced by normal CLI use.
+      let(:stdin) { 'some string' }
 
       it "should print error without backtrace and exit abnormally" do
         expect(Vcloud::Fog::Login).to receive(:token_export).
-          with("").and_raise('something went horribly wrong')
+          and_raise('something went horribly wrong')
         expect(subject.stderr).to eq("vCloud password: \nsomething went horribly wrong")
         expect(subject.exitstatus).to eq(1)
       end

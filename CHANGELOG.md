@@ -1,3 +1,10 @@
+## UNRELEASED (xxxx-xx-xx)
+
+Features:
+
+  - New vcloud-login tool for fetching session tokens without the need to
+    store your password in a plaintext FOG_RC file.
+
 ## 0.6.0 (2014-07-14)
 
 API changes:

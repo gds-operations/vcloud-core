@@ -128,14 +128,18 @@ describe Vcloud::Core::LoginCli do
       # We have to pass a string here to prevent highline blowing up. This
       # appears to be related to swapping out $stdin for StringIO and can't
       # be reproduced by normal CLI use.
-      let(:stdin) { 'some string' }
+      let(:pass) { 'some string' }
+      let(:stdin) { pass }
+      let(:exception_string) { 'something went horribly wrong' }
 
       it "should print error without backtrace and exit abnormally" do
         expect(Vcloud::Fog::Login).to receive(:token_export).
-          and_raise('something went horribly wrong')
-        expect(subject.stderr).to match(
-          /(vCloud password: |Reading password from pipe\.\.)\nsomething went horribly wrong/
-        )
+          and_raise(exception_string)
+        if STDIN.tty?
+          expect(subject.stderr).to eq("vCloud password: #{'*' * pass.size}\n#{exception_string}")
+        else
+          expect(subject.stderr).to eq("Reading password from pipe..\n#{exception_string}")
+        end
         expect(subject.exitstatus).to eq(1)
       end
     end

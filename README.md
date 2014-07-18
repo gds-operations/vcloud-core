@@ -36,7 +36,7 @@ credentials that allow it to talk to a vCloud Director environment.
 
       eval $(FOG_CREDENTIAL=test_credentials vcloud-login)
 
-  This will prompt for your password.
+  This will prompt for your password and export an environment variable.
 
 3. Specify your credentials at the beginning of the command. For example:
 

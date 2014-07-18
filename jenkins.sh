@@ -1,14 +1,5 @@
 #!/bin/bash -x
 set -e
 
-git clean -ffdx
-bundle install --path "${HOME}/bundles/${JOB_NAME}"
-
-# Obtain the integration test parameters
-git clone git@github.gds:gds/vcloud-tools-testing-config.git
-mv vcloud-tools-testing-config/vcloud_tools_testing_config.yaml spec/integration/
-rm -rf vcloud-tools-testing-config
-
-bundle exec rake
-RUBYOPT="-r ./tools/fog_credentials" bundle exec rake integration
+./jenkins_test.sh
 bundle exec rake publish_gem

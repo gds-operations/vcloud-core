@@ -1,5 +1,5 @@
 #!/bin/bash -x
 set -e
 
-./jenkins_test.sh
+./jenkins_tests.sh
 bundle exec rake publish_gem

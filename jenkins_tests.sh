@@ -26,4 +26,4 @@ rm -rf vcloud-tools-testing-config
 
 eval $(printenv API_PASSWORD | bundle exec vcloud-login)
 bundle exec rake
-bundle exec rspec integration
+bundle exec rake integration

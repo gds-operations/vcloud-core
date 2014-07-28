@@ -5,6 +5,12 @@ Features:
   - New vcloud-login tool for fetching session tokens without the need to
     store your password in a plaintext FOG_RC file.
 
+Deprecated:
+
+  - Deprecate the use of :vcloud_director_password in a plaintext FOG_RC
+    file. A warning will be printed to STDERR at load time. Please use
+    vcloud-login instead.
+
 ## 0.6.0 (2014-07-14)
 
 API changes:

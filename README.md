@@ -20,31 +20,7 @@ Or install it yourself as:
 
 ## Credentials
 
-vCloud Core is based around [fog](http://fog.io/). To use it you'll need to give it
-credentials that allow it to talk to a vCloud Director environment.
-
-1. Create a '.fog' file in your home directory.
-
-  For example:
-
-      test_credentials:
-        vcloud_director_host: 'host.api.example.com'
-        vcloud_director_username: 'username@org_name'
-        vcloud_director_password: ''
-
-2. Obtain a session token:
-
-      eval $(FOG_CREDENTIAL=test_credentials vcloud-login)
-
-  This will prompt for your password and export an environment variable.
-
-3. Specify your credentials at the beginning of the command. For example:
-
-        FOG_CREDENTIAL=test_credentials vcloud-query
-
-  **NB** It is also possible to sidestep the need for the session token by saving your
-  password in the fog file. This is **not recommended**.
-
+Please see the [vcloud-tools usage documentation](http://gds-operations.github.io/vcloud-tools/usage/).
 
 ## vCloud Query
 

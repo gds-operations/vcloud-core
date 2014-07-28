@@ -1,4 +1,4 @@
-## UNRELEASED (xxxx-xx-xx)
+## 0.7.0 (2014-07-28)
 
 Features:
 

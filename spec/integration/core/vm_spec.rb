@@ -147,7 +147,7 @@ describe Vcloud::Core::Vm do
   context "#add_extra_disks" do
 
     before(:all) do
-      @fog_model_vm = Vcloud::Fog::ModelInterface.new.get_vm_by_href(@vm.href)
+      @fog_model_vm = Vcloud::Core::Fog::ModelInterface.new.get_vm_by_href(@vm.href)
       @initial_vm_disks = get_vm_hard_disks(@fog_model_vm)
     end
 

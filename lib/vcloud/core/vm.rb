@@ -70,7 +70,7 @@ module Vcloud
       end
 
       def add_extra_disks(extra_disks)
-        vm = Vcloud::Fog::ModelInterface.new.get_vm_by_href(href)
+        vm = Vcloud::Core::Fog::ModelInterface.new.get_vm_by_href(href)
         if extra_disks
           extra_disks.each do |extra_disk|
             Vcloud::Core.logger.debug("adding a disk of size #{extra_disk[:size]}MB into VM #{id}")

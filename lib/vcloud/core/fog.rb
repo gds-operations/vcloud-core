@@ -1,9 +1,9 @@
 require 'fog'
-require 'vcloud/fog/content_types'
-require 'vcloud/fog/login'
-require 'vcloud/fog/relation'
-require 'vcloud/fog/service_interface'
-require 'vcloud/fog/model_interface'
+require 'vcloud/core/fog/content_types'
+require 'vcloud/core/fog/login'
+require 'vcloud/core/fog/relation'
+require 'vcloud/core/fog/service_interface'
+require 'vcloud/core/fog/model_interface'
 
 module Vcloud
   module Fog

@@ -50,7 +50,7 @@ describe Vcloud::Core::LoginCli do
         end
 
         it "should prompt on stderr so that stdout can be scripted and mask password input" do
-          expect(Vcloud::Fog::Login).to receive(:token_export).with(pass)
+          expect(Vcloud::Core::Fog::Login).to receive(:token_export).with(pass)
           expect(subject.stderr).to eq("vCloud password: " + "*" * pass.size)
         end
       end
@@ -61,7 +61,7 @@ describe Vcloud::Core::LoginCli do
         end
 
         it "should write stderr message to say that it's reading from pipe and not echo any input" do
-          expect(Vcloud::Fog::Login).to receive(:token_export).with(pass)
+          expect(Vcloud::Core::Fog::Login).to receive(:token_export).with(pass)
           expect(subject.stderr).to eq("Reading password from pipe..")
         end
       end
@@ -71,7 +71,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{--version} }
 
       it "should not call Login" do
-        expect(Vcloud::Fog::Login).not_to receive(:token_export)
+        expect(Vcloud::Core::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print version and exit normally" do
@@ -84,7 +84,7 @@ describe Vcloud::Core::LoginCli do
       let(:args) { %w{--help} }
 
       it "should not call Login" do
-        expect(Vcloud::Fog::Login).not_to receive(:token_export)
+        expect(Vcloud::Core::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print usage and exit normally" do
@@ -97,7 +97,7 @@ describe Vcloud::Core::LoginCli do
   describe "incorrect usage" do
     shared_examples "print usage and exit abnormally" do |error|
       it "should not call Login" do
-        expect(Vcloud::Fog::Login).not_to receive(:token_export)
+        expect(Vcloud::Core::Fog::Login).not_to receive(:token_export)
       end
 
       it "should print error message and usage" do
@@ -133,7 +133,7 @@ describe Vcloud::Core::LoginCli do
       let(:exception_string) { 'something went horribly wrong' }
 
       it "should print error without backtrace and exit abnormally" do
-        expect(Vcloud::Fog::Login).to receive(:token_export).
+        expect(Vcloud::Core::Fog::Login).to receive(:token_export).
           and_raise(exception_string)
         if STDIN.tty?
           expect(subject.stderr).to eq("vCloud password: #{'*' * pass.size}\n#{exception_string}")

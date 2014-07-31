@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'stringio'
 
-describe Vcloud::Fog::Login do
+describe Vcloud::Core::Fog::Login do
   describe "#token" do
     it "should return the output from get_token" do
       expect(subject).to receive(:check_plaintext_pass)

@@ -6,7 +6,7 @@ require 'spec_helper'
 # of our tests should fail if the behaviour of Fog changes. However these
 # may came in useful when debugging such a scenario.
 
-describe Vcloud::Fog::Login do
+describe Vcloud::Core::Fog::Login do
   let!(:mock_env) { ENV.clone }
 
   before(:each) do

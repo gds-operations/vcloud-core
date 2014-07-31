@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Vcloud::Fog do
+describe Vcloud::Core::Fog do
   describe "fog_credentials_pass" do
-    let(:subject) { Vcloud::Fog::fog_credentials_pass }
+    let(:subject) { Vcloud::Core::Fog::fog_credentials_pass }
 
     context "vcloud_director_password not set" do
       it "should return nil" do

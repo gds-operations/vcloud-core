@@ -38,4 +38,4 @@ EOF
   end
 end
 
-Vcloud::Fog.check_credentials
+Vcloud::Core::Fog.check_credentials

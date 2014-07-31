@@ -20,7 +20,7 @@ describe Vcloud::Core::Fog::Login do
   describe "#check_plaintext_pass" do
     context "vcloud_director_password not set" do
       it "should not raise an exception" do
-        expect(Vcloud::Fog).to receive(:fog_credentials_pass).and_return(nil)
+        expect(Vcloud::Core::Fog).to receive(:fog_credentials_pass).and_return(nil)
         expect(subject).to receive(:get_token)
         expect { subject.token('supersekret') }.not_to raise_error
       end
@@ -28,7 +28,7 @@ describe Vcloud::Core::Fog::Login do
 
     context "vcloud_director_password empty string" do
       it "should not raise an exception" do
-        expect(Vcloud::Fog).to receive(:fog_credentials_pass).and_return('')
+        expect(Vcloud::Core::Fog).to receive(:fog_credentials_pass).and_return('')
         expect(subject).to receive(:get_token)
         expect { subject.token('supersekret') }.not_to raise_error
       end
@@ -36,7 +36,7 @@ describe Vcloud::Core::Fog::Login do
 
     context "vcloud_director_password non-empty string" do
       it "should raise an exception" do
-        expect(Vcloud::Fog).to receive(:fog_credentials_pass).and_return('supersekret')
+        expect(Vcloud::Core::Fog).to receive(:fog_credentials_pass).and_return('supersekret')
         expect(subject).to_not receive(:get_token)
         expect { subject.token('supersekret') }.to raise_error(
           RuntimeError,

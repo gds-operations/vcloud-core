@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Vcloud::Core::QueryRunner do
   before(:each) do
     @mock_fog_interface = StubFogInterface.new
-    allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
+    allow(Vcloud::Core::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
     @query_runner = Vcloud::Core::QueryRunner.new()
   end
 

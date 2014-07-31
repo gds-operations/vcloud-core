@@ -27,7 +27,7 @@ module Vcloud
       end
 
       def vcloud_attributes
-        Vcloud::Fog::ServiceInterface.new.get_vapp(id)
+        Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
       end
 
       module STATUS
@@ -57,14 +57,14 @@ module Vcloud
       end
 
       def self.get_by_name_and_vdc_name(name, vdc_name)
-        fog_interface = Vcloud::Fog::ServiceInterface.new
+        fog_interface = Vcloud::Core::Fog::ServiceInterface.new
         attrs = fog_interface.get_vapp_by_name_and_vdc_name(name, vdc_name)
         self.new(attrs[:href].split('/').last) if attrs && attrs.key?(:href)
       end
 
       def self.instantiate(name, network_names, template_id, vdc_name)
         Vcloud::Core.logger.info("Instantiating new vApp #{name} in vDC '#{vdc_name}'")
-        fog_interface = Vcloud::Fog::ServiceInterface.new
+        fog_interface = Vcloud::Core::Fog::ServiceInterface.new
         networks = get_networks(network_names, vdc_name)
 
         attrs = fog_interface.post_instantiate_vapp_template(
@@ -79,14 +79,14 @@ module Vcloud
       def power_on
         raise "Cannot power on a missing vApp." unless id
         return true if running?
-        Vcloud::Fog::ServiceInterface.new.power_on_vapp(id)
+        Vcloud::Core::Fog::ServiceInterface.new.power_on_vapp(id)
         running?
       end
 
       private
       def running?
         raise "Cannot call running? on a missing vApp." unless id
-        vapp = Vcloud::Fog::ServiceInterface.new.get_vapp(id)
+        vapp = Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
         vapp[:status].to_i == STATUS::RUNNING ? true : false
       end
 
@@ -110,7 +110,7 @@ module Vcloud
       end
 
       def self.get_networks(network_names, vdc_name)
-        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.find_networks(network_names, vdc_name) if network_names
       end
     end

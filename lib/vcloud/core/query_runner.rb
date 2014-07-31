@@ -3,7 +3,7 @@ module Vcloud
     class QueryRunner
 
       def initialize
-        @fsi = Vcloud::Fog::ServiceInterface.new
+        @fsi = Vcloud::Core::Fog::ServiceInterface.new
       end
 
       def run(type=nil, options={})

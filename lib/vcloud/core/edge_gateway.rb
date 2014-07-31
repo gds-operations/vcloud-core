@@ -21,7 +21,7 @@ module Vcloud
       end
 
       def update_configuration(config)
-        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.post_configure_edge_gateway_services(id, config)
       end
 
@@ -42,7 +42,7 @@ module Vcloud
       end
 
       def vcloud_attributes
-        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.get_edge_gateway(id)
       end
 

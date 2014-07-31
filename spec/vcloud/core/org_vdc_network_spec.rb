@@ -11,7 +11,7 @@ module Vcloud
         @vdc_name  = 'test-vdc-1'
         @net_name  = 'test-net-1'
         @mock_fog_interface = StubFogInterface.new
-        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
+        allow(Vcloud::Core::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
         allow_any_instance_of(Vdc).to receive(:id).and_return(@vdc_id)
         @mock_vdc = double(:vdc, :id => @vdc_id)
         allow(Vdc).to receive(:get_by_name).and_return(@mock_vdc)

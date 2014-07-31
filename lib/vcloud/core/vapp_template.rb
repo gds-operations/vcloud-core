@@ -12,7 +12,7 @@ module Vcloud
       end
 
       def vcloud_attributes
-        Vcloud::Fog::ServiceInterface.new.get_vapp_template(id)
+        Vcloud::Core::Fog::ServiceInterface.new.get_vapp_template(id)
       end
 
       def href

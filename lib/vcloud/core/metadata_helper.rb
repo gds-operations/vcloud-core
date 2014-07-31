@@ -5,7 +5,7 @@ module Vcloud
       def extract_metadata vcloud_metadata_entries
         metadata = {}
         vcloud_metadata_entries.each do |entry|
-          next unless entry[:type] == Vcloud::Fog::ContentTypes::METADATA
+          next unless entry[:type] == Vcloud::Core::Fog::ContentTypes::METADATA
           key = entry[:Key].to_sym
           val = entry[:TypedValue][:Value]
           case entry[:TypedValue][:xsi_type]

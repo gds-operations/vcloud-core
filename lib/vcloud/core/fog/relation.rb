@@ -1,8 +1,10 @@
 module Vcloud
-  module Fog
-    module RELATION
-      PARENT = 'up'
-      CHILD = 'down'
+  module Core
+    module Fog
+      module RELATION
+        PARENT = 'up'
+        CHILD = 'down'
+      end
     end
   end
 end

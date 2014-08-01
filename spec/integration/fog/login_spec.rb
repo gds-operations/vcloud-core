@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Vcloud::Core::Fog::Login do
+
+  # FIXME: #clone is a shallow copy, so line 16 clears the actual ENV.
+  # This needs to be handled a different way. Once it is, this test 
+  # should be moved into the `spec/integration/core` folder.
+  # See https://www.pivotaltracker.com/story/show/76118720
   let!(:mock_env) { ENV.clone }
 
   before(:each) do

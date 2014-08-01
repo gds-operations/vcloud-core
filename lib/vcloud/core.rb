@@ -1,5 +1,6 @@
 require 'open3'
 require 'vcloud/core/fog'
+require 'vcloud/core/api_interface'
 
 require 'vcloud/core/version'
 

@@ -21,7 +21,7 @@ module Vcloud
         @mock_vm_cpu_count = 1
         @fog_interface = StubFogInterface.new
         @mock_vapp = double(:vappm, :name => @vapp_name, :id => @vapp_id)
-        allow(Vcloud::Fog::ServiceInterface).to receive(:new).and_return(@fog_interface)
+        allow(Vcloud::Core::Fog::ServiceInterface).to receive(:new).and_return(@fog_interface)
         allow(@fog_interface).to receive(:get_vapp).with(@vm_id).and_return({
             :name => "#{@vm_name}",
             :href => "vm-href/#{@vm_id}",

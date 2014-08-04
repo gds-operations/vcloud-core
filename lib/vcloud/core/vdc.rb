@@ -20,7 +20,7 @@ module Vcloud
       end
 
       def vcloud_attributes
-        Vcloud::Fog::ServiceInterface.new.get_vdc(id)
+        Vcloud::Core::Fog::ServiceInterface.new.get_vdc(id)
       end
 
       def name

@@ -1,5 +1,5 @@
 require 'open3'
-require 'vcloud/fog'
+require 'vcloud/core/fog'
 
 require 'vcloud/core/version'
 

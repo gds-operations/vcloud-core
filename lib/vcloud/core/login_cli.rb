@@ -13,7 +13,7 @@ module Vcloud
       def run
         begin
           pass = read_pass
-          puts Vcloud::Fog::Login.token_export(pass)
+          puts Vcloud::Core::Fog::Login.token_export(pass)
         rescue => e
           $stderr.puts(e)
           exit 1

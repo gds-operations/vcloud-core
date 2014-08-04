@@ -14,14 +14,14 @@ module Vcloud
       end
 
       def vcloud_attributes
-        Vcloud::Fog::ServiceInterface.new.get_vapp(id)
+        Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
       end
 
       def update_memory_size_in_mb(new_memory)
         return if new_memory.nil?
         return if new_memory.to_i < 64
         unless memory.to_i == new_memory.to_i
-          Vcloud::Fog::ServiceInterface.new.put_memory(id, new_memory)
+          Vcloud::Core::Fog::ServiceInterface.new.put_memory(id, new_memory)
         end
       end
 
@@ -44,7 +44,7 @@ module Vcloud
       end
 
       def update_name(new_name)
-        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.put_vm(id, new_name) unless name == new_name
       end
 
@@ -56,13 +56,13 @@ module Vcloud
         return if new_cpu_count.nil?
         return if new_cpu_count.to_i == 0
         unless cpu.to_i == new_cpu_count.to_i
-          Vcloud::Fog::ServiceInterface.new.put_cpu(id, new_cpu_count)
+          Vcloud::Core::Fog::ServiceInterface.new.put_cpu(id, new_cpu_count)
         end
       end
 
       def update_metadata(metadata)
         return if metadata.nil?
-        fsi = Vcloud::Fog::ServiceInterface.new
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
         metadata.each do |k, v|
           fsi.put_vapp_metadata_value(@vapp.id, k, v)
           fsi.put_vapp_metadata_value(id, k, v)
@@ -70,7 +70,7 @@ module Vcloud
       end
 
       def add_extra_disks(extra_disks)
-        vm = Vcloud::Fog::ModelInterface.new.get_vm_by_href(href)
+        vm = Vcloud::Core::Fog::ModelInterface.new.get_vm_by_href(href)
         if extra_disks
           extra_disks.each do |extra_disk|
             Vcloud::Core.logger.debug("adding a disk of size #{extra_disk[:size]}MB into VM #{id}")
@@ -99,16 +99,16 @@ module Vcloud
           connection[:IpAddress] = ip_address if ip_address
           connection
         end
-        Vcloud::Fog::ServiceInterface.new.put_network_connection_system_section_vapp(id, section)
+        Vcloud::Core::Fog::ServiceInterface.new.put_network_connection_system_section_vapp(id, section)
       end
 
       def configure_guest_customization_section(preamble)
-        Vcloud::Fog::ServiceInterface.new.put_guest_customization_section(id, vapp_name, preamble)
+        Vcloud::Core::Fog::ServiceInterface.new.put_guest_customization_section(id, vapp_name, preamble)
       end
 
       def update_storage_profile storage_profile
         storage_profile_href = get_storage_profile_href_by_name(storage_profile, @vapp.name)
-        Vcloud::Fog::ServiceInterface.new.put_vm(id, name, {
+        Vcloud::Core::Fog::ServiceInterface.new.put_vm(id, name, {
           :StorageProfile => {
             name: storage_profile,
             href: storage_profile_href

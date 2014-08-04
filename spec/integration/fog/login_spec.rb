@@ -24,7 +24,7 @@ describe Vcloud::Fog::Login do
           Fog::Errors::LoadError,
           /^Missing Credentials\n/
         )
-        expect { subject.token(@real_password) }.to raise_error(
+        expect { subject.token('supersekret') }.to raise_error(
           ArgumentError,
           /^Missing required arguments: vcloud_director_.*$/
         )

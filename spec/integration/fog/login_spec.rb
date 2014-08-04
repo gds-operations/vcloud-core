@@ -1,16 +1,13 @@
 require 'spec_helper'
 
 describe Vcloud::Fog::Login do
-  let!(:mock_env) { ENV.clone }
-
   before(:each) do
-    stub_const('ENV', mock_env)
+    stub_const('ENV', {})
   end
 
   describe "#token" do
     context "unable to load credentials" do
       it "should raise an exception succinctly listing the missing credentials" do
-        mock_env.clear
         ::Fog.credential = 'null'
         ::Fog.credentials_path = '/dev/null'
 

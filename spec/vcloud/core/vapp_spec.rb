@@ -22,7 +22,7 @@ module Vcloud
         it { should respond_to(:name) }
         it { should respond_to(:href) }
         it { should respond_to(:vdc_id) }
-        it { should respond_to(:fog_vms) }
+        it { should respond_to(:vms) }
         it { should respond_to(:networks) }
         it { should respond_to(:power_on) }
       end
@@ -115,8 +115,8 @@ module Vcloud
         end
 
         it "should return vms" do
-          expect(@vapp.fog_vms.count).to eq(1)
-          expect(@vapp.fog_vms.first[:href]).to eq('/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237')
+          expect(@vapp.vms.count).to eq(1)
+          expect(@vapp.vms.first[:href]).to eq('/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237')
         end
       end
 

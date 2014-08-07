@@ -1,6 +1,8 @@
 module Vcloud
   module Core
 
+    # Public interface to allow direct access to the API
+    # if functionality does not exist in Core
     class ApiInterface
 
       def initialize

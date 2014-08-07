@@ -2,3 +2,4 @@
 /coverage/
 spec/integration/vcloud_tools_testing_config.yaml
 .bundle
+.yardoc/

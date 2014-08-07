@@ -31,8 +31,8 @@ describe Vcloud::Core::Vm do
       "vcloud-core-vm-tests"
     )
     @vapp = @test_case_vapps.first
-    vapp_vms = @vapp.vms.map do |fog_vm|
-      vm_id = fog_vm[:href].split('/').last
+    vapp_vms = @vapp.vms.map do |vm|
+      vm_id = vm[:href].split('/').last
       Vcloud::Core::Vm.new(vm_id, @vapp)
     end
     @vm = vapp_vms.first

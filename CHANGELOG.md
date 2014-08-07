@@ -1,4 +1,4 @@
-## UNRELEASED
+## 0.8.0 (2014-08-07)
 
 API changes:
 
@@ -6,6 +6,7 @@ API changes:
     service interface and model interface, so that gems that depend on
     vCloud Core do not need to know about the inner workings of fog, or
     about fog at all.
+  - Move fog classes into Core. This API change is not backwards-compatible.
   - Mark the fog classes `@api private` to clarify that they do not form
     part of the public API.
 

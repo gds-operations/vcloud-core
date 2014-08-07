@@ -1,5 +1,5 @@
 /Gemfile.lock
 /coverage/
-.idea
 spec/integration/vcloud_tools_testing_config.yaml
 .bundle
+.yardoc/

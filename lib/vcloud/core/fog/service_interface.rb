@@ -3,6 +3,12 @@ require 'forwardable'
 module Vcloud
   module Core
     module Fog
+
+      # Private interface to the fog service layer.
+      # You should not use this directly. Expose required
+      # functionality in {Vcloud::Core::ApiInterface}
+      #
+      # @api private
       class ServiceInterface
         extend Forwardable
 

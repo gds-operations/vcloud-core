@@ -1,6 +1,12 @@
 module Vcloud
   module Core
     module Fog
+
+      # Private interface to the fog model layer.
+      # You should not use this directly. Expose required
+      # functionality in {Vcloud::Core::ApiInterface}
+      #
+      # @api private
       class ModelInterface
         def initialize
           @vcloud = ::Fog::Compute::VcloudDirector.new

@@ -1,3 +1,14 @@
+## UNRELEASED
+
+API changes:
+
+  - Create new `Vcloud::Core::ApiInterface` that delegates calls to the fog
+    service interface and model interface, so that gems that depend on
+    vCloud Core do not need to know about the inner workings of fog, or
+    about fog at all.
+  - Mark the fog classes `@api private` to clarify that they do not form
+    part of the public API.
+
 ## 0.7.0 (2014-07-28)
 
 Features:

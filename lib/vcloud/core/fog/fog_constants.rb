@@ -22,6 +22,14 @@ module Vcloud
         Boolean = 'MetadataBooleanValue'
       end
 
+      # Private helper constants for use with the vCloud API.
+      #
+      # @api private
+      module RELATION
+        PARENT = 'up'
+        CHILD = 'down'
+      end
+
     end
   end
 end

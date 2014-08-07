@@ -1,3 +1,11 @@
+## UNRELEASED
+
+API changes:
+
+  - Change name of method that returns the VMs in a vApp via the API, from
+    `fog_vms` to `vms`.
+    This change is not backwards-compatible.
+
 ## 0.8.0 (2014-08-07)
 
 API changes:

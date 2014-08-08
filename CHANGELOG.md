@@ -1,4 +1,4 @@
-## UNRELEASED
+## 0.9.0 (2014-08-08)
 
 API changes:
 

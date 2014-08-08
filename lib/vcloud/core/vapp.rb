@@ -48,7 +48,7 @@ module Vcloud
         link ? link[:href].split('/').last : raise('a vapp without parent vdc found')
       end
 
-      def fog_vms
+      def vms
         vcloud_attributes[:Children][:Vm]
       end
 

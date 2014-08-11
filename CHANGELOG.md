@@ -1,3 +1,9 @@
+## 0.10.0 (2014-08-11)
+
+API changes:
+
+  - removes the temporary files used for transitioning vCloud Tools Tester to use the new API.
+
 ## 0.9.0 (2014-08-08)
 
 API changes:

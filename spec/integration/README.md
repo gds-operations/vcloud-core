@@ -33,4 +33,8 @@ default: # This is the fog credential that refers to your testing environment, e
 
 ## To run the tests
 
+  `eval $(FOG_CREDENTIAL=test_credentials vcloud-login)`
+
+This will prompt for your password and export a `FOG_VCLOUD_TOKEN` environment variable. Then:
+
   `FOG_CREDENTIAL=test_credential bundle exec integration`

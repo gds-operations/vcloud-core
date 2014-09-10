@@ -11,15 +11,7 @@ module Vcloud
       FOG_CREDS_PASS_NAME = :vcloud_director_password
 
       def self.check_credentials
-        pass = fog_credentials_pass
-        unless pass.nil? or pass.empty?
-          warn <<EOF
-[WARNING] Storing :vcloud_director_password in your plaintext FOG_RC file is
-          insecure. Future releases of vcloud-core (and tools that depend on
-          it) will prevent you from doing this. Please use vcloud-login to
-          get a session token instead.
-EOF
-        end
+        check_plaintext_pass
       end
 
       def self.fog_credentials_pass
@@ -33,6 +25,16 @@ EOF
 
         pass
       end
+
+      private
+
+      def self.check_plaintext_pass
+        pass = fog_credentials_pass
+        unless pass.nil? or pass.empty?
+          raise "Found plaintext #{Vcloud::Core::Fog::FOG_CREDS_PASS_NAME} entry. Please set it to an empty string as storing passwords in plaintext is insecure. See http://gds-operations.github.io/vcloud-tools/usage/ for further information."
+        end
+      end
+
     end
   end
 end

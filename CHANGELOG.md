@@ -1,3 +1,11 @@
+## 0.11.0 (XXXX-XX-XX)
+
+Changes:
+
+  - As deprecated in 0.7.0, it is now impossible to specify a plaintext
+    password in a FOG_RC file. Please use tokens vcloud-login instead as
+    per the documentation: http://gds-operations.github.io/vcloud-tools/usage/
+
 ## 0.10.0 (2014-08-11)
 
 API changes:

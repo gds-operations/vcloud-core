@@ -6,7 +6,7 @@ module Vcloud
       module Login
         class << self
           def token(pass)
-            check_plaintext_pass
+            Vcloud::Core::Fog.check_credentials
             token = get_token(pass)
 
             return token
@@ -17,13 +17,6 @@ module Vcloud
           end
 
           private
-
-          def check_plaintext_pass
-            pass = Vcloud::Core::Fog::fog_credentials_pass
-            unless pass.nil? || pass.empty?
-              raise "Found plaintext #{Vcloud::Core::Fog::FOG_CREDS_PASS_NAME} entry. Please set it to an empty string"
-            end
-          end
 
           def get_token(pass)
             ENV.delete(Vcloud::Core::Fog::TOKEN_ENV_VAR_NAME)

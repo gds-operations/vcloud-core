@@ -2,6 +2,10 @@
 
 We really welcome contributions.
 
+## Issues list
+
+Issues we know about are [listed here](https://github.com/gds-operations/vcloud-core/issues). We have a [`newcomer-friendly label`](https://github.com/gds-operations/vcloud-core/labels/newcomer-friendly) for issues that we feel would be a good place to start, because they do not touch a lot of other vCloud Tools code and do not require an environment to work on. This label is just a suggestion.
+
 ## A quick guide on how to contribute
 
 1. Clone the repo:

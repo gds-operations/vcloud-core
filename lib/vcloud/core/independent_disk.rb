@@ -25,6 +25,11 @@ module Vcloud
         return self.new(query_results.first[:href].split('/').last)
       end
 
+      def self.create(vdc, name, size)
+        body = Vcloud::Core::Fog::ServiceInterface.new.post_upload_disk(vdc.id, name, size)
+        return self.new(body[:href].split('/').last)
+      end
+
       def vcloud_attributes
         Vcloud::Core::Fog::ServiceInterface.new.get_disk(id)
       end

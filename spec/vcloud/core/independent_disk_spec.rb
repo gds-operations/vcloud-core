@@ -90,6 +90,18 @@ describe Vcloud::Core::IndependentDisk do
 
   end
 
+  context "#create" do
+
+    let(:vdc) { double(:vdc, :id => "12341234-1234-1234-1234-123412341234")}
+
+    it "returns an IndependentDisk object if successful" do
+      size_in_bytes = 1000_000_000
+      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size_in_bytes)
+      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+    end
+
+  end
+
   context "attributes" do
 
     before(:each) {

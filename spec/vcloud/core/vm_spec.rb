@@ -56,6 +56,7 @@ module Vcloud
         it { should respond_to(:update_metadata) }
         it { should respond_to(:update_storage_profile) }
         it { should respond_to(:add_extra_disks) }
+        it { should respond_to(:attach_independent_disks) }
         it { should respond_to(:configure_network_interfaces) }
         it { should respond_to(:configure_guest_customization_section) }
       end
@@ -323,6 +324,27 @@ module Vcloud
             and_return(storage_profile_results)
 
           expect{ @vm.update_storage_profile(storage_profile) }.to raise_error("storage profile not found" )
+        end
+
+      end
+
+      context "#attach_independent_disks" do
+
+        let(:disk1) { double(:disk, :name => 'test-disk-1',
+                         :id => '12341234-1234-1234-1234-12345678900')
+        }
+        let(:disk2) { double(:disk, :name => 'test-disk-2',
+                         :id => '12341234-1234-1234-1234-12345678901')
+        }
+        let(:disk3) { double(:disk, :name => 'test-disk-3',
+                         :id => '12341234-1234-1234-1234-12345678902')
+        }
+
+        it "handles attaching an array of Independent Disk objects" do
+          vm = Vm.new(@vm_id, @mock_vapp)
+          disk_array = [disk1, disk2, disk3]
+          expect(@fog_interface).to receive(:post_attach_disk).exactly(disk_array.size).times
+          vm.attach_independent_disks(disk_array)
         end
 
       end

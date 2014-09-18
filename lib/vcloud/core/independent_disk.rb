@@ -26,7 +26,8 @@ module Vcloud
       end
 
       def self.create(vdc, name, size)
-        body = Vcloud::Core::Fog::ServiceInterface.new.post_upload_disk(vdc.id, name, size)
+        size_in_bytes = convert_size_string_to_bytes(size)
+        body = Vcloud::Core::Fog::ServiceInterface.new.post_upload_disk(vdc.id, name, size_in_bytes)
         return self.new(body[:href].split('/').last)
       end
 
@@ -40,6 +41,22 @@ module Vcloud
 
       def href
         vcloud_attributes[:href]
+      end
+
+      def self.convert_size_string_to_bytes(size)
+        if size.to_s =~ /^(\d+)mb$/i
+          Integer($1) * (10**6)
+        elsif size.to_s =~ /^(\d+)gb$/i
+          Integer($1) * (10**9)
+        elsif size.to_s =~ /^(\d+)mib$/i
+          Integer($1) * (2**20)
+        elsif size.to_s =~ /^(\d+)gib$/i
+          Integer($1) * (2**30)
+        elsif size.to_s =~ /^(\d+)$/i
+          Integer($1)
+        else
+          raise ArgumentError, "Cannot convert size string '#{size}' into a number of bytes"
+        end
       end
 
     end

@@ -175,6 +175,34 @@ module Vcloud
 
       end
 
+      context "#get_by_child_vm_id" do
+
+        it "should raise an ArgumentError if an invalid VM id is supplied" do
+          vm_id = 'vapp-12341234-1234-1234-1234-123412341234'
+          expect {Vapp.get_by_child_vm_id(vm_id)}.to raise_error(ArgumentError)
+        end
+
+        it "should return a vApp object if we supply an existing VM id" do
+          vm_id = "vm-12341234-1234-1234-1234-123412340001"
+          vapp_id = "vapp-12341234-1234-1234-1234-123412349999"
+          expect(@mock_fog_interface).to receive(:get_vapp).with(vm_id).and_return({
+            :Link => [
+              { :rel => 'down',
+                :type => "application/vnd.vmware.vcloud.metadata+xml",
+                :href => "/api/vApp/#{vm_id}/metadata"
+              },
+              { :rel => 'up',
+                :type => "application/vnd.vmware.vcloud.vApp+xml",
+                :href => "/api/vApp/#{vapp_id}"
+              }
+            ]
+          })
+          obj = Vapp.get_by_child_vm_id(vm_id)
+          expect(obj.id).to eq(vapp_id)
+        end
+
+      end
+
     end
   end
 end

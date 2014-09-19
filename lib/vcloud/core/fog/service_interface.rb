@@ -17,7 +17,8 @@ module Vcloud
                        :post_instantiate_vapp_template, :put_memory, :put_cpu, :power_on_vapp, :put_vapp_metadata_value,
                        :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
                        :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp,
-                       :post_upload_disk, :get_disk, :delete_disk, :post_attach_disk
+                       :post_upload_disk, :get_disk, :delete_disk, :post_attach_disk,
+                       :get_vms_disk_attached_to
 
         #########################
         # FogFacade Inner class to represent a logic free facade over our interactions with Fog
@@ -144,6 +145,10 @@ module Vcloud
           def post_attach_disk(vm_id, disk_id, options = {})
             task = @vcloud.post_attach_disk(vm_id, disk_id, options).body
             @vcloud.process_task(task)
+          end
+
+          def get_vms_disk_attached_to(disk_id)
+            @vcloud.get_vms_disk_attached_to(disk_id).body
           end
 
           def post_create_org_vdc_network(vdc_id, name, options)

@@ -30,6 +30,12 @@ describe Vcloud::Core::Vm do
       @network_names,
       "vcloud-core-vm-tests"
     )
+    @test_case_independent_disks = IntegrationHelper.create_test_case_independent_disks(
+      1,
+      @test_params.vdc_1_name,
+      "100MB",
+      "vcloud-core-vm-test-disk"
+    )
     @vapp = @test_case_vapps.first
     vapp_vms = @vapp.vms.map do |vm|
       vm_id = vm[:href].split('/').last
@@ -44,6 +50,12 @@ describe Vcloud::Core::Vm do
       expect(@vm.vcloud_attributes[:href].split('/').last).to eq(@vm.id)
     end
 
+  end
+
+  context "#attach_independent_disks" do
+    it "can attach our fixture disk" do
+      expect(@vm.attach_independent_disks(@test_case_independent_disks)).to be_true
+    end
   end
 
   context "#update_memory_size_in_mb" do
@@ -249,8 +261,11 @@ describe Vcloud::Core::Vm do
 
   end
 
+
+
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
+    IntegrationHelper.delete_independent_disks(@test_case_independent_disks)
   end
 
   def get_vm_hard_disks(fog_model_vm)

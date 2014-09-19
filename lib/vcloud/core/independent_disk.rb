@@ -43,6 +43,16 @@ module Vcloud
         vcloud_attributes[:href]
       end
 
+      def attached_vms
+        body = Vcloud::Core::Fog::ServiceInterface.new.get_vms_disk_attached_to(id)
+        vms = body.fetch(:VmReference)
+        vms.map do |vm|
+          id = vm.fetch(:href).split('/').last
+          parent_vapp = Vcloud::Core::Vapp.get_by_child_vm_id(id)
+          Vcloud::Core::Vm.new(id, parent_vapp)
+        end
+      end
+
       def self.convert_size_string_to_bytes(size)
         if size.to_s =~ /^(\d+)mb$/i
           Integer($1) * (10**6)

@@ -19,6 +19,7 @@ describe Vcloud::Core::IndependentDisk do
     it { should respond_to(:vcloud_attributes) }
     it { should respond_to(:name) }
     it { should respond_to(:href) }
+    it { should respond_to(:attached_vms) }
   end
 
   context "#initialize" do
@@ -189,6 +190,32 @@ describe Vcloud::Core::IndependentDisk do
 
     it { expect(@disk.name).to eq(@disk_name) }
     it { expect(@disk.id).to eq(@disk_id) }
+
+  end
+
+  context "#attached_vms" do
+
+    subject { Vcloud::Core::IndependentDisk.new(@disk_id) }
+
+    it "returns an empty list if there are no attached vms" do
+      expect(@mock_fog_interface).to receive(:get_vms_disk_attached_to).
+        with(subject.id).and_return({:VmReference=>[]})
+      expect(subject.attached_vms).to eq([])
+    end
+
+    it "returns a list of Core::Vm objects that are attached" do
+      expect(Vcloud::Core::Vapp).to receive(:get_by_child_vm_id).exactly(2).times.and_return({
+        :href => "/vapp-12341234-1234-1234-1234-123412340000"
+      })
+      expect(@mock_fog_interface).to receive(:get_vms_disk_attached_to).
+        with(subject.id).and_return({:VmReference=>[
+          { :href => '/vm-12341234-1234-1234-1234-123412340001' },
+          { :href => '/vm-12341234-1234-1234-1234-123412340002' },
+        ]})
+      vms = subject.attached_vms
+      expect(vms[0].id).to eq('vm-12341234-1234-1234-1234-123412340001')
+      expect(vms[1].id).to eq('vm-12341234-1234-1234-1234-123412340002')
+    end
 
   end
 

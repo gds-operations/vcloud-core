@@ -26,7 +26,7 @@ module Vcloud
       end
 
       def self.create(vdc, name, size)
-        size_in_bytes = convert_size_string_to_bytes(size)
+        size_in_bytes = convert_size_to_bytes(size)
         body = Vcloud::Core::Fog::ServiceInterface.new.post_upload_disk(vdc.id, name, size_in_bytes)
         return self.new(body[:href].split('/').last)
       end
@@ -53,7 +53,7 @@ module Vcloud
         end
       end
 
-      def self.convert_size_string_to_bytes(size)
+      def self.convert_size_to_bytes(size)
         if size.to_s =~ /^(\d+)mb$/i
           Integer($1) * (10**6)
         elsif size.to_s =~ /^(\d+)gb$/i

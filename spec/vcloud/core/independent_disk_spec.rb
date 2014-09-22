@@ -91,6 +91,44 @@ describe Vcloud::Core::IndependentDisk do
 
   end
 
+  describe "#convert_size_to_bytes" do
+
+    it "accepts integers, passing through as bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes(100_000_000)).to eq(100_000_000)
+    end
+
+    it "accepts suffixless strings, passing through as bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes('100000000')).to eq(100_000_000)
+    end
+
+    it "converts 100MB to 100_000_000 bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes('100MB')).to eq(100_000_000)
+    end
+
+    it "converts 10MiB to 104_857_600 bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes('100MiB')).to eq(104_857_600)
+    end
+
+    it "converts 10GB to 100_000_000_000 bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes('100GB')).to eq(100_000_000_000)
+    end
+
+    it "converts 10GiB to 100_000_000_000 bytes" do
+      expect(Vcloud::Core::IndependentDisk.convert_size_to_bytes('100GiB')).to eq(107_374_182_400)
+    end
+
+    it "raises an ArgumentError if numeric component is not an integer" do
+      expect{Vcloud::Core::IndependentDisk.convert_size_to_bytes('10.5GB')}.
+        to raise_error(ArgumentError)
+    end
+
+    it "raises an ArgumentError if it does not understand the input" do
+      expect{Vcloud::Core::IndependentDisk.convert_size_to_bytes('10wibbles')}.
+        to raise_error(ArgumentError)
+    end
+
+  end
+
   context "#create" do
 
     let(:vdc) { double(:vdc, :id => "12341234-1234-1234-1234-123412341234")}
@@ -101,46 +139,10 @@ describe Vcloud::Core::IndependentDisk do
       expect(obj.class).to be(Vcloud::Core::IndependentDisk)
     end
 
-    it "handles size parameter given with a MB (10^6) suffix" do
+    it "handles size parameter suffixes (MB, GB, ...)" do
       size = "100MB"
       expect(@mock_fog_interface).to receive(:post_upload_disk).with(
         vdc.id, "new-disk-1", 100_000_000
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "handles size parameter given with a GB (10^9) suffix" do
-      size = "100GB"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 100_000_000_000
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "handles size parameter given with a MiB (2^20) suffix" do
-      size = "100MiB"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 104_857_600
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "handles size parameter given with a GiB (2^30) suffix" do
-      size = "100GiB"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 107_374_182_400
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "handles size parameter given with a GiB (2^30) suffix" do
-      size = "100GiB"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 107_374_182_400
       ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
       obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
       expect(obj.class).to be(Vcloud::Core::IndependentDisk)
@@ -153,21 +155,6 @@ describe Vcloud::Core::IndependentDisk do
       ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
       obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
       expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "handles size parameter given as a String (in bytes)" do
-      size = "100000000000"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 100_000_000_000
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
-
-    it "raises an ArgumentError if an invalid size string is supplied" do
-      size = "1000blah"
-      expect{ Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size) }.
-        to raise_error(ArgumentError)
     end
 
   end

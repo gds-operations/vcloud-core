@@ -2,6 +2,11 @@ module Vcloud
   module Core
     class IndependentDisk
 
+      class QueryExecutionError < RuntimeError; end
+      class DiskNotFoundException < RuntimeError; end
+      class MultipleDisksFoundException < RuntimeError; end
+      class DiskAlreadyExistsException < RuntimeError; end
+
       attr_reader :id
 
       def initialize(id)
@@ -15,17 +20,33 @@ module Vcloud
         q = Vcloud::Core::QueryRunner.new
         query_results = q.run('disk', :filter => "name==#{name};vdcName==#{vdc_name}")
         unless query_results
-          raise "Error finding IndependentDisk by name '#{name}' & vdc '#{vdc_name}'"
+          raise QueryExecutionError,
+            "Error finding IndependentDisk by name '#{name}' & vdc '#{vdc_name}'"
         end
-        raise "IndependentDisk '#{name}' not found in vDC '#{vdc_name}'" if query_results.size == 0
+        raise DiskNotFoundException,
+          "IndependentDisk '#{name}' not found in vDC '#{vdc_name}'" if query_results.size == 0
         if query_results.size > 1
-          raise "Multiple IndependentDisks matching '#{name}' found in vDC '#{vdc_name}. " +
+          raise MultipleDisksFoundException,
+            "Multiple IndependentDisks matching '#{name}' found in vDC '#{vdc_name}. " +
                 "You must specify via ID instead."
         end
         return self.new(query_results.first[:href].split('/').last)
       end
 
       def self.create(vdc, name, size)
+        vdc_name = vdc.name
+        begin
+          self.get_by_name_and_vdc_name(name, vdc_name)
+        rescue DiskNotFoundException
+          ok_to_create = true
+        end
+
+        unless ok_to_create
+          raise DiskAlreadyExistsException,
+            "Cannot create Independent Disk '#{name}' in vDC '#{vdc_name}' - a disk with " +
+            "that name is already present"
+        end
+
         size_in_bytes = convert_size_to_bytes(size)
         body = Vcloud::Core::Fog::ServiceInterface.new.post_upload_disk(vdc.id, name, size_in_bytes)
         return self.new(body[:href].split('/').last)

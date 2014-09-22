@@ -69,7 +69,7 @@ describe Vcloud::Core::IndependentDisk do
       ).and_return(q_results)
       expect {
         Vcloud::Core::IndependentDisk.get_by_name_and_vdc_name(@disk_name, @vdc_name)
-      }.to raise_exception(RuntimeError)
+      }.to raise_exception(Vcloud::Core::IndependentDisk::DiskNotFoundException)
     end
 
     it "should raise an error if multiple Independent Disks with " +
@@ -129,32 +129,61 @@ describe Vcloud::Core::IndependentDisk do
 
   end
 
-  context "#create" do
+  describe "#create" do
 
-    let(:vdc) { double(:vdc, :id => "12341234-1234-1234-1234-123412341234")}
+    let(:vdc) { double(:vdc, :id => "12341234-1234-1234-1234-123412341234", :name => @vdc_name)}
 
-    it "returns an IndependentDisk object if successful" do
-      size_in_bytes = 1000_000_000
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size_in_bytes)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+    context "when there is no disk already present with that name" do
+
+      before(:each) do
+        mock_query = double(:query_runner)
+        expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+        expect(mock_query).to receive(:run).with(
+          'disk',
+          :filter => "name==new-disk-1;vdcName==#{@vdc_name}"
+        ).and_return([])
+      end
+
+      it "returns an IndependentDisk object if successful" do
+        size_in_bytes = 1000_000_000
+        obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size_in_bytes)
+        expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+      end
+
+      it "handles size parameter suffixes (MB, GB, ...)" do
+        size = "100MB"
+        expect(@mock_fog_interface).to receive(:post_upload_disk).with(
+          vdc.id, "new-disk-1", 100_000_000
+        ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
+        obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
+        expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+      end
+
+      it "handles size parameter given as an Integer (in bytes)" do
+        size = 100_000_000_000
+        expect(@mock_fog_interface).to receive(:post_upload_disk).with(
+          vdc.id, "new-disk-1", 100_000_000_000
+        ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
+        obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
+        expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+      end
+
     end
 
-    it "handles size parameter suffixes (MB, GB, ...)" do
-      size = "100MB"
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 100_000_000
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
-    end
+    context "when there is a disk present in the vDC with the same name"  do
 
-    it "handles size parameter given as an Integer (in bytes)" do
-      size = 100_000_000_000
-      expect(@mock_fog_interface).to receive(:post_upload_disk).with(
-        vdc.id, "new-disk-1", 100_000_000_000
-      ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
-      obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
-      expect(obj.class).to be(Vcloud::Core::IndependentDisk)
+      it "raises an error" do
+        mock_query = double(:query_runner)
+        q_results = [ { :name => @disk_name, :href => @disk_id } ]
+        expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
+        expect(mock_query).to receive(:run).with(
+          'disk',
+          :filter => "name==#{@disk_name};vdcName==#{@vdc_name}"
+        ).and_return(q_results)
+        expect{ Vcloud::Core::IndependentDisk.create(vdc, @disk_name, 100_000) }.
+          to raise_error(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
+      end
+
     end
 
   end

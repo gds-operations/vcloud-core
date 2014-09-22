@@ -81,7 +81,7 @@ describe Vcloud::Core::IndependentDisk do
 
   describe "#create" do
 
-    let(:disk_name) { "#{@disk_name_prefix}-instantiate-#{Time.new.to_i}" }
+    let(:disk_name) { "#{@disk_name_prefix}-instantiate-test-disk" }
 
     it "can create a Independent Disk" do
       new_disk = Vcloud::Core::IndependentDisk.create(
@@ -91,6 +91,15 @@ describe Vcloud::Core::IndependentDisk do
       )
       @test_case_disks << new_disk
       expect(new_disk.name).to eq(disk_name)
+    end
+
+    it "raises a DiskAlreadyExistsException if we try to create a disk with the same " +
+         "name in the same vDC" do
+      expect { duplicate_disk = Vcloud::Core::IndependentDisk.create(
+        @vdc,
+        disk_name,
+        10000000,
+      ) }.to raise_error(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
     end
 
   end

@@ -95,11 +95,11 @@ describe Vcloud::Core::IndependentDisk do
 
     it "raises a DiskAlreadyExistsException if we try to create a disk with the same " +
          "name in the same vDC" do
-      expect { duplicate_disk = Vcloud::Core::IndependentDisk.create(
+      expect { Vcloud::Core::IndependentDisk.create(
         @vdc,
         disk_name,
-        10000000,
-      ) }.to raise_error(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
+        10000000)
+      }.to raise_error(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
     end
 
   end

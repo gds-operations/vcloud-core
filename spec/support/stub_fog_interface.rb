@@ -51,7 +51,7 @@ class StubFogInterface
     }
   end
 
-  def post_upload_disk(_vdc_id, name, size)
+  def post_create_disk(_vdc_id, name, size)
     {
       :name => name,
       :href => "https://api.example.com/disk/#{SecureRandom.uuid}",

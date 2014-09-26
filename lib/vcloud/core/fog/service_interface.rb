@@ -17,7 +17,7 @@ module Vcloud
                        :post_instantiate_vapp_template, :put_memory, :put_cpu, :power_on_vapp, :put_vapp_metadata_value,
                        :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
                        :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp,
-                       :post_upload_disk, :get_disk, :delete_disk, :post_attach_disk,
+                       :post_create_disk, :get_disk, :delete_disk, :post_attach_disk,
                        :get_vms_disk_attached_to
 
         #########################
@@ -136,7 +136,9 @@ module Vcloud
             @vcloud.process_task(task)
           end
 
-          def post_upload_disk(vdc_id, disk_id, size_in_bytes, options = {})
+          def post_create_disk(vdc_id, disk_id, size_in_bytes, options = {})
+            # Fog method is incorrectly named 'post_upload_disk', and will be fixed
+            # in a future version to match our post_create_disk method name.
             attrs = @vcloud.post_upload_disk(vdc_id, disk_id, size_in_bytes, options).body
             @vcloud.process_task(attrs[:Tasks][:Task])
             get_disk(extract_id(attrs))

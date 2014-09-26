@@ -152,7 +152,7 @@ describe Vcloud::Core::IndependentDisk do
 
       it "handles size parameter suffixes (MB, GB, ...)" do
         size = "100MB"
-        expect(@mock_fog_interface).to receive(:post_upload_disk).with(
+        expect(@mock_fog_interface).to receive(:post_create_disk).with(
           vdc.id, "new-disk-1", 100_000_000
         ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
         obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)
@@ -161,7 +161,7 @@ describe Vcloud::Core::IndependentDisk do
 
       it "handles size parameter given as an Integer (in bytes)" do
         size = 100_000_000_000
-        expect(@mock_fog_interface).to receive(:post_upload_disk).with(
+        expect(@mock_fog_interface).to receive(:post_create_disk).with(
           vdc.id, "new-disk-1", 100_000_000_000
         ).and_return({ :href => "/#{12341234-1234-1234-1234-123412341234}" })
         obj = Vcloud::Core::IndependentDisk.create(vdc, "new-disk-1", size)

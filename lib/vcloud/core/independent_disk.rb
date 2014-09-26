@@ -28,7 +28,7 @@ module Vcloud
         if query_results.size > 1
           raise MultipleDisksFoundException,
             "Multiple IndependentDisks matching '#{name}' found in vDC '#{vdc_name}. " +
-                "You must specify via ID instead."
+                "Create disks via IndependentDisk.new(disk_id) instead."
         end
         return self.new(query_results.first[:href].split('/').last)
       end

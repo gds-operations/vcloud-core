@@ -263,29 +263,61 @@ describe Vcloud::Core::Vm do
 
   end
 
-  context "#update_storage_profile" do
+  describe "cannot update the storage profile of a VM with an independent disk attached" do
+    context "#update_storage_profile" do
 
-    it "can update the storage profile of a VM" do
-      available_storage_profiles = Vcloud::Core::QueryRunner.new.run(
-        'orgVdcStorageProfile',
-        filter: "vdcName==#{@test_params.vdc_1_name}"
-      )
-      if available_storage_profiles.size == 1
-        pending("There is only one StorageProfile in vDC #{@test_params.vdc_1_name}: cannot test.")
+      it "throws an error when trying to update the storage profile of a VM with an " +
+         "independent disk attached" do
+        available_storage_profiles = Vcloud::Core::QueryRunner.new.run(
+          'orgVdcStorageProfile',
+          filter: "vdcName==#{@test_params.vdc_1_name}"
+        )
+        if available_storage_profiles.size == 1
+          pending("There is only one StorageProfile in vDC #{@test_params.vdc_1_name}: cannot test.")
+        end
+        expect{ @vm.update_storage_profile(@test_params.storage_profile) }.
+          to raise_error(Fog::Compute::VcloudDirector::TaskError)
       end
-      original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
-      expect(original_storage_profile_name).to eq(@test_params.default_storage_profile_name)
-      @vm.update_storage_profile(@test_params.storage_profile)
-      expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_params.storage_profile)
+    end
+  end
+
+  describe "detach the independent disk causing the storage profile problem" do
+    context "#detach_independent_disks" do
+      it "can detach independent disks from the VM" do
+        disk = @test_case_independent_disk_list.first
+        expect(disk.attached_vms.first.id).to eq(@vm.id)
+        @vm.detach_independent_disks(@test_case_independent_disk_list)
+        expect(disk.attached_vms).to be_empty
+      end
+    end
+  end
+
+  describe "can now update the storage profile" do
+
+    context "#update_storage_profile" do
+
+      it "can update the storage profile of a VM" do
+        available_storage_profiles = Vcloud::Core::QueryRunner.new.run(
+          'orgVdcStorageProfile',
+          filter: "vdcName==#{@test_params.vdc_1_name}"
+        )
+        if available_storage_profiles.size == 1
+          pending("There is only one StorageProfile in vDC #{@test_params.vdc_1_name}: cannot test.")
+        end
+        original_storage_profile_name = @vm.vcloud_attributes[:StorageProfile][:name]
+        expect(original_storage_profile_name).to eq(@test_params.default_storage_profile_name)
+        @vm.update_storage_profile(@test_params.storage_profile)
+        expect(@vm.vcloud_attributes[:StorageProfile][:name]).to eq(@test_params.storage_profile)
+      end
+
     end
 
   end
 
 
-
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
-    IntegrationHelper.delete_independent_disks(@test_case_independent_disks)
+    IntegrationHelper.delete_independent_disks(@test_case_independent_disk_list)
   end
 
   def get_vm_hard_disks(fog_model_vm)

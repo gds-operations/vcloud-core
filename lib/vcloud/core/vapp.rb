@@ -93,7 +93,7 @@ module Vcloud
         end
 
         Vcloud::Core.logger.debug("adding custom fields #{fields.inspect} to vapp #{@id}")
-        Vcloud::Core::Fog::ServiceInterface.new.put_custom_fields(@id, fields)
+        Vcloud::Core::Fog::ServiceInterface.new.put_product_sections(@id, fields)
       end
 
       def power_on

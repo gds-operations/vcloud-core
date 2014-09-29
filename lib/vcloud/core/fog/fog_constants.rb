@@ -8,6 +8,7 @@ module Vcloud
       module ContentTypes
         ORG = 'application/vnd.vmware.vcloud.org+xml'
         VDC = 'application/vnd.vmware.vcloud.vdc+xml'
+        VAPP = 'application/vnd.vmware.vcloud.vApp+xml'
         NETWORK = 'application/vnd.vmware.vcloud.network+xml'
         METADATA = 'application/vnd.vmware.vcloud.metadata.value+xml'
       end

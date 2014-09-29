@@ -30,6 +30,12 @@ describe Vcloud::Core::Vm do
       @network_names,
       "vcloud-core-vm-tests"
     )
+    @test_case_independent_disk_list = IntegrationHelper.create_test_case_independent_disks(
+      1,
+      @test_params.vdc_1_name,
+      "100MB",
+      "vcloud-core-vm-test-disk"
+    )
     @vapp = @test_case_vapps.first
     vapp_vms = @vapp.vms.map do |vm|
       vm_id = vm[:href].split('/').last
@@ -45,6 +51,7 @@ describe Vcloud::Core::Vm do
     end
 
   end
+
 
   context "#update_memory_size_in_mb" do
 
@@ -231,6 +238,31 @@ describe Vcloud::Core::Vm do
 
   end
 
+  context "#attach_independent_disks" do
+    it "can attach our fixture disk" do
+      disk = @test_case_independent_disk_list.first
+      expect(disk.attached_vms).to be_empty
+      @vm.attach_independent_disks(@test_case_independent_disk_list)
+      expect(disk.attached_vms.first.id).to eq(@vm.id)
+    end
+  end
+
+  # NB: It is suspected that this behaviour is caused by the Fog Model, not
+  #     vCloud Director itself. Issue raised on fog/fog to investigate/fix:
+  #     https://github.com/fog/fog/issues/3179
+  context "local disks cannot be added whilst an independent disk is attached" do
+
+    it "raises an error if we now try to add an extra local disk" do
+      extra_disks = [ { size: '10240' } ]
+      expect { @vm.add_extra_disks(extra_disks) }.
+        to raise_error(
+          Fog::Compute::VcloudDirector::BadRequest,
+          "The attached disks on VM \"#{@vm.name}\" cannot be modified."
+        )
+    end
+
+  end
+
   context "#update_storage_profile" do
 
     it "can update the storage profile of a VM" do
@@ -249,8 +281,11 @@ describe Vcloud::Core::Vm do
 
   end
 
+
+
   after(:all) do
     IntegrationHelper.delete_vapps(@test_case_vapps)
+    IntegrationHelper.delete_independent_disks(@test_case_independent_disks)
   end
 
   def get_vm_hard_disks(fog_model_vm)

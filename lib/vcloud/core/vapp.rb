@@ -26,6 +26,18 @@ module Vcloud
         end
       end
 
+      def self.get_by_child_vm_id(vm_id)
+        raise ArgumentError, "Must supply a valid Vm id" unless vm_id =~ /^vm-[-0-9a-f]+$/
+        vm_body = Vcloud::Core::Fog::ServiceInterface.new.get_vapp(vm_id)
+        parent_vapp_link = vm_body.fetch(:Link).detect do |link|
+          link[:rel] == Fog::RELATION::PARENT && link[:type] == Fog::ContentTypes::VAPP
+        end
+        unless parent_vapp_link
+          raise RuntimeError, "Could not find parent vApp for VM '#{vm_id}'"
+        end
+        return self.new(parent_vapp_link.fetch(:href).split('/').last)
+      end
+
       def vcloud_attributes
         Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
       end

@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'securerandom'
 
 class StubFogInterface
 
@@ -47,6 +48,14 @@ class StubFogInterface
       :Children => {
         :Vm => ['bogus vm data']
       }
+    }
+  end
+
+  def post_create_disk(_vdc_id, name, size)
+    {
+      :name => name,
+      :href => "https://api.example.com/disk/#{SecureRandom.uuid}",
+      :size => size,
     }
   end
 

@@ -1,6 +1,14 @@
+## Current
+
+Features:
+
+  - Added IndependentDisk entity class, for creation and discovery of Independent Disks.
+  - Added Vm#attach_independent_disks to attach IndependentDisk objects to an existing Vm.
+  - Added Vapp.get_by_child_vm_id method, to find a vApp by its child Vm id.
+
 ## 0.11.0 (2014-09-11)
 
-Changes:
+Features:
 
   - As deprecated in 0.7.0, it is now impossible to specify a plaintext
     password in a FOG_RC file. Please use tokens via vcloud-login as per

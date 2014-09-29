@@ -18,7 +18,7 @@ module Vcloud
                        :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
                        :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp,
                        :post_create_disk, :get_disk, :delete_disk, :post_attach_disk,
-                       :get_vms_disk_attached_to
+                       :get_vms_disk_attached_to, :put_product_sections
 
         #########################
         # FogFacade Inner class to represent a logic free facade over our interactions with Fog
@@ -196,6 +196,11 @@ module Vcloud
 
           def get_edge_gateway(id)
             @vcloud.get_edge_gateway(id).body
+          end
+
+          def put_product_sections(id, items)
+            task = @vcloud.put_product_sections(id, items).body
+            @vcloud.process_task(task)
           end
 
           private

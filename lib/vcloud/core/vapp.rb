@@ -88,6 +88,26 @@ module Vcloud
         self.new(attrs[:href].split('/').last) if attrs and attrs.key?(:href)
       end
 
+      def update_custom_fields(custom_fields)
+        return if custom_fields.nil?
+        fields = custom_fields.collect do |field|
+          user_configurable = field[:user_configurable] || true
+          type              = field[:type] || 'string'
+          password          = field[:password] || false
+
+          {
+            :id                => field[:name],
+            :value             => field[:value],
+            :user_configurable => user_configurable,
+            :type              => type,
+            :password          => password
+          }
+        end
+
+        Vcloud::Core.logger.debug("adding custom fields #{fields.inspect} to vapp #{@id}")
+        Vcloud::Core::Fog::ServiceInterface.new.put_product_sections(@id, fields)
+      end
+
       def power_on
         raise "Cannot power on a missing vApp." unless id
         return true if running?

@@ -76,6 +76,13 @@ module Vcloud
         end
       end
 
+      def detach_independent_disks(disk_list)
+        disk_list = Array(disk_list) # ensure we have an array
+        disk_list.each do |disk|
+          Vcloud::Core::Fog::ServiceInterface.new.post_detach_disk(id, disk.id)
+        end
+      end
+
       def add_extra_disks(extra_disks)
         vm = Vcloud::Core::Fog::ModelInterface.new.get_vm_by_href(href)
         if extra_disks

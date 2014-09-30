@@ -103,6 +103,28 @@ If you want to be sure you are pinning to 5.1, or use 5.5, you can set the API v
 
 `vcloud_director_api_version: 5.1`
 
+## Working with Independent Disks
+
+vcloud-core now supports the management of Independent Disks -- block devices
+stored and managed separately from the VMs they are attached to. We have
+noticed that this bring some limitations/caveats into play that API users
+should be aware of:
+
+* It is not possible to move the VM from one Storage Profile to another with
+  Vm#update_storage_profile if an Independent Disk is attached. This appears to
+  be a limitation in vCloud Director itself. To work around this, detach the
+  disks before updating, and reattach afterwards.
+
+* It is not possible to add additional *local* disks via Vm#add_extra_disks
+  when Independent Disks are attached to a VM. This appears to be a limitation with
+  Fog, as the vCD UI permits it. See https://github.com/fog/fog/issues/3179
+  for progress on this issue.
+
+* Extreme care should be taken when detaching Independent Disks from a VM, as
+  vCloud Director will detach them without warning from running VMs, and hence
+  with no notification to the running OS. It is recommended to simply use them for
+  persistence across VM delete/recreate operations.
+
 ## Debugging
 
 `export EXCON_DEBUG=true` - this will print out the API requests and responses.

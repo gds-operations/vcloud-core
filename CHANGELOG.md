@@ -2,9 +2,11 @@
 
 Features:
 
-  - Added IndependentDisk entity class, for creation and discovery of Independent Disks.
-  - Added Vm#attach_independent_disks to attach IndependentDisk objects to an existing Vm.
-  - Added Vapp.get_by_child_vm_id method, to find a vApp by its child Vm id.
+
+  - Adds custom fields support to vApps. Thanks @geriBatai
+  - Added IndependentDisk entity class, for creation and discovery of Independent Disks. Thanks @mikepea
+  - Added Vm#attach_independent_disks to attach IndependentDisk objects to an existing Vm. Thanks @mikepea
+  - Added Vapp.get_by_child_vm_id method, to find a vApp by its child Vm id. Thanks @mikepea
 
 ## 0.11.0 (2014-09-11)
 

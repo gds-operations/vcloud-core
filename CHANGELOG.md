@@ -2,9 +2,10 @@
 
 Features:
 
-  - Added IndependentDisk entity class, for creation and discovery of Independent Disks.
-  - Added Vm#attach_independent_disks to attach IndependentDisk objects to an existing Vm.
-  - Added Vapp.get_by_child_vm_id method, to find a vApp by its child Vm id.
+  - Adds custom fields support to vApps. Thanks @geriBatai
+  - Adds IndependentDisk entity class, for creation and discovery of Independent Disks. Thanks @mikepea
+  - Adds methods to attach and detach IndependentDisk objects to/from an existing VM. Thanks @mikepea
+  - Add Vapp.get_by_child_vm_id method, to find a vApp by its child VM id. Thanks @mikepea
 
 ## 0.11.0 (2014-09-11)
 
@@ -18,7 +19,7 @@ Features:
 
 API changes:
 
-  - removes the temporary files used for transitioning vCloud Tools Tester to use the new API.
+  - Removes the temporary files used for transitioning vCloud Tools Tester to use the new API.
 
 ## 0.9.0 (2014-08-08)
 

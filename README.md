@@ -105,7 +105,7 @@ If you want to be sure you are pinning to 5.1, or use 5.5, you can set the API v
 
 ## Working with Independent Disks
 
-vcloud-core now supports the management of Independent Disks -- block devices
+vCloud Core now supports the management of Independent Disks -- block devices
 stored and managed separately from the VMs they are attached to. We have
 noticed that this bring some limitations/caveats into play that API users
 should be aware of:

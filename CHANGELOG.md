@@ -1,3 +1,11 @@
+## 0.13.0 (2014-10-13)
+
+Features:
+
+  - Upgrade Fog dependency to version 1.24.0, which ensures that the `FOG_CREDENTIAL`
+    environment variable matches the information stored against any vCloud session referred
+    to by `FOG_VCLOUD_TOKEN`.
+
 ## 0.12.0 (2014-10-03)
 
 Features:

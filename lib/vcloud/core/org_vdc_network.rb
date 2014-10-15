@@ -4,6 +4,10 @@ module Vcloud
 
       attr_reader :id
 
+      # Return an object referring to a particular OrgVdcNetwork
+      #
+      # @param id [String] The ID of the network
+      # @return [Vcloud::Core::OrgVdcNetwork]
       def initialize(id)
         unless id =~ /^[-0-9a-f]+$/
           raise "orgVdcNetwork id : #{id} is not in correct format"
@@ -11,6 +15,10 @@ module Vcloud
         @id = id
       end
 
+      # Configure OrgVdcNetwork
+      #
+      # @param config [Hash] the configuration to apply to network
+      # @return [Vcloud::Core::OrgVdcNetwork] an object referring to network
       def self.provision(config)
         raise "Must specify a name" unless config[:name]
         raise "Must specify a vdc_name" unless config[:vdc_name]
@@ -45,18 +53,30 @@ module Vcloud
 
       end
 
+      # Return all the vcloud attributes of OrgVdcNetwork
+      #
+      # @return [Hash] a hash describing all the attributes of OrgVdcNetwork
       def vcloud_attributes
         Vcloud::Core::Fog::ServiceInterface.new.get_network_complete(id)
       end
 
+      # Return the name of OrgVdcNetwork
+      #
+      # @return [String] the name of instance
       def name
         vcloud_attributes[:name]
       end
 
+      # Return the href of OrgVdcNetwork
+      #
+      # @return [String] the href of instance
       def href
         vcloud_attributes[:href]
       end
 
+      # Delete OrgVdcNetwork
+      #
+      # @return [void]
       def delete
         Vcloud::Core::Fog::ServiceInterface.new.delete_network(id)
       end

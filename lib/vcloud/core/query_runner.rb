@@ -2,15 +2,24 @@ module Vcloud
   module Core
     class QueryRunner
 
+      # Create a new instance of the ServiceInterface as the @fsi global
       def initialize
         @fsi = Vcloud::Core::Fog::ServiceInterface.new
       end
 
+      # Run a query (optionally for a particular type)
+      #
+      # @param type [String] Name of type to query for - default: nil
+      # @param options [Hash] options to the query API - default: {}
+      # @return [Array] List of results
       def run(type=nil, options={})
         raise ArgumentError, "Query API :format option is not supported" if options[:format]
         get_all_results(type, options)
       end
 
+      # List the available types to be queried
+      #
+      # @return [Array] list of valid types
       def available_query_types
         query_body = @fsi.get_execute_query()
         get_entity_types_in_record_format(query_body)

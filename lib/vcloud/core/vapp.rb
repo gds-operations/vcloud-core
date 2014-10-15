@@ -5,6 +5,10 @@ module Vcloud
 
       attr_reader :id
 
+      # Initialize a Vcloud::Core::Vapp
+      #
+      # @param id [String] the vApp ID
+      # @return [Vcloud::Core::Vapp]
       def initialize(id)
         unless id =~ /^#{self.class.id_prefix}-[-0-9a-f]+$/
           raise "#{self.class.id_prefix} id : #{id} is not in correct format"
@@ -12,6 +16,10 @@ module Vcloud
         @id = id
       end
 
+      # Return the ID of a named vApp
+      #
+      # @param name [String] the name of the vApp to find
+      # @return [String] the vApp ID
       def self.get_by_name(name)
         q = Vcloud::Core::QueryRunner.new
         query_results = q.run('vApp', :filter => "name==#{name}")
@@ -26,6 +34,10 @@ module Vcloud
         end
       end
 
+      # Return the ID of the vApp which contains a particular VM
+      #
+      # @param vm_id [String] the ID of the VM to find the parent for
+      # @return [String] the vApp ID
       def self.get_by_child_vm_id(vm_id)
         raise ArgumentError, "Must supply a valid Vm id" unless vm_id =~ /^vm-[-0-9a-f]+$/
         vm_body = Vcloud::Core::Fog::ServiceInterface.new.get_vapp(vm_id)
@@ -38,6 +50,9 @@ module Vcloud
         return self.new(parent_vapp_link.fetch(:href).split('/').last)
       end
 
+      # Return the vCloud data associated with vApp
+      #
+      # @return [Hash] the complete vCloud data for vApp
       def vcloud_attributes
         Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
       end
@@ -47,33 +62,60 @@ module Vcloud
         POWERED_OFF = 8
       end
 
+      # Return the name of vApp
+      #
+      # @return [String] the name of instance
       def name
         vcloud_attributes[:name]
       end
 
+      # Return the href of vApp
+      #
+      # @return [String] the href of instance
       def href
         vcloud_attributes[:href]
       end
 
+      # Return the ID of the vDC containing vApp
+      #
+      # @return [String] the ID of the vDC containing vApp
       def vdc_id
         link = vcloud_attributes[:Link].detect { |l| l[:rel] == Fog::RELATION::PARENT && l[:type] == Fog::ContentTypes::VDC }
         link ? link[:href].split('/').last : raise('a vapp without parent vdc found')
       end
 
+      # Return the VMs within vApp
+      #
+      # @return [Hash] the VMs contained in the vApp
       def vms
         vcloud_attributes[:Children][:Vm]
       end
 
+      # Return the networks connected to vApp
+      #
+      # @return [Hash] a hash describing the networks
       def networks
         vcloud_attributes[:'ovf:NetworkSection'][:'ovf:Network']
       end
 
+      # Find a vApp by name and vDC
+      #
+      # @param name [String] name of the vApp to find
+      # @param vdc_name [String] name of the vDC
+      # @return [String] the ID of the instance
       def self.get_by_name_and_vdc_name(name, vdc_name)
         fog_interface = Vcloud::Core::Fog::ServiceInterface.new
         attrs = fog_interface.get_vapp_by_name_and_vdc_name(name, vdc_name)
         self.new(attrs[:href].split('/').last) if attrs && attrs.key?(:href)
       end
 
+      # Instantiate a vApp
+      #
+      # @param name [String] Name to use when creating the vApp
+      # @param network_names [Array] Array of Strings with names of Networks to connect to the vApp
+      # @param template_id [String] The ID of the template to use when creating the vApp
+      # @param vdc_name [String] The name of the vDC to create vApp in
+      # @return [String] the id of the created vApp
       def self.instantiate(name, network_names, template_id, vdc_name)
         Vcloud::Core.logger.info("Instantiating new vApp #{name} in vDC '#{vdc_name}'")
         fog_interface = Vcloud::Core::Fog::ServiceInterface.new
@@ -88,6 +130,10 @@ module Vcloud
         self.new(attrs[:href].split('/').last) if attrs and attrs.key?(:href)
       end
 
+      # Update custom_fields for vApp
+      #
+      # @param custom_fields [Array] Array of Hashes describing the custom fields
+      # @return [void] 
       def update_custom_fields(custom_fields)
         return if custom_fields.nil?
         fields = custom_fields.collect do |field|
@@ -108,6 +154,9 @@ module Vcloud
         Vcloud::Core::Fog::ServiceInterface.new.put_product_sections(@id, fields)
       end
 
+      # Power on vApp
+      #
+      # @return [Boolean] Returns true if the VM is running, false otherwise
       def power_on
         raise "Cannot power on a missing vApp." unless id
         return true if running?

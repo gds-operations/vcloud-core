@@ -10,10 +10,18 @@ module Vcloud
       TOKEN_ENV_VAR_NAME = 'FOG_VCLOUD_TOKEN'
       FOG_CREDS_PASS_NAME = :vcloud_director_password
 
+      # Run any checks needed against the Fog credentials
+      # currently only used to disallow plaintext passwords
+      # in .fog files.
+      #
       def self.check_credentials
         check_plaintext_pass
       end
 
+      # Attempt to load the password from the fog credentials file
+      #
+      # @return [String, nil] The password if it could be loaded, 
+      #                       else nil.
       def self.fog_credentials_pass
         begin
           pass = ::Fog.credentials[FOG_CREDS_PASS_NAME]
@@ -28,6 +36,10 @@ module Vcloud
 
       private
 
+      # Check whether a plaintext password is in the Fog config
+      # file
+      #
+      # @return [void]
       def self.check_plaintext_pass
         pass = fog_credentials_pass
         unless pass.nil? or pass.empty?

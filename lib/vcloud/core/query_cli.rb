@@ -3,6 +3,11 @@ require 'optparse'
 module Vcloud
   module Core
     class QueryCli
+
+      # Create a new instance of the CLI, parsing the arguments supplied
+      #
+      # @param argv_array [Array] The Array of ARGV arguments
+      # @return [Vcloud::Core::QueryCLI]
       def initialize(argv_array)
         @usage_text = nil
         @type = nil
@@ -11,6 +16,9 @@ module Vcloud
         parse(argv_array)
       end
 
+      # Run a query and print results to standard out
+      #
+      # @return [void]
       def run
         begin
           Vcloud::Core::Query.new(@type, @options).run

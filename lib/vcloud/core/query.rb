@@ -4,6 +4,12 @@ module Vcloud
   module Core
     class Query
 
+      # Initialize a new Vcloud::Core::Query object
+      #
+      # @param type [String] Restrict query results to this type (see QueryRunner#available_query_types)
+      # @param options [Hash] key :output_type defines the output type and defaults to tsv; csv and yaml are valid options
+      # @param query_runner [Method] default=Vcloud::Core::QueryRunner.new
+      # @return [void]
       def initialize(type=nil, options={}, query_runner = Vcloud::Core::QueryRunner.new)
         @type = type
         @options = options
@@ -11,6 +17,9 @@ module Vcloud
         @query_runner = query_runner
       end
 
+      # Run the query and print to standard out
+      #
+      # @return [void]
       def run()
         if @type.nil?
           output_available_query_types

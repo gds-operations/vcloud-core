@@ -1,3 +1,9 @@
+## unrelease
+
+Documentation:
+
+  - Documented all the public methods in vcloud-core to comply with semver.org recommendations.
+
 ## 0.13.0 (2014-10-13)
 
 Features:

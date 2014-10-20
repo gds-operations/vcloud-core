@@ -41,7 +41,7 @@ module Vcloud
       # Delete a vApp by id
       #
       # @param id [String] ID of the vApp to delete
-      # @return [void]
+      # @return [Boolean] return true or throw error
       def delete_vapp(id)
         fog_service_interface.delete_vapp(id)
       end
@@ -49,7 +49,7 @@ module Vcloud
       # Delete a network by id
       #
       # @param id [String] ID of the network to delete
-      # @return [void]
+      # @return [Boolean] return true or throw error
       def delete_network(id)
         fog_service_interface.delete_network(id)
       end

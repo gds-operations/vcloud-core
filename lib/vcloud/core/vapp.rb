@@ -133,7 +133,7 @@ module Vcloud
       # Update custom_fields for vApp
       #
       # @param custom_fields [Array] Array of Hashes describing the custom fields
-      # @return [void] 
+      # @return [Boolean] return true or throws error
       def update_custom_fields(custom_fields)
         return if custom_fields.nil?
         fields = custom_fields.collect do |field|

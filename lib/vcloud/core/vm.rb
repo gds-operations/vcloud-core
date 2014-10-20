@@ -28,7 +28,7 @@ module Vcloud
       # Set the amount of memory in VM which can't be nil or less than 64 (mb)
       #
       # @param new_memory [Integer] amount of memory for instance
-      # @return [void]
+      # @return [Boolean] return true or throws an error
       def update_memory_size_in_mb(new_memory)
         return if new_memory.nil?
         return if new_memory.to_i < 64
@@ -70,7 +70,7 @@ module Vcloud
       # Update the name of VM
       #
       # @param new_name [String] The new name for the VM
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def update_name(new_name)
         fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.put_vm(id, new_name) unless name == new_name
@@ -86,7 +86,7 @@ module Vcloud
       # Update the number of CPUs in VM
       #
       # @param new_cpu_count [Integer] The number of virtual CPUs to allocate
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def update_cpu_count(new_cpu_count)
         return if new_cpu_count.nil?
         return if new_cpu_count.to_i == 0
@@ -98,7 +98,7 @@ module Vcloud
       # Update the metadata for VM
       #
       # @param metadata [Hash] hash of keys, values to set
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def update_metadata(metadata)
         return if metadata.nil?
         fsi = Vcloud::Core::Fog::ServiceInterface.new
@@ -111,7 +111,7 @@ module Vcloud
       # Attach independent disk(s) to VM
       #
       # @param disk_list [Array] an array of Vcloud::Core::IndependentDisk objects
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def attach_independent_disks(disk_list)
         disk_list = Array(disk_list) # ensure we have an array
         disk_list.each do |disk|
@@ -122,7 +122,7 @@ module Vcloud
       # Detach independent disk(s) from VM
       #
       # @param disk_list [Array] an array of Vcloud::Core::IndependentDisk objects
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def detach_independent_disks(disk_list)
         disk_list = Array(disk_list) # ensure we have an array
         disk_list.each do |disk|
@@ -133,7 +133,7 @@ module Vcloud
       # Add extra disks to VM
       #
       # @param extra_disks [Array] An array of hashes like [{ size: '20480' }]
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def add_extra_disks(extra_disks)
         vm = Vcloud::Core::Fog::ModelInterface.new.get_vm_by_href(href)
         if extra_disks
@@ -147,7 +147,7 @@ module Vcloud
       # Configure VM network interfaces
       #
       # @param networks_config [Array] An array of hashes like [{ :name => 'NetworkName' }]
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def configure_network_interfaces(networks_config)
         return unless networks_config
         section = {PrimaryNetworkConnectionIndex: 0}
@@ -174,7 +174,7 @@ module Vcloud
       # Configure guest customisation script
       #
       # @param preamble [String] A script to run when the VM is created
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def configure_guest_customization_section(preamble)
         Vcloud::Core::Fog::ServiceInterface.new.put_guest_customization_section(id, vapp_name, preamble)
       end
@@ -182,7 +182,7 @@ module Vcloud
       # Update the storage profile of a VM
       #
       # @param storage_profile [String] The name of the storage profile
-      # @return [void]
+      # @return [Boolean] return true or throw an error
       def update_storage_profile storage_profile
         storage_profile_href = get_storage_profile_href_by_name(storage_profile, @vapp.name)
         Vcloud::Core::Fog::ServiceInterface.new.put_vm(id, name, {

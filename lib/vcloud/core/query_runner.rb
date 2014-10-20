@@ -7,9 +7,10 @@ module Vcloud
         @fsi = Vcloud::Core::Fog::ServiceInterface.new
       end
 
-      # Run a query (optionally for a particular type)
+      # Run a query (optionally for a particular entity type)
       #
       # @param type [String] Name of type to query for - default: nil
+      #                      See integration test of this module for examples
       # @param options [Hash] options to the query API - default: {}
       # @return [Array] List of results
       def run(type=nil, options={})
@@ -17,7 +18,8 @@ module Vcloud
         get_all_results(type, options)
       end
 
-      # List the available types to be queried
+      # List the available entity types which can be queried
+      #   See integration test of this module for examples
       #
       # @return [Array] list of valid types
       def available_query_types

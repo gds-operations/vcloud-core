@@ -4,6 +4,17 @@ module Vcloud
   module Core
     class ConfigLoader
 
+      # Loads the configuration from +config_file+, optionally rendering
+      # +config_file+ as a Mustache template using vars in +vars_file+ and
+      # optionally validating config against +schema+ supplied.
+      #
+      # @param config_file [String]      Location of the YAML config file
+      # @param schema      [String, nil] Location of the validation schema
+      #                                  if nil, no validation takes place.
+      # @param vars_file   [String, nil] Location of the vars_file (YAML),
+      #                                  if nil, config_file is not rendered
+      #                                  by Mustache
+      # @return [Hash]
       def load_config(config_file, schema = nil, vars_file = nil)
         if vars_file
           rendered_config = Mustache.render(

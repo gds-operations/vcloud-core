@@ -4,6 +4,10 @@ module Vcloud
 
       attr_accessor :name, :network_href, :network_name
 
+      # Return a new instance of an EdgeGatewayInterface
+      #
+      # @param gateway_interface_hash [Hash] The configuration of EdgeGatewayInterface
+      # @return [Vcloud::Core::EdgeGatewayInterface]
       def initialize(gateway_interface_hash)
         if gateway_interface_hash.nil?
           raise "EdgeGatewayInterface: gateway_interface_hash cannot be nil"
@@ -17,6 +21,9 @@ module Vcloud
         @network_name = gateway_interface_hash[:Network][:name]
       end
 
+      # Get the ID of EdgeGatewayInterface from the @network_href
+      #
+      # @return [String] The ID of EdgeGatewayInterface
       def network_id
         network_href.split('/').last
       end

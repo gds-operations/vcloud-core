@@ -2,6 +2,13 @@ module Vcloud
   module Core
     module MetadataHelper
 
+      # Convert the fog metadata into a hash of standard Ruby types
+      # Fog and vCloud currently expose the types used in the API, which are
+      # unnecessary for most needs. This class maps those custom Fog types back
+      # to Ruby types if possible.
+      #
+      # @param vcloud_metadata_entries [Hash] vCloud data as returned from Fog
+      # @return [Hash] a hash of only the metadata using Ruby types
       def extract_metadata vcloud_metadata_entries
         metadata = {}
         vcloud_metadata_entries.each do |entry|

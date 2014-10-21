@@ -4,12 +4,20 @@ require 'highline'
 module Vcloud
   module Core
     class LoginCli
+
+      # Create a new instance of the CLI, parsing the arguments supplied
+      #
+      # @param argv_array [Array] The Array of ARGV arguments
+      # @return [Vcloud::Core::LoginCLI]
       def initialize(argv_array)
         @usage_text = nil
 
         parse(argv_array)
       end
 
+      # Login to vCloud and print shell commands suitable for setting the vcloud_token
+      #
+      # @return [void]
       def run
         begin
           pass = read_pass

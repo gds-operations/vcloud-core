@@ -9,6 +9,10 @@ module Vcloud
 
       attr_reader :id
 
+      # Return an object referring to a particular IndependentDisk
+      #
+      # @param id [String] The ID of the independent disk
+      # @return [Vcloud::Core::IndependentDisk]
       def initialize(id)
         unless id =~ /^[-0-9a-f]+$/
           raise "IndependentDisk id : #{id} is not in correct format"
@@ -16,6 +20,11 @@ module Vcloud
         @id = id
       end
 
+      # Return the ID of an IndependentDisk referred to by name and vDC
+      #
+      # @param name [String] The name of the disk
+      # @param vdc [String] The name of the vDC
+      # @return [Vcloud::Core::IndependentDisk] An object representing the IndependentDisk
       def self.get_by_name_and_vdc_name(name, vdc_name)
         q = Vcloud::Core::QueryRunner.new
         query_results = q.run('disk', :filter => "name==#{name};vdcName==#{vdc_name}")
@@ -33,6 +42,15 @@ module Vcloud
         return self.new(query_results.first[:href].split('/').last)
       end
 
+      # Create a named, sized IndependentDisk in a particular named vDC
+      #
+      # @param vdc [String] The name of the vDC
+      # @param name [String] The name of the IndependentDisk
+      # @param size [String, Integer] The size as an integer of bytes, or an
+      #                               integer with units
+      #                               (see convert_size_to_bytes)
+      # @return [Vcloud::Core::IndependentDisk] An object representing
+      #                                         the new disk
       def self.create(vdc, name, size)
         vdc_name = vdc.name
         begin
@@ -52,18 +70,31 @@ module Vcloud
         return self.new(body[:href].split('/').last)
       end
 
+      # Return all the vcloud attributes of IndependentDisk
+      #
+      # @return [Hash] a hash describing all the attributes of disk
       def vcloud_attributes
         Vcloud::Core::Fog::ServiceInterface.new.get_disk(id)
       end
 
+      # Return the name of IndependentDisk
+      #
+      # @return [String] the name of instance
       def name
         vcloud_attributes[:name]
       end
 
+      # Return the href of IndependentDisk
+      #
+      # @return [String] the href of instance
       def href
         vcloud_attributes[:href]
       end
 
+      # Return an array of Vcloud::Core::Vm objects which are attached to
+      # independent disk
+      #
+      # @return [Array] an array of Vcloud::Core::Vm
       def attached_vms
         body = Vcloud::Core::Fog::ServiceInterface.new.get_vms_disk_attached_to(id)
         vms = body.fetch(:VmReference)
@@ -74,6 +105,11 @@ module Vcloud
         end
       end
 
+      # Convert an integer and units suffix (e.g. 10mb) into an integer of bytes
+      # Allowed suffixes are: mb, gb, mib, gib
+      #
+      # @param size [String] the intended size of the disk (optionally with units)
+      # @return [Integer] the disk size in bytes
       def self.convert_size_to_bytes(size)
         if size.to_s =~ /^(\d+)mb$/i
           Integer($1) * (10**6)

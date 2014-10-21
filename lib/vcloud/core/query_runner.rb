@@ -11,7 +11,12 @@ module Vcloud
       #
       # @param type [String] Name of type to query for - default: nil
       #                      See integration test of this module for examples
-      # @param options [Hash] options to the query API - default: {}
+      # @param options [Hash] options for the query API
+      #                       see Fog::Compute::VcloudDirector::Real for more
+      #                       documentation of valid options.
+      #                       Default: {}
+      # @option options [String] :filter Filter the query e.g. "name==foo"
+      # @option options [String] :format Unsupported - do not use
       # @return [Array] List of results
       def run(type=nil, options={})
         raise ArgumentError, "Query API :format option is not supported" if options[:format]

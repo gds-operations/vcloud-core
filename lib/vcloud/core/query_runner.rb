@@ -17,10 +17,17 @@ module Vcloud
       #                       Default: {}
       # @option options [String] :filter Filter the query e.g. "name==foo"
       # @option options [String] :format Unsupported - do not use
+      # @option options [String] :page Override automatic pagination
+      # @option options [String] :pageSize Override automatic pagination
       # @return [Array] List of results
       def run(type=nil, options={})
         raise ArgumentError, "Query API :format option is not supported" if options[:format]
-        get_all_results(type, options)
+
+        if options.has_key?(:page) || options.has_key?(:pageSize)
+          get_results_page(options.fetch(:page, 1), type, options) || []
+        else
+          get_all_results(type, options)
+        end
       end
 
       # List the available entity types which can be queried

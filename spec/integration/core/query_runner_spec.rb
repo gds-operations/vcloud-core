@@ -185,6 +185,24 @@ module Vcloud
 
         end
 
+        context "automatic pagination can be suppressed with page/pageSize options" do
+          before(:all) do
+            @first_vapp_name = ''
+          end
+
+          it "returns the first singular result" do
+            results = Vcloud::Core::QueryRunner.new.run('vApp', sortAsc: 'name', pageSize: 1)
+            expect(results).to have(1).items
+            @first_vapp_name = results.first.fetch(:name)
+          end
+
+          it "returns the next singular result which is different from the first" do
+            results = Vcloud::Core::QueryRunner.new.run('vApp', sortAsc: 'name', pageSize: 1, page: 2)
+            expect(results).to have(1).items
+            expect(results.first.fetch(:name)).not_to eq(@first_vapp_name)
+          end
+        end
+
         after(:all) do
           IntegrationHelper.delete_vapps(@test_case_vapps)
         end

@@ -1,4 +1,9 @@
-## unrelease
+## 0.14.0 (2014-11-10)
+
+API changes:
+
+  - Automatic pagination of `Vcloud::QueryRunner` results can now be
+    overridden with `page` and `pageSize` options.
 
 Documentation:
 

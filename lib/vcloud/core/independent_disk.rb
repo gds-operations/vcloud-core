@@ -105,6 +105,13 @@ module Vcloud
         end
       end
 
+      # Delete the IndependentDisk entity referred to by this object.
+      #
+      # @return [Boolean] Returns true if disk was deleted. Raises an exception otherwise.
+      def destroy
+        Vcloud::Core::Fog::ServiceInterface.new.delete_disk(id)
+      end
+
       # Convert an integer and units suffix (e.g. 10mb) into an integer of bytes
       # Allowed suffixes are: mb, gb, mib, gib
       #

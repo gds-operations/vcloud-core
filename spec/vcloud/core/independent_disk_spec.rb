@@ -235,5 +235,16 @@ describe Vcloud::Core::IndependentDisk do
 
   end
 
+  context "#destroy" do
+    subject { Vcloud::Core::IndependentDisk.new(@disk_id) }
+
+    it "deletes the independent disk entity via Fog delete_disk method" do
+      expect(@mock_fog_interface).to receive(:delete_disk).
+        with(subject.id)
+      subject.destroy
+    end
+
+  end
+
 end
 

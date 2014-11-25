@@ -22,7 +22,7 @@ describe Vcloud::Core::IndependentDisk do
       @test_disk_size,
       @disk_name_prefix
     )
-    @test_disk = @test_case_disks.first
+    @test_disk = @test_case_disks.shift  # we will delete this disk in the tests
   end
 
   subject(:fixture_disk) { @test_disk }
@@ -102,6 +102,15 @@ describe Vcloud::Core::IndependentDisk do
       }.to raise_error(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
     end
 
+  end
+
+  describe "#destroy" do
+    it "after deletion, access to the disk is forbidden (as the API does not distinguish " +
+       "not present and access-denied)" do
+      fixture_disk.destroy
+      expect(fixture_disk.id).to match(/^#{uuid_matcher}$/)
+      expect { fixture_disk.name }.to raise_error(Fog::Compute::VcloudDirector::Forbidden)
+    end
   end
 
   after(:all) do

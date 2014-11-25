@@ -1,3 +1,14 @@
+## 0.15.0 (2014-11-26)
+
+Features:
+
+  - New method IndependentDisk#destroy to delete an independent disk.
+
+Bugfixes:
+
+  - Upgrade to Fog version 1.25.0 to support vCloud usernames containing more than
+    one `@` symbol.
+
 ## 0.14.0 (2014-11-10)
 
 API changes:

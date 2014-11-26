@@ -24,6 +24,9 @@ describe Vcloud::Core::Fog::Login do
           Fog::Errors::LoadError,
           /^Missing Credentials\n/
         )
+      end
+
+      it "should raise an exception succinctly listing the missing credentials when a token is supplied" do
         expect { subject.token('supersekret') }.to raise_error(
           ArgumentError,
           /^Missing required arguments: vcloud_director_.*$/

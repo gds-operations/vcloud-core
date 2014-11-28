@@ -10,6 +10,21 @@ module Vcloud
       TOKEN_ENV_VAR_NAME = 'FOG_VCLOUD_TOKEN'
       FOG_CREDS_PASS_NAME = :vcloud_director_password
 
+      # Logout an existing vCloud session, rendering the token unusable.
+      # Requires a FOG_VCLOUD_TOKEN environment variable to be set.
+      #
+      # @return [Boolean] return true or raise an exception
+      def self.logout
+        unless ENV[TOKEN_ENV_VAR_NAME]
+          raise "#{TOKEN_ENV_VAR_NAME} environment variable is not set"
+        end
+
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
+        fsi.logout
+
+        return true
+      end
+
       # Run any checks needed against the Fog credentials
       # currently only used to disallow plaintext passwords
       # in .fog files.

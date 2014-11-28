@@ -42,8 +42,15 @@ describe Vcloud::Core::Fog::Login do
       let(:envvar_password) { 'API_PASSWORD' }
 
       before(:each) do
+        @temp_token = nil
         @real_password = ENV[envvar_password]
         stub_const('ENV', {})
+      end
+
+      after(:each) do
+        stub_const('ENV', { envvar_token => @temp_token })
+        fsi = Vcloud::Core::Fog::ServiceInterface.new
+        fsi.logout
       end
 
       context "environment variable VCLOUD_FOG_TOKEN not set" do
@@ -53,8 +60,8 @@ describe Vcloud::Core::Fog::Login do
           end
 
           expect(ENV).not_to have_key(envvar_token)
-          token = subject.token(@real_password)
-          expect(token.size).to eq(token_length)
+          @temp_token = subject.token(@real_password)
+          expect(@temp_token.size).to eq(token_length)
         end
       end
 
@@ -67,9 +74,9 @@ describe Vcloud::Core::Fog::Login do
           end
 
           ENV[envvar_token] = old_token
-          new_token = subject.token(@real_password)
-          expect(new_token).to_not eq(old_token)
-          expect(new_token.size).to eq(token_length)
+          @temp_token = subject.token(@real_password)
+          expect(@temp_token).to_not eq(old_token)
+          expect(@temp_token.size).to eq(token_length)
         end
       end
     end

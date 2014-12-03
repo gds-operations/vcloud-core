@@ -24,6 +24,9 @@ describe Vcloud::Core::Fog do
         expect(fsi.session).to include(:user, :org)
 
         expect(subject).to eq(true)
+        # logout appears to sometimes be slightly asynchronous and doesn't
+        # provide a task that we can monitor the progress of.
+        sleep(1)
 
         fsi = Vcloud::Core::Fog::ServiceInterface.new
         expect{ fsi.session }.to raise_error(

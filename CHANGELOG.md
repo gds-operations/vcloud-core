@@ -1,3 +1,10 @@
+## 0.16.0 (2014-12-03)
+
+Features:
+
+  - New `vlcoud-logout` command line utility to revoke session tokens.
+  - New `Vcloud::Core::Fog.logout` method to revoke session tokens.
+
 ## 0.15.0 (2014-11-26)
 
 Features:

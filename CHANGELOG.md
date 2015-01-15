@@ -1,3 +1,9 @@
+## 0.16.1 (2015-01-15)
+
+Bugfixes:
+
+  - Pin Mustache dependency to 0.99.x to maintain support for Ruby 1.9.3
+
 ## 0.16.0 (2014-12-03)
 
 Features:

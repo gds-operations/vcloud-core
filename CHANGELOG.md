@@ -1,3 +1,7 @@
+## 1.0.0 (2015-01-22)
+
+  - Release 1.0.0 since the public API is now stable
+
 ## 0.16.1 (2015-01-15)
 
 Bugfixes:

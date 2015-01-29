@@ -52,7 +52,7 @@ describe Vcloud::Core::Query do
           [
             {:field1 => "Stuff 1", :field2 => "Stuff 2"},
             {:field1 => "More Stuff 1", :field2 => "More Stuff 2"}
-          ]
+        ]
         }
       end
 

@@ -137,14 +137,19 @@ Run the default suite of tests (e.g. lint, unit, features):
 
     bundle exec rake
 
-Run the integration tests (slower and requires a real environment):
+There are also integration tests. These are slower and require a real environment.
+See the [vCloud Tools website](http://gds-operations.github.io/vcloud-tools/testing/) for details of how to set up and run the integration tests.
 
-    bundle exec rake integration
+The parameters required to run the vCloud Core integration tests are:
 
-You need access to a suitable vCloud Director organization to run the
-integration tests. See the [integration tests README](/spec/integration/README.md) for
-further details.
-
+````
+default: # This is the fog credential that refers to your testing environment, e.g. `test_credential`
+  vdc_1_name: # The name of a VDC
+  catalog: # A catalog
+  vapp_template: # A vApp Template within that catalog
+  network_1: # The name of the primary network
+  network_1_ip: # The IP address of the primary network
+````
 ## Contributing
 
 1. Fork it

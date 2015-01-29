@@ -9,12 +9,12 @@ describe Vcloud::Core::EdgeGateway do
   end
 
   context "Class public interface" do
-    it { expect(EdgeGateway).to respond_to(:get_ids_by_name) }
-    it { expect(EdgeGateway).to respond_to(:get_by_name) }
+    it { expect(Vcloud::Core::EdgeGateway).to respond_to(:get_ids_by_name) }
+    it { expect(Vcloud::Core::EdgeGateway).to respond_to(:get_by_name) }
   end
 
   context "Instance public interface" do
-    subject { EdgeGateway.new(@edgegw_id) }
+    subject { Vcloud::Core::EdgeGateway.new(@edgegw_id) }
     it { should respond_to(:id) }
     it { should respond_to(:name) }
     it { should respond_to(:href) }
@@ -24,32 +24,32 @@ describe Vcloud::Core::EdgeGateway do
   context "#initialize" do
 
     it "should be constructable from just an id reference" do
-      obj = EdgeGateway.new(@edgegw_id)
+      obj = Vcloud::Core::EdgeGateway.new(@edgegw_id)
       expect(obj.class).to be(Vcloud::Core::EdgeGateway)
     end
 
     it "should store the id specified" do
-      obj = EdgeGateway.new(@edgegw_id)
+      obj = Vcloud::Core::EdgeGateway.new(@edgegw_id)
       expect(obj.id).to eq(@edgegw_id)
     end
 
     it "should raise error if id is not in correct format" do
       bogus_id = '123123-bogus-id-123445'
-      expect{ EdgeGateway.new(bogus_id) }.to raise_error("EdgeGateway id : #{bogus_id} is not in correct format" )
+      expect{ Vcloud::Core::EdgeGateway.new(bogus_id) }.to raise_error("EdgeGateway id : #{bogus_id} is not in correct format" )
     end
 
   end
 
   context "#get_by_name" do
 
-    it "should return a EdgeGateway object if name exists" do
+    it "should return a Vcloud::Core::EdgeGateway object if name exists" do
       q_results = [
         { :name => 'edgegw-test-1', :href => "/#{@edgegw_id}" }
       ]
       mock_query = double(:query_runner)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
-      @obj = EdgeGateway.get_by_name('edgegw-test-1')
+      @obj = Vcloud::Core::EdgeGateway.get_by_name('edgegw-test-1')
       expect(@obj.class).to be(Vcloud::Core::EdgeGateway)
     end
 
@@ -60,7 +60,7 @@ describe Vcloud::Core::EdgeGateway do
       mock_query = double(:query_runner)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
-      @obj = EdgeGateway.get_by_name('edgegw-test-1')
+      @obj = Vcloud::Core::EdgeGateway.get_by_name('edgegw-test-1')
       expect(@obj.id).to eq(@edgegw_id)
     end
 
@@ -69,7 +69,7 @@ describe Vcloud::Core::EdgeGateway do
       mock_query = double(:query_runner)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('edgeGateway', :filter => "name==edgegw-test-1").and_return(q_results)
-      expect{ EdgeGateway.get_by_name('edgegw-test-1') }.to raise_exception(RuntimeError, "edgeGateway edgegw-test-1 not found")
+      expect{ Vcloud::Core::EdgeGateway.get_by_name('edgegw-test-1') }.to raise_exception(RuntimeError, "edgeGateway edgegw-test-1 not found")
     end
 
   end
@@ -115,7 +115,7 @@ describe Vcloud::Core::EdgeGateway do
       }
       expect(@mock_fog_interface).to receive(:get_edge_gateway).
         and_return(edge_gateway_hash)
-      @edgegw = EdgeGateway.new(@edgegw_id)
+      @edgegw = Vcloud::Core::EdgeGateway.new(@edgegw_id)
     end
 
     context "#vcloud_gateway_interface_by_id" do
@@ -148,7 +148,7 @@ describe Vcloud::Core::EdgeGateway do
 
     context "#interfaces" do
 
-      it "should return an array of EdgeGatewayInterface objects" do
+      it "should return an array of Vcloud::Core::EdgeGatewayInterface objects" do
         interfaces_list = @edgegw.interfaces
         expect(interfaces_list.class).to be(Array)
         expect(interfaces_list.first.class).to be(Vcloud::Core::EdgeGatewayInterface)

@@ -19,11 +19,11 @@ describe Vcloud::Core::EdgeGatewayInterface do
     },
       :UseForDefaultRoute=>"true"
     }
-    @interface = EdgeGatewayInterface.new(@gateway_interface_hash)
+    @interface = Vcloud::Core::EdgeGatewayInterface.new(@gateway_interface_hash)
   end
 
   context "Instance public interface" do
-    subject { EdgeGatewayInterface.new(@gateway_interface_hash) }
+    subject { Vcloud::Core::EdgeGatewayInterface.new(@gateway_interface_hash) }
     it { should respond_to(:name) }
     it { should respond_to(:network_id) }
     it { should respond_to(:network_name) }
@@ -33,22 +33,22 @@ describe Vcloud::Core::EdgeGatewayInterface do
   context "#initialize" do
 
     it "should be constructable from just a Fog vCloud GatewayInterfaceType hash" do
-      obj = EdgeGatewayInterface.new(@gateway_interface_hash)
+      obj = Vcloud::Core::EdgeGatewayInterface.new(@gateway_interface_hash)
       expect(obj.class).to be(Vcloud::Core::EdgeGatewayInterface)
     end
 
     it "should raise an error if passed a nil value" do
-      expect { EdgeGatewayInterface.new(nil) }.
+      expect { Vcloud::Core::EdgeGatewayInterface.new(nil) }.
         to raise_error(StandardError, /^EdgeGatewayInterface:/)
     end
 
     it "should raise an error if a :Name is not passed" do
-      expect { EdgeGatewayInterface.new({}) }.
+      expect { Vcloud::Core::EdgeGatewayInterface.new({}) }.
         to raise_error(StandardError, /^EdgeGatewayInterface:/)
     end
 
     it "should raise an error if a :Network is not passed" do
-      expect { EdgeGatewayInterface.new({Name: 'test-interface'}) }.
+      expect { Vcloud::Core::EdgeGatewayInterface.new({Name: 'test-interface'}) }.
         to raise_error(StandardError, /^EdgeGatewayInterface:/)
     end
 

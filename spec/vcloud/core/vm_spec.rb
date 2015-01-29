@@ -36,14 +36,14 @@ describe Vcloud::Core::Vm do
       ]
       }
     })
-    @vm =  Vm.new(@vm_id, @mock_vapp)
+    @vm =  Vcloud::Core::Vm.new(@vm_id, @mock_vapp)
   end
 
   context "Class public interface" do
   end
 
   context "Instance public interface" do
-    subject { Vm.new(@vm_id, @mock_vapp) }
+    subject { Vcloud::Core::Vm.new(@vm_id, @mock_vapp) }
     it { should respond_to(:id) }
     it { should respond_to(:vcloud_attributes) }
     it { should respond_to(:name) }
@@ -63,18 +63,18 @@ describe Vcloud::Core::Vm do
   context "#initialize" do
 
     it "should be constructable from just an id reference & Vapp object" do
-      obj = Vm.new(@vm_id, @mock_vapp)
+      obj = Vcloud::Core::Vm.new(@vm_id, @mock_vapp)
       expect(obj.class).to be(Vcloud::Core::Vm)
     end
 
     it "should store the id specified" do
-      obj = Vm.new(@vm_id, @mock_vapp)
+      obj = Vcloud::Core::Vm.new(@vm_id, @mock_vapp)
       expect(obj.id).to eq(@vm_id)
     end
 
     it "should raise error if id is not in correct format" do
       bogus_id = '12314124-ede5-4d07-bad5-000000111111'
-      expect{ Vm.new(bogus_id, @mock_vapp) }.to raise_error("vm id : #{bogus_id} is not in correct format" )
+      expect{ Vcloud::Core::Vm.new(bogus_id, @mock_vapp) }.to raise_error("vm id : #{bogus_id} is not in correct format" )
     end
 
   end
@@ -340,7 +340,7 @@ describe Vcloud::Core::Vm do
     }
 
     it "handles attaching an array of Independent Disk objects" do
-      vm = Vm.new(@vm_id, @mock_vapp)
+      vm = Vcloud::Core::Vm.new(@vm_id, @mock_vapp)
       disk_array = [disk1, disk2, disk3]
       expect(@fog_interface).to receive(:post_attach_disk).exactly(disk_array.size).times
       vm.attach_independent_disks(disk_array)
@@ -361,7 +361,7 @@ describe Vcloud::Core::Vm do
     }
 
     it "handles detaching an array of Independent Disk objects" do
-      vm = Vm.new(@vm_id, @mock_vapp)
+      vm = Vcloud::Core::Vm.new(@vm_id, @mock_vapp)
       disk_array = [disk1, disk2, disk3]
       expect(@fog_interface).to receive(:post_detach_disk).exactly(disk_array.size).times
       vm.detach_independent_disks(disk_array)

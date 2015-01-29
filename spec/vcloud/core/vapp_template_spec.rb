@@ -9,11 +9,11 @@ describe Vcloud::Core::VappTemplate do
   end
 
   context "Class public interface" do
-    it { expect(VappTemplate).to respond_to(:get) }
+    it { expect(Vcloud::Core::VappTemplate).to respond_to(:get) }
   end
 
   context "Instance public interface" do
-    subject { VappTemplate.new(@id) }
+    subject { Vcloud::Core::VappTemplate.new(@id) }
     it { should respond_to(:id) }
     it { should respond_to(:vcloud_attributes) }
     it { should respond_to(:name) }
@@ -23,18 +23,18 @@ describe Vcloud::Core::VappTemplate do
   context "#initialize" do
 
     it "should be constructable from just an id reference" do
-      obj = VappTemplate.new(@id)
+      obj = Vcloud::Core::VappTemplate.new(@id)
       expect(obj.class).to be(Vcloud::Core::VappTemplate)
     end
 
     it "should store the id specified" do
-      obj = VappTemplate.new(@id)
+      obj = Vcloud::Core::VappTemplate.new(@id)
       expect(obj.id).to eq(@id)
     end
 
     it "should raise error if id is not in correct format" do
       bogus_id = '12314124-ede5-4d07-bad5-000000111111'
-      expect{ VappTemplate.new(bogus_id) }.to raise_error("vappTemplate id : #{bogus_id} is not in correct format" )
+      expect{ Vcloud::Core::VappTemplate.new(bogus_id) }.to raise_error("vappTemplate id : #{bogus_id} is not in correct format" )
     end
 
   end
@@ -49,7 +49,7 @@ describe Vcloud::Core::VappTemplate do
       expect(mock_query).to receive(:run).
         with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
         and_return(q_results)
-      expect { VappTemplate.get('test_template', 'test_catalog') }.
+      expect { Vcloud::Core::VappTemplate.get('test_template', 'test_catalog') }.
         to raise_error('Could not find template vApp')
     end
 
@@ -65,7 +65,7 @@ describe Vcloud::Core::VappTemplate do
       expect(mock_query).to receive(:run).
         with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
         and_return(q_results)
-      expect { VappTemplate.get('test_template', 'test_catalog') }.
+      expect { Vcloud::Core::VappTemplate.get('test_template', 'test_catalog') }.
         to raise_error('Template test_template is not unique in catalog test_catalog')
     end
 
@@ -79,7 +79,7 @@ describe Vcloud::Core::VappTemplate do
       expect(mock_query).to receive(:run).
         with('vAppTemplate', :filter => "name==test_template;catalogName==test_catalog").
         and_return(q_results)
-      test_template = VappTemplate.get('test_template', 'test_catalog')
+      test_template = Vcloud::Core::VappTemplate.get('test_template', 'test_catalog')
       expect(test_template.id).to eq('vappTemplate-12345678-90ab-cdef-0123-4567890abcde')
     end
 

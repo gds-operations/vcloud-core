@@ -10,17 +10,17 @@ describe Vcloud::Core::OrgVdcNetwork do
     @net_name  = 'test-net-1'
     @mock_fog_interface = StubFogInterface.new
     allow(Vcloud::Core::Fog::ServiceInterface).to receive(:new).and_return(@mock_fog_interface)
-    allow_any_instance_of(Vdc).to receive(:id).and_return(@vdc_id)
+    allow_any_instance_of(Vcloud::Core::Vdc).to receive(:id).and_return(@vdc_id)
     @mock_vdc = double(:vdc, :id => @vdc_id)
-    allow(Vdc).to receive(:get_by_name).and_return(@mock_vdc)
+    allow(Vcloud::Core::Vdc).to receive(:get_by_name).and_return(@mock_vdc)
   end
 
   context "Class public interface" do
-    it { expect(OrgVdcNetwork).to respond_to(:provision) }
+    it { expect(Vcloud::Core::OrgVdcNetwork).to respond_to(:provision) }
   end
 
   context "Object public interface" do
-    subject { OrgVdcNetwork.new(@net_id) }
+    subject { Vcloud::Core::OrgVdcNetwork.new(@net_id) }
     it { should respond_to(:id) }
     it { should respond_to(:name) }
     it { should respond_to(:href) }
@@ -30,18 +30,18 @@ describe Vcloud::Core::OrgVdcNetwork do
   context "#initialize" do
 
     it "should be constructable from just an id reference" do
-      obj = OrgVdcNetwork.new(@net_id)
+      obj = Vcloud::Core::OrgVdcNetwork.new(@net_id)
       expect(obj.class).to be(Vcloud::Core::OrgVdcNetwork)
     end
 
     it "should store the id specified" do
-      obj = OrgVdcNetwork.new(@net_id)
+      obj = Vcloud::Core::OrgVdcNetwork.new(@net_id)
       expect(obj.id).to eq(@net_id)
     end
 
     it "should raise error if id is not in correct format" do
       bogus_id = '123123-bogus-id-123445'
-      expect{ OrgVdcNetwork.new(bogus_id) }.
+      expect{ Vcloud::Core::OrgVdcNetwork.new(bogus_id) }.
         to raise_error("orgVdcNetwork id : #{bogus_id} is not in correct format" )
     end
 
@@ -50,7 +50,7 @@ describe Vcloud::Core::OrgVdcNetwork do
   context "#delete" do
     it "should call down to Fog::ServiceInterface.delete_network with the correct id" do
       expect(@mock_fog_interface).to receive(:delete_network).with(@net_id)
-      OrgVdcNetwork.new(@net_id).delete
+      Vcloud::Core::OrgVdcNetwork.new(@net_id).delete
     end
   end
 
@@ -63,7 +63,7 @@ describe Vcloud::Core::OrgVdcNetwork do
         :href => "/#{@vdc_id}",
         :name => @vdc_name
       )
-      allow(Vdc).to receive(:get_by_name).and_return(@mock_vdc)
+      allow(Vcloud::Core::Vdc).to receive(:get_by_name).and_return(@mock_vdc)
     end
 
     context "should fail gracefully on bad input" do
@@ -116,7 +116,7 @@ describe Vcloud::Core::OrgVdcNetwork do
         }
       end
 
-      it "should create an OrgVdcNetwork with minimal config" do
+      it "should create an Vcloud::Core::OrgVdcNetwork with minimal config" do
         expected_vcloud_attrs = {
           :IsShared => false,
           :Configuration => {

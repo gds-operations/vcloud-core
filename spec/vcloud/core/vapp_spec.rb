@@ -8,13 +8,13 @@ describe Vcloud::Core::Vapp do
   end
 
   context "Class public interface" do
-    it { expect(Vapp).to respond_to(:instantiate) }
-    it { expect(Vapp).to respond_to(:get_by_name) }
-    it { expect(Vapp).to respond_to(:get_metadata) }
+    it { expect(Vcloud::Core::Vapp).to respond_to(:instantiate) }
+    it { expect(Vcloud::Core::Vapp).to respond_to(:get_by_name) }
+    it { expect(Vcloud::Core::Vapp).to respond_to(:get_metadata) }
   end
 
   context "Instance public interface" do
-    subject { Vapp.new(@vapp_id) }
+    subject { Vcloud::Core::Vapp.new(@vapp_id) }
     it { should respond_to(:id) }
     it { should respond_to(:vcloud_attributes) }
     it { should respond_to(:name) }
@@ -28,32 +28,32 @@ describe Vcloud::Core::Vapp do
   context "#initialize" do
 
     it "should be constructable from just an id reference" do
-      obj = Vapp.new(@vapp_id)
+      obj = Vcloud::Core::Vapp.new(@vapp_id)
       expect(obj.class).to be(Vcloud::Core::Vapp)
     end
 
     it "should store the id specified" do
-      obj = Vapp.new(@vapp_id)
+      obj = Vcloud::Core::Vapp.new(@vapp_id)
       expect(obj.id).to eq(@vapp_id)
     end
 
     it "should raise error if id is not in correct format" do
       bogus_id = '12314124-ede5-4d07-bad5-000000111111'
-      expect{ Vapp.new(bogus_id) }.to raise_error("vapp id : #{bogus_id} is not in correct format" )
+      expect{ Vcloud::Core::Vapp.new(bogus_id) }.to raise_error("vapp id : #{bogus_id} is not in correct format" )
     end
 
   end
 
   context "#get_by_name" do
 
-    it "should return a Vapp object if name exists" do
+    it "should return a Vcloud::Core::Vapp object if name exists" do
       q_results = [
         { :name => 'vapp-test-1', :href => @vapp_id }
       ]
       mock_query = double(:query)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
-      obj = Vapp.get_by_name('vapp-test-1')
+      obj = Vcloud::Core::Vapp.get_by_name('vapp-test-1')
       expect(obj.class).to be(Vcloud::Core::Vapp)
     end
 
@@ -62,7 +62,7 @@ describe Vcloud::Core::Vapp do
       mock_query = double(:query_runner)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
-      expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
+      expect{ Vcloud::Core::Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
     end
 
     it "should raise an error if multiple vApps with that name exists (NB: prescribes unique vApp names!)" do
@@ -73,7 +73,7 @@ describe Vcloud::Core::Vapp do
       mock_query = double(:query)
       expect(Vcloud::Core::QueryRunner).to receive(:new).and_return(mock_query)
       expect(mock_query).to receive(:run).with('vApp', :filter => "name==vapp-test-1").and_return(q_results)
-      expect{ Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
+      expect{ Vcloud::Core::Vapp.get_by_name('vapp-test-1') }.to raise_exception(RuntimeError)
     end
 
   end
@@ -91,7 +91,7 @@ describe Vcloud::Core::Vapp do
         :Children => {:Vm => [{:href => '/vm-123aea1e-a5e9-4dd1-a028-40db8c98d237'}]}
     }
     allow_any_instance_of(StubFogInterface).to receive(:get_vapp).and_return(@stub_attrs)
-    @vapp = Vapp.new(@vapp_id)
+    @vapp = Vcloud::Core::Vapp.new(@vapp_id)
     }
     it { expect(@vapp.name).to eq('Webserver vapp-1') }
 
@@ -133,7 +133,7 @@ describe Vcloud::Core::Vapp do
       end
 
       it "should power on a vapp that is not powered on" do
-        vapp = Vapp.new(@vapp_id)
+        vapp = Vcloud::Core::Vapp.new(@vapp_id)
         expect(@mock_fog_interface).to receive(:get_vapp).twice().and_return(
           {:status => Vcloud::Core::Vapp::STATUS::POWERED_OFF},
           {:status => Vcloud::Core::Vapp::STATUS::RUNNING}
@@ -144,7 +144,7 @@ describe Vcloud::Core::Vapp do
       end
 
       it "should not power on a vapp that is already powered on, but should return true" do
-        vapp = Vapp.new(@vapp_id)
+        vapp = Vcloud::Core::Vapp.new(@vapp_id)
         expect(@mock_fog_interface).to receive(:get_vapp).and_return(
           {:status => Vcloud::Core::Vapp::STATUS::RUNNING}
         )
@@ -161,14 +161,14 @@ describe Vcloud::Core::Vapp do
     it "should return nil if fog returns nil" do
       allow_any_instance_of(StubFogInterface).to receive(:get_vapp_by_name_and_vdc_name)
       .with('vapp_name', 'vdc_name').and_return(nil)
-      expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name')).to be_nil
+      expect(Vcloud::Core::Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name')).to be_nil
     end
 
     it "should return vapp instance if found" do
       vcloud_attr_vapp = { :href => "/#{@vapp_id}" }
       allow_any_instance_of(StubFogInterface).to receive(:get_vapp_by_name_and_vdc_name)
       .with('vapp_name', 'vdc_name').and_return(vcloud_attr_vapp)
-      expect(Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class).to eq(Core::Vapp)
+      expect(Vcloud::Core::Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class).to eq(Vcloud::Core::Vapp)
     end
 
   end
@@ -177,7 +177,7 @@ describe Vcloud::Core::Vapp do
 
     it "should raise an ArgumentError if an invalid VM id is supplied" do
       vm_id = 'vapp-12341234-1234-1234-1234-123412341234'
-      expect {Vapp.get_by_child_vm_id(vm_id)}.to raise_error(ArgumentError)
+      expect {Vcloud::Core::Vapp.get_by_child_vm_id(vm_id)}.to raise_error(ArgumentError)
     end
 
     it "should return a vApp object if we supply an existing VM id" do
@@ -195,7 +195,7 @@ describe Vcloud::Core::Vapp do
       }
       ]
       })
-      obj = Vapp.get_by_child_vm_id(vm_id)
+      obj = Vcloud::Core::Vapp.get_by_child_vm_id(vm_id)
       expect(obj.id).to eq(vapp_id)
     end
 

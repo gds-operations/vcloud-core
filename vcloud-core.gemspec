@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Anna Shipman']
   s.email       = ['anna.shipman@digital.cabinet-office.gov.uk']
   s.summary     = 'Core tools for interacting with VMware vCloud Director'
-  s.description = 'Core tools for interacting with VMware vCloud Director. Includes VCloud Query, a light wrapper round the vCloud Query API.'
+  s.description = 'Core tools for interacting with VMware vCloud Director. Includes vCloud Query, a light wrapper round the vCloud Query API.'
   s.homepage    = 'http://github.com/gds-operations/vcloud-core'
   s.license     = 'MIT'
 
@@ -31,5 +31,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.14.1'
   s.add_development_dependency 'rubocop', '~> 0.23.0'
   s.add_development_dependency 'simplecov', '~> 0.7.1'
-  s.add_development_dependency 'vcloud-tools-tester'
+  s.add_development_dependency 'vcloud-tools-tester', '~> 1.0'
 end

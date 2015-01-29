@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe Vapp do
+    describe Vcloud::Core::Vapp do
       before(:each) do
         @vapp_id = 'vapp-12345678-1234-1234-1234-000000111111'
         @mock_fog_interface = StubFogInterface.new
@@ -204,6 +202,4 @@ module Vcloud
       end
 
     end
-  end
-end
 

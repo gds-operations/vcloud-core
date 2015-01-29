@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe MetadataHelper do
+    describe Vcloud::Core::MetadataHelper do
       context "get_metadata" do
 
         it "should process valid metadata types" do
@@ -85,5 +83,3 @@ module Vcloud
 
     end
 
-  end
-end

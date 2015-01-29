@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe Vm do
+    describe Vcloud::Core::Vm do
 
       before(:each) do
         @vm_id = 'vm-1234'
@@ -372,6 +370,4 @@ module Vcloud
       end
 
     end
-  end
-end
 

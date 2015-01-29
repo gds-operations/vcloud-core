@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe OrgVdcNetwork do
+    describe Vcloud::Core::OrgVdcNetwork do
 
       before(:each) do
         @vdc_id    = '12345678-1234-1234-1234-000000111111'
@@ -253,5 +251,3 @@ module Vcloud
       end
 
     end
-  end
-end

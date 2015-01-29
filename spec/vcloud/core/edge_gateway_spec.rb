@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe EdgeGateway do
+    describe Vcloud::Core::EdgeGateway do
 
       before(:each) do
         @edgegw_id = '12345678-1234-1234-1234-000000111454'
@@ -161,7 +159,3 @@ module Vcloud
       end
 
     end
-
-  end
-
-end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe EdgeGatewayInterface do
+    describe Vcloud::Core::EdgeGatewayInterface do
 
       before(:each) do
         @valid_ext_id = "12345678-70ac-487e-9c1e-124716764274"
@@ -82,6 +80,3 @@ module Vcloud
 
     end
 
-  end
-
-end

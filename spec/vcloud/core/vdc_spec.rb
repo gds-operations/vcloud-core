@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe Vdc do
+    describe Vcloud::Core::Vdc do
 
       before(:each) do
         @vdc_id = '12345678-1234-1234-1234-000000111232'
@@ -64,7 +62,3 @@ module Vcloud
       end
 
     end
-
-  end
-
-end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe ConfigLoader do
+describe Vcloud::Core::ConfigLoader do
 
       before(:all) do
         @data_dir = File.join(File.dirname(__FILE__), "/data")
@@ -160,5 +158,3 @@ module Vcloud
         }
       end
     end
-  end
-end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe ConfigValidator do
+describe Vcloud::Core::ConfigValidator do
 
       context "sanitize type" do
 
@@ -693,5 +691,3 @@ module Vcloud
       end
 
     end
-  end
-end

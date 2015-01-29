@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-module Vcloud
-  module Core
-    describe VappTemplate do
+    describe Vcloud::Core::VappTemplate do
 
       before(:each) do
         @id = 'vappTemplate-12345678-1234-1234-1234-000000234121'
@@ -88,5 +86,3 @@ module Vcloud
       end
 
     end
-  end
-end

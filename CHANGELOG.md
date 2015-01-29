@@ -1,3 +1,9 @@
+## 1.0.1 (2015-01-29)
+
+  - Tighten dependency on vcloud-tools-tester
+  - Update integration test details in README
+  - Update Gem ownership details
+
 ## 1.0.0 (2015-01-22)
 
   - Release 1.0.0 since the public API is now stable

@@ -19,12 +19,12 @@ describe Vcloud::Core::QueryRunner do
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',
-           :href => 'query?type=alice&#38;format=records'},
-          {:rel  => 'down',
-           :href => 'query?type=bob&#38;format=records'},
-          {:rel  => 'down',
-           :href => 'query?type=charlie&#38;format=records'},
-        ]})
+            :href => 'query?type=alice&#38;format=records'},
+            {:rel  => 'down',
+              :href => 'query?type=bob&#38;format=records'},
+              {:rel  => 'down',
+                :href => 'query?type=charlie&#38;format=records'},
+      ]})
       expect(@query_runner.available_query_types).to eq(['alice', 'bob', 'charlie'])
     end
 
@@ -32,12 +32,12 @@ describe Vcloud::Core::QueryRunner do
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {:Link => [
           {:rel  => 'down',
-           :href => 'query?type=alice&#38;format=references'},
-          {:rel  => 'down',
-           :href => 'query?type=bob&#38;format=idrecords'},
-          {:rel  => 'down',
-           :href => 'query?type=charlie&#38;format=records'},
-        ]})
+            :href => 'query?type=alice&#38;format=references'},
+            {:rel  => 'down',
+              :href => 'query?type=bob&#38;format=idrecords'},
+              {:rel  => 'down',
+                :href => 'query?type=charlie&#38;format=records'},
+      ]})
       expect(@query_runner.available_query_types).to eq(['charlie'])
     end
 
@@ -58,8 +58,8 @@ describe Vcloud::Core::QueryRunner do
     it 'return no results when fog results do not include a "Record" or a "Reference"' do
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleBlob => {:field1 => 'Stuff 1'}
-        }
+        :WibbleBlob => {:field1 => 'Stuff 1'}
+      }
       )
       expect(@query_runner.run().size).to eq(0)
     end
@@ -68,8 +68,8 @@ describe Vcloud::Core::QueryRunner do
       fields = {:field1 => 'Stuff 1'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleRecord => [fields]
-        }
+        :WibbleRecord => [fields]
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(1)
@@ -80,8 +80,8 @@ describe Vcloud::Core::QueryRunner do
       fields = {:field1 => 'Stuff 1'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleReference => [fields]
-        }
+        :WibbleReference => [fields]
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(1)
@@ -92,8 +92,8 @@ describe Vcloud::Core::QueryRunner do
       fields = {:field1 => 'Stuff 1'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleRecord => fields
-        }
+        :WibbleRecord => fields
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(1)
@@ -105,8 +105,8 @@ describe Vcloud::Core::QueryRunner do
       more_fields = {:field1 => 'More Stuff 1'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleRecord => [fields, more_fields]
-        }
+        :WibbleRecord => [fields, more_fields]
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(2)
@@ -119,9 +119,9 @@ describe Vcloud::Core::QueryRunner do
       fields2 = {:field1 => 'Stuff 2'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :WibbleRecord => [fields1],
-          :WobbleRecord => [fields2]
-        }
+        :WibbleRecord => [fields1],
+        :WobbleRecord => [fields2]
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(1)
@@ -131,9 +131,9 @@ describe Vcloud::Core::QueryRunner do
     it 'should raise error if lastPage is not an integer' do
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :lastPage     => :qwerty,
-          :WibbleRecord => []
-        }
+        :lastPage     => :qwerty,
+        :WibbleRecord => []
+      }
       )
 
       expect { @query_runner.run() }.to raise_error('Invalid lastPage (qwerty) in query results')
@@ -143,9 +143,9 @@ describe Vcloud::Core::QueryRunner do
       fields = {:field1 => 'Stuff 1'}
       allow(@mock_fog_interface).to receive(:get_execute_query).and_return(
         {
-          :lastPage     => 2,
-          :WibbleRecord => [fields]
-        }
+        :lastPage     => 2,
+        :WibbleRecord => [fields]
+      }
       )
       result = @query_runner.run()
       expect(result.size).to eq(2)

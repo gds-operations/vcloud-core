@@ -73,7 +73,7 @@ describe Vcloud::Core::IndependentDisk do
     end
 
     it "should raise an error if multiple Independent Disks with " +
-       "that name exists (NB: prescribes unique disk names!)" do
+      "that name exists (NB: prescribes unique disk names!)" do
       q_results = [
         { :name => @disk_name, :href => @disk_id },
         { :name => @disk_name, :href => '12341234-1234-1234-1234-123456789012' },
@@ -87,7 +87,7 @@ describe Vcloud::Core::IndependentDisk do
       expect {
         Vcloud::Core::IndependentDisk.get_by_name_and_vdc_name(@disk_name, @vdc_name)
       }.to raise_exception(RuntimeError)
-    end
+      end
 
   end
 
@@ -192,16 +192,16 @@ describe Vcloud::Core::IndependentDisk do
 
     before(:each) {
       @stub_attrs = {
-        :name => @disk_name,
-        :href => "https://api.vcloud-director.example.com/api/disk/#{@disk_id}",
-        :Link => [{
-          :rel => 'up',
-          :type => 'application/vnd.vmware.vcloud.vdc+xml',
-          :href => 'https://api.vcloud-director.example.com/api/vdc/074aea1e-a5e9-4dd1-a028-40db8c98d237'
-        }]
-      }
-      allow_any_instance_of(StubFogInterface).to receive(:get_disk).and_return(@stub_attrs)
-      @disk = Vcloud::Core::IndependentDisk.new(@disk_id)
+      :name => @disk_name,
+      :href => "https://api.vcloud-director.example.com/api/disk/#{@disk_id}",
+      :Link => [{
+        :rel => 'up',
+        :type => 'application/vnd.vmware.vcloud.vdc+xml',
+        :href => 'https://api.vcloud-director.example.com/api/vdc/074aea1e-a5e9-4dd1-a028-40db8c98d237'
+      }]
+    }
+    allow_any_instance_of(StubFogInterface).to receive(:get_disk).and_return(@stub_attrs)
+    @disk = Vcloud::Core::IndependentDisk.new(@disk_id)
     }
 
     it { expect(@disk.name).to eq(@disk_name) }
@@ -225,9 +225,9 @@ describe Vcloud::Core::IndependentDisk do
       })
       expect(@mock_fog_interface).to receive(:get_vms_disk_attached_to).
         with(subject.id).and_return({:VmReference=>[
-          { :href => '/vm-12341234-1234-1234-1234-123412340001' },
-          { :href => '/vm-12341234-1234-1234-1234-123412340002' },
-        ]})
+                                    { :href => '/vm-12341234-1234-1234-1234-123412340001' },
+                                    { :href => '/vm-12341234-1234-1234-1234-123412340002' },
+      ]})
       vms = subject.attached_vms
       expect(vms[0].id).to eq('vm-12341234-1234-1234-1234-123412340001')
       expect(vms[1].id).to eq('vm-12341234-1234-1234-1234-123412340002')

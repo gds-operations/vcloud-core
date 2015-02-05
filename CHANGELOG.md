@@ -1,3 +1,15 @@
+## 1.0.1 (2015-01-29)
+
+Documentation:
+
+    - Update integration test details in README
+    - Update Gem ownership details
+
+Fixes:
+
+    - Tighten dependency on vcloud-tools-tester
+    - Refactored test namespacing
+
 ## 1.0.0 (2015-01-22)
 
   - Release 1.0.0 since the public API is now stable
@@ -12,7 +24,7 @@ Bugfixes:
 
 Features:
 
-  - New `vlcoud-logout` command line utility to revoke session tokens.
+  - New `vcloud-logout` command line utility to revoke session tokens.
   - New `Vcloud::Core::Fog.logout` method to revoke session tokens.
 
 ## 0.15.0 (2014-11-26)

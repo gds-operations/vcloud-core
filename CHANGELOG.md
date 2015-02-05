@@ -4,7 +4,6 @@ Documentation:
 
     - Update integration test details in README
     - Update Gem ownership details
-    - Update Gem ownership details
 
 Fixes:
 
@@ -25,7 +24,7 @@ Bugfixes:
 
 Features:
 
-  - New `vlcoud-logout` command line utility to revoke session tokens.
+  - New `vcloud-logout` command line utility to revoke session tokens.
   - New `Vcloud::Core::Fog.logout` method to revoke session tokens.
 
 ## 0.15.0 (2014-11-26)

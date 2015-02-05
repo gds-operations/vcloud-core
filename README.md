@@ -129,8 +129,6 @@ should be aware of:
 
 `export EXCON_DEBUG=true` - this will print out the API requests and responses.
 
-`export DEBUG=true` - this will show you the stack trace when there is an exception instead of just the message.
-
 ## Testing
 
 Run the default suite of tests (e.g. lint, unit, features):

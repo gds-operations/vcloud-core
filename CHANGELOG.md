@@ -1,11 +1,13 @@
 ## 1.0.1 (2015-01-29)
 
-  - DOCUMENTATION
+Documentation:
+
     - Update integration test details in README
     - Update Gem ownership details
     - Update Gem ownership details
 
-  - CODE
+Fixes:
+
     - Tighten dependency on vcloud-tools-tester
     - Refactored test namespacing
 

@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
 
   s.add_runtime_dependency 'fog', '~> 1.27'
+  # FIXME: Remove fog-core line below once fog/fog-core@58556e4b1 is pulled in by `fog` gem
+  s.add_runtime_dependency 'fog-core', '~> 1.0', '>= 1.27.4'
   s.add_runtime_dependency 'mustache', '~> 0.99.0'
   s.add_runtime_dependency 'highline'
   s.add_development_dependency 'gem_publisher', '1.2.0'

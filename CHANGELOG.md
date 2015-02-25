@@ -1,3 +1,21 @@
+## 1.0.2 (2015-02-24)
+
+Documentation:
+
+  - `DEBUG` environment variable removed from the README as this is no longer
+    supported
+  - Copyright notice updated to reflect the copyright's correct legal owner
+    (Crown Copyright)
+
+Bugfixes:
+
+  - Test namespaces and indentation made consistent
+  - Fog dependency is now pinned to version 1.x to prevent breakage on release
+    of a future version 2
+  - Explictly require Fog Core version 1.27.4 to prevent this error:
+
+      undefined method `redisplay_progressbar' for Fog::Formatador:Class
+
 ## 1.0.1 (2015-01-29)
 
 Documentation:

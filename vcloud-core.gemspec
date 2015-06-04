@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'mustache', '~> 0.99.0'
   s.add_runtime_dependency 'highline'
   s.add_development_dependency 'gem_publisher', '1.2.0'
+  s.add_development_dependency 'mac_address'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.14.1'

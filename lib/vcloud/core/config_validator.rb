@@ -1,4 +1,5 @@
 require 'ipaddr'
+require 'macaddr'
 
 module Vcloud
   module Core
@@ -194,6 +195,15 @@ module Vcloud
         begin
           ip = IPAddr.new(data)
           ip.ipv4?
+        rescue ArgumentError
+          false
+        end
+      end
+
+      def valid_mac_address?
+        begin
+          mac = Mac.addr
+          mac = 
         rescue ArgumentError
           false
         end

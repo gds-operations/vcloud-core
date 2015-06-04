@@ -1,5 +1,5 @@
 require 'ipaddr'
-require 'macaddr'
+require 'mac_address'
 
 module Vcloud
   module Core
@@ -202,8 +202,8 @@ module Vcloud
 
       def valid_mac_address?
         begin
-          mac = Mac.addr
-          mac = 
+          mac = MacAddress.new("3c:15:c2:bb:f3:b4")
+          mac.valid_mac?
         rescue ArgumentError
           false
         end

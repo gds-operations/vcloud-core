@@ -16,7 +16,7 @@ module Vcloud
                        :get_execute_query, :get_vapp_metadata, :power_off_vapp, :shutdown_vapp, :session,
                        :post_instantiate_vapp_template, :put_memory, :put_cpu, :power_on_vapp, :put_vapp_metadata_value,
                        :put_vm, :get_edge_gateway, :get_network_complete, :delete_network, :post_create_org_vdc_network,
-                       :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp,
+                       :post_insert_cdrom, :post_detach_cdrom, :post_configure_edge_gateway_services, :get_vdc, :post_undeploy_vapp,
                        :post_create_disk, :get_disk, :delete_disk, :post_attach_disk,
                        :get_vms_disk_attached_to, :post_detach_disk, :put_product_sections,
                        :logout
@@ -64,6 +64,16 @@ module Vcloud
 
           def get_vapp(id)
             @vcloud.get_vapp(id).body
+          end
+
+          def post_insert_cdrom(vm_id, media_id)
+            Vcloud::Core.logger.debug("inserting #{media_id} cdrom into VM #{vm_id}")
+            @vcloud.post_insert_cd_rom(vm_id, media_id)
+          end
+
+          def post_detach_cdrom(vm_id, media_id)
+            Vcloud::Core.logger.debug("detaching #{media_id} cdrom into VM #{vm_id}")
+            @vcloud.post_eject_cd_rom(vm_id, media_id)
           end
 
           def put_network_connection_system_section_vapp(vm_id, section)

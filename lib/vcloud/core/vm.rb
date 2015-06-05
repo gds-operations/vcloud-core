@@ -130,6 +130,28 @@ module Vcloud
         end
       end
 
+      # Insert a cdrom from medias
+      #
+      # @param media_name [String] The name of the media you wish inserted
+      # @return [Boolean] return true or throw an error
+      def insert_cdrom(media_name)
+        if media_name
+          media_id = get_media_id_by_name(media_name)
+          Vcloud::Core::Fog::ServiceInterface.new.put_insert_cdrom(id, media_id)
+        end
+      end
+
+      # Detach a cdrom from VM
+      #
+      # @param media_name [String] The name of the media you wish inserted
+      # @return [Boolean] return true or throw an error
+      def detach_cdrom(media_name)
+        if media_name
+          media_id = get_media_id_by_name(media_name)
+          Vcloud::Core::Fog::ServiceInterface.new.put_detach_cdrom(id, media_id)
+        end
+      end
+
       # Add extra disks to VM
       #
       # @param extra_disks [Array] An array of hashes like [{ size: '20480' }]
@@ -199,6 +221,26 @@ module Vcloud
 
       def virtual_hardware_section
         vcloud_attributes[:'ovf:VirtualHardwareSection'][:'ovf:Item']
+      end
+
+      def get_media_id_by_name(media_name)
+        media_id = get_media_href_by_name(media_name)
+        media_id.split("/").last
+      end
+
+      def get_media_href_by_name(media_name)
+        q = Vcloud::Core::QueryRunner.new
+        vdc_results = q.run('vApp', :filter => "name==#{vapp_name}")
+        vdc_name = vdc_results.first[:vdcName]
+
+        q = Vcloud::Core::QueryRunner.new
+        sp_results = q.run('media', :filter => "name==#{media_name};vdcName==#{vdc_name}")
+
+        if sp_results.empty? or !sp_results.first.has_key?(:href)
+          raise "media #{media_name} not found in vdc"
+        else
+          return sp_results.first[:href]
+        end
       end
 
       def get_storage_profile_href_by_name(storage_profile_name, vapp_name)

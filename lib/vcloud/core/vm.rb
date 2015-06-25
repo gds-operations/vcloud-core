@@ -160,13 +160,14 @@ module Vcloud
           }
           ip_address      = network[:ip_address]
           allocation_mode = network[:allocation_mode]
+          mac_address     = network[:mac_address]
 
           allocation_mode = 'manual' if ip_address
           allocation_mode = 'dhcp' unless %w{dhcp manual pool}.include?(allocation_mode)
 
           connection[:IpAddressAllocationMode] = allocation_mode.upcase
           connection[:IpAddress] = ip_address if ip_address
-          connection[:MACAddress] = network[:mac_address] if network[:mac_address]
+          connection[:MACAddress] = mac_address if mac_address
           connection
         end
         Vcloud::Core::Fog::ServiceInterface.new.put_network_connection_system_section_vapp(id, section)

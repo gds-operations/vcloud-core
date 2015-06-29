@@ -1,3 +1,13 @@
+## 1.1.0 (2015-06-30)
+
+Features:
+
+  - Add the ability to set the MAC address of a VM
+
+Bugfixes:
+
+  - Add an explicit `require 'json'` to the ConfigLoader
+
 ## 1.0.2 (2015-02-24)
 
 Documentation:

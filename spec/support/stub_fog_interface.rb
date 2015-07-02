@@ -63,9 +63,4 @@ class StubFogInterface
     { }
   end
 
-  def template(_catalog_name, _name)
-    { :href => '/vappTemplate-12345678-90ab-cdef-0123-4567890abcde' }
-  end
-
-
 end

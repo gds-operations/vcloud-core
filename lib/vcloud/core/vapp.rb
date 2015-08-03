@@ -164,11 +164,27 @@ module Vcloud
         running?
       end
 
+      # Power off vApp
+      #
+      # @return [Boolean] Returns true if the VM is powered off, false otherwise
+      def power_off
+        raise "Unable to find requested vApp to power off" unless id
+        return true if powered_off?
+        Vcloud::Core::Fog::ServiceInterface.new.power_off_vapp(id)
+        powered_off?
+      end
+
       private
       def running?
         raise "Cannot call running? on a missing vApp." unless id
         vapp = Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
         vapp[:status].to_i == STATUS::RUNNING ? true : false
+      end
+
+      def powered_off?
+        raise "Cannot call stopped? on a missing vApp." unless id
+        vapp = Vcloud::Core::Fog::ServiceInterface.new.get_vapp(id)
+        vapp[:status].to_i == STATUS::POWERED_OFF ? true : false
       end
 
       def self.build_network_config(networks)

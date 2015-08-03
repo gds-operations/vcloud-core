@@ -46,6 +46,14 @@ module Vcloud
         fog_service_interface.delete_vapp(id)
       end
 
+      # Poweroff a vApp by id
+      #
+      # @param id [String] ID of the vApp to power off
+      # @return [Boolean] return true or throw error
+      def power_off_vapp(id)
+        fog_service_interface.power_off_vapp(id)
+      end
+
       # Delete a network by id
       #
       # @param id [String] ID of the network to delete

@@ -154,6 +154,42 @@ describe Vcloud::Core::Vapp do
       end
     end
 
+  context "power off" do
+    context "successful power off" do
+      before(:each) do
+        @fog_vapp_body = {
+          :name => "Webserver vapp-1",
+          :href => "https://api.vcloud-director.example.com/api/vApp/vapp-63d3be58-2d5c-477d-8410-267e7c3c4a02",
+          :Link => [{
+          :rel  => "stopped",
+          :type => "application/vnd.vmware.vcloud.vdc+xml",
+          :href => "https://api.vcloud-director.example.com/api/vdc/074aea1e-a5e9-4dd1-a028-40db8c98d237"
+          }]
+        }
+      end
+
+      it "should power off a vapp that is powered on" do
+        vapp = Vcloud::Core::Vapp.new(@vapp_id)
+        expect(@mock_fog_interface).to receive(:get_vapp).twice().and_return(
+          {:status => Vcloud::Core::Vapp::STATUS::RUNNING},
+          {:status => Vcloud::Core::Vapp::STATUS::POWERED_OFF}
+        )
+        expect(@mock_fog_interface).to receive(:power_off_vapp).with(vapp.id)
+        state = vapp.power_off
+        expect(state).to be_true
+      end
+
+      it "should not try to power off a vapp that is already stopped" do
+        vapp = Vcloud::Core::Vapp.new(@vapp_id)
+        expect(@mock_fog_interface).to receive(:get_vapp).and_return(
+          {:status => Vcloud::Core::Vapp::STATUS::POWERED_OFF}
+        )
+        expect(@mock_fog_interface).not_to receive(:power_off_vapp)
+        state = vapp.power_off
+        expect(state).to be_true
+      end
+    end
+
   end
 
   context "#get_by_name_and_vdc_name" do
@@ -170,7 +206,6 @@ describe Vcloud::Core::Vapp do
       .with('vapp_name', 'vdc_name').and_return(vcloud_attr_vapp)
       expect(Vcloud::Core::Vapp.get_by_name_and_vdc_name('vapp_name', 'vdc_name').class).to eq(Vcloud::Core::Vapp)
     end
-
   end
 
   context "#get_by_child_vm_id" do
@@ -198,8 +233,7 @@ describe Vcloud::Core::Vapp do
       obj = Vcloud::Core::Vapp.get_by_child_vm_id(vm_id)
       expect(obj.id).to eq(vapp_id)
     end
-
   end
-
+  end
 end
 

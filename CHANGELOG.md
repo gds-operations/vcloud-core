@@ -1,3 +1,10 @@
+## 1.2.0 (2015-09-10)
+
+Bugfixes:
+
+  - Upgrade to Fog version 1.34.0 to support multiple peer and local subnets
+    with vSE IPSEC VPN
+
 ## 1.1.0 (2015-06-30)
 
 Features:

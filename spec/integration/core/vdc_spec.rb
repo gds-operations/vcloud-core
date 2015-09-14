@@ -82,7 +82,7 @@ describe Vcloud::Core::Vdc do
       it "throws a Forbidden error when trying to access the #name of the Vdc" do
         expect { subject.name }.to raise_error(
           Fog::Compute::VcloudDirector::Forbidden,
-          /\ANo access to entity /
+          /No access to entity/
         )
       end
 

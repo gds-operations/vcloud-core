@@ -257,7 +257,7 @@ describe Vcloud::Core::Vm do
       expect { @vm.add_extra_disks(extra_disks) }.
         to raise_error(
           Fog::Compute::VcloudDirector::BadRequest,
-          "The attached disks on VM \"#{@vm.name}\" cannot be modified."
+          /The attached disks on VM \"#{@vm.name}\" cannot be modified/
         )
     end
 
@@ -276,7 +276,7 @@ describe Vcloud::Core::Vm do
           pending("There is only one StorageProfile in vDC #{@test_params.vdc_1_name}: cannot test.")
         end
         expect{ @vm.update_storage_profile(@test_params.storage_profile) }.
-          to raise_error(Fog::Compute::VcloudDirector::TaskError)
+          to raise_error(Fog::Compute::VcloudDirector::TaskError, /attached to a virtual machine/)
       end
     end
   end

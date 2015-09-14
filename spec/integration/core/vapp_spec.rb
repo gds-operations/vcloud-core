@@ -174,7 +174,7 @@ describe Vcloud::Core::Vapp do
           "invalid-vapp-template-id",
           @test_params.vdc_1_name
         )
-      }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, "This operation is denied.")
+      }.to raise_error(Fog::Compute::VcloudDirector::Forbidden, /This operation is denied/)
     end
 
     it "raises a Fog error if the vAppTemplate id is nil" do

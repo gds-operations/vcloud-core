@@ -37,7 +37,7 @@ describe Vcloud::Core::Fog::Login do
     end
 
     context "fog credentials without password" do
-      let(:token_length) { 44 }
+      let(:token_length) { 32 }
       let(:envvar_token) { 'FOG_VCLOUD_TOKEN' }
       let(:envvar_password) { 'API_PASSWORD' }
 

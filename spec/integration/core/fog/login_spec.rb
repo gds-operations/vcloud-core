@@ -37,7 +37,6 @@ describe Vcloud::Core::Fog::Login do
     end
 
     context "fog credentials without password" do
-      let(:token_length) { 32 }
       let(:envvar_token) { 'FOG_VCLOUD_TOKEN' }
       let(:envvar_password) { 'API_PASSWORD' }
 
@@ -61,7 +60,7 @@ describe Vcloud::Core::Fog::Login do
 
           expect(ENV).not_to have_key(envvar_token)
           @temp_token = subject.token(@real_password)
-          expect(@temp_token.size).to eq(token_length)
+          expect(@temp_token).not_to be_empty
         end
       end
 
@@ -76,7 +75,7 @@ describe Vcloud::Core::Fog::Login do
           ENV[envvar_token] = old_token
           @temp_token = subject.token(@real_password)
           expect(@temp_token).to_not eq(old_token)
-          expect(@temp_token.size).to eq(token_length)
+          expect(@temp_token).not_to be_empty
         end
       end
     end

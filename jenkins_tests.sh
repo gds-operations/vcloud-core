@@ -18,11 +18,9 @@ ${FOG_CREDENTIAL}:
   vcloud_director_password: ''
 EOF
 
-git clean -ffdx
+source ./rbenv_version.sh
 
-# We wish to force using a version of ruby installed with rbenv, because the version of ruby shipped with
-# Ubuntu 12.04 has a bug we hit in Psych when loading YAML files.
-export RBENV_VERSION="1.9.3"
+git clean -ffdx
 
 bundle install --path "${HOME}/bundles/${JOB_NAME}" --shebang="/usr/bin/env ruby"
 

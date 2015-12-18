@@ -1,3 +1,4 @@
+require 'logger'
 require 'open3'
 require 'vcloud/core/fog'
 require 'vcloud/core/api_interface'

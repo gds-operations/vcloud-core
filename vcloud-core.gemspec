@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
 
   s.add_runtime_dependency 'fog', '~> 1.34.0'
   s.add_runtime_dependency 'mustache', '~> 0.99.0'

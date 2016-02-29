@@ -1,6 +1,8 @@
-## Unreleased
+## 2.0.0 (2015-12-24)
 
   - Remove support for Ruby 1.9.3, which is now end-of-life.
+  - Update version of fog to work around a bug in fog 1.35.0
+  - Minor fixes to tests
 
 ## 1.2.0 (2015-09-10)
 

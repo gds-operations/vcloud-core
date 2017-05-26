@@ -151,4 +151,4 @@ default: # This is the fog credential that refers to your testing environment, e
 
 ## Contributing
 
-Please see [CONTRIBUTING.md].
+Please see [CONTRIBUTING.md](/CONTRIBUTING.md).

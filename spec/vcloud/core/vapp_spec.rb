@@ -140,7 +140,7 @@ describe Vcloud::Core::Vapp do
         )
         expect(@mock_fog_interface).to receive(:power_on_vapp).with(vapp.id)
         state = vapp.power_on
-        expect(state).to be_true
+        expect(state).to be true
       end
 
       it "should not power on a vapp that is already powered on, but should return true" do
@@ -150,7 +150,7 @@ describe Vcloud::Core::Vapp do
         )
         expect(@mock_fog_interface).not_to receive(:power_on_vapp)
         state = vapp.power_on
-        expect(state).to be_true
+        expect(state).to be true
       end
     end
 

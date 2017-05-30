@@ -89,7 +89,7 @@ describe Vcloud::Core::Vapp do
 
     it "powers up a powered down Vapp" do
       expect(Integer(fixture_vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::POWERED_OFF)
-      expect(fixture_vapp.power_on).to be_true
+      expect(fixture_vapp.power_on).to be true
       expect(Integer(fixture_vapp.vcloud_attributes[:status])).to eq(Vcloud::Core::Vapp::STATUS::RUNNING)
     end
 

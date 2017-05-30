@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'gem_publisher', '1.2.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 2.14.1'
+  s.add_development_dependency 'rspec', '>= 3.6'
   s.add_development_dependency 'rubocop', '~> 0.30.1'
   s.add_development_dependency 'simplecov', '~> 0.7.1'
   s.add_development_dependency 'vcloud-tools-tester'

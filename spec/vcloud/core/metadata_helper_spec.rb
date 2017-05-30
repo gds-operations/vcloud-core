@@ -33,7 +33,7 @@ describe Vcloud::Core::MetadataHelper do
       expect(metadata[:role_name]).to eq('james-bond')
       expect(metadata[:server_number]).to eq(-10)
       expect(metadata[:created_at]).to eq(DateTime.parse("2013-12-16T14:30:05.000Z"))
-      expect(metadata[:daily_shutdown]).to be_false
+      expect(metadata[:daily_shutdown]).to be false
     end
 
     it "should skip metadata entry if entry type is not application/vnd.vmware.vcloud.metadata.value+xml" do

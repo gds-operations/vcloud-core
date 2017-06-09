@@ -195,6 +195,10 @@ module Vcloud
         })
       end
 
+      def self.id_prefix
+        'vm'
+      end
+
       private
 
       def virtual_hardware_section
@@ -216,11 +220,6 @@ module Vcloud
         end
       end
 
-      def self.id_prefix
-        'vm'
-      end
-
     end
-
   end
 end

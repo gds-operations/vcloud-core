@@ -164,6 +164,10 @@ module Vcloud
         running?
       end
 
+      def self.id_prefix
+        'vapp'
+      end
+
       private
       def running?
         raise "Cannot call running? on a missing vApp." unless id
@@ -171,7 +175,7 @@ module Vcloud
         vapp[:status].to_i == STATUS::RUNNING ? true : false
       end
 
-      def self.build_network_config(networks)
+      private_class_method def self.build_network_config(networks)
         return {} unless networks
         instantiation = { NetworkConfigSection: {NetworkConfig: []} }
         networks.compact.each do |network|
@@ -186,11 +190,7 @@ module Vcloud
         instantiation
       end
 
-      def self.id_prefix
-        'vapp'
-      end
-
-      def self.get_networks(network_names, vdc_name)
+      private_class_method def self.get_networks(network_names, vdc_name)
         fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.find_networks(network_names, vdc_name) if network_names
       end

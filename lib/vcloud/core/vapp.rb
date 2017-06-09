@@ -175,7 +175,7 @@ module Vcloud
         vapp[:status].to_i == STATUS::RUNNING ? true : false
       end
 
-      private_class_method def self.build_network_config(networks)
+      def build_network_config(networks)
         return {} unless networks
         instantiation = { NetworkConfigSection: {NetworkConfig: []} }
         networks.compact.each do |network|
@@ -190,10 +190,11 @@ module Vcloud
         instantiation
       end
 
-      private_class_method def self.get_networks(network_names, vdc_name)
+      def get_networks(network_names, vdc_name)
         fsi = Vcloud::Core::Fog::ServiceInterface.new
         fsi.find_networks(network_names, vdc_name) if network_names
       end
+
     end
   end
 end

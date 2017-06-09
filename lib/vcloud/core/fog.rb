@@ -49,8 +49,6 @@ module Vcloud
         pass
       end
 
-      private
-
       # Check whether a plaintext password is in the Fog config
       # file
       #

@@ -8,21 +8,21 @@ describe Vcloud::Core::ConfigValidator do
       data = "hello world"
       schema = { type: String }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should be ok with type as string 'String'" do
       data = "hello world"
       schema = { type: 'String' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should be ok with type as string 'string'" do
       data = "hello world"
       schema = { type: 'string' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
   end
@@ -33,14 +33,14 @@ describe Vcloud::Core::ConfigValidator do
       data = "hello world"
       schema = { type: 'string' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should not validate a number as a basic string" do
       data = 42
       schema = { type: 'string' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_false
+      expect(v.valid?).to be false
     end
 
     it "should log error with number as a basic string" do
@@ -68,7 +68,7 @@ describe Vcloud::Core::ConfigValidator do
       data = ""
       schema = { type: 'string', allowed_empty: true }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should return error for nil value with allowed_empty: true)" do
@@ -82,7 +82,7 @@ describe Vcloud::Core::ConfigValidator do
       data = "name-1234"
       schema = { type: 'string', matcher: /^name-\d+$/ }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should return errror with a :matcher regex not matching" do
@@ -106,7 +106,7 @@ describe Vcloud::Core::ConfigValidator do
       }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should not validate a bogus hash" do
@@ -119,7 +119,7 @@ describe Vcloud::Core::ConfigValidator do
       }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_false
+      expect(v.valid?).to be false
     end
 
     it "should return correct errors validating a bogus hash" do
@@ -156,7 +156,7 @@ describe Vcloud::Core::ConfigValidator do
       data = {}
       schema = { type: 'hash', allowed_empty: true }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should validate ok with a missing parameter, when marked :required => false" do
@@ -171,7 +171,7 @@ describe Vcloud::Core::ConfigValidator do
       }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should return error with a missing :required => true param" do
@@ -222,7 +222,7 @@ describe Vcloud::Core::ConfigValidator do
       },
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
   end
@@ -236,7 +236,7 @@ describe Vcloud::Core::ConfigValidator do
         each_element_is: { type: "string" }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should validate a bogus array" do
@@ -246,7 +246,7 @@ describe Vcloud::Core::ConfigValidator do
         each_element_is: { type: "string" }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_false
+      expect(v.valid?).to be false
     end
 
     it "should return correct errors validating a bogus array" do
@@ -280,7 +280,7 @@ describe Vcloud::Core::ConfigValidator do
       data = []
       schema = { type: 'array', allowed_empty: true }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
   end
@@ -303,7 +303,7 @@ describe Vcloud::Core::ConfigValidator do
       }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should correctly error on an invalid an array of hashes" do
@@ -351,7 +351,7 @@ describe Vcloud::Core::ConfigValidator do
       }
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should correctly error on an invalid hash of arrays" do
@@ -373,7 +373,7 @@ describe Vcloud::Core::ConfigValidator do
       },
       }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
   end
@@ -384,14 +384,14 @@ describe Vcloud::Core::ConfigValidator do
       data = 2
       schema = { type: 'string_or_number' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should correctly validate a String" do
       data = '2'
       schema = { type: 'string_or_number' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should correctly error if not a string or numeric" do
@@ -409,7 +409,7 @@ describe Vcloud::Core::ConfigValidator do
       data = '192.168.100.100'
       schema = { type: 'ip_address' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
 
     it "should correctly error on an invalid IP address" do
@@ -434,14 +434,14 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100.100/24'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
       end
 
       it "should return error if network bit value is greater than 32" do
         data = '192.168.100.100/33'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 192.168.100.100/33 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
 
@@ -449,7 +449,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100.100/33'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 192.168.100.100/33 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
 
@@ -457,7 +457,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100./33'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 192.168.100./33 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
     end
@@ -467,7 +467,7 @@ describe Vcloud::Core::ConfigValidator do
         it "should validate OK if IP range is '#{data}'" do
           schema = { type: 'ip_address_range' }
           v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-          expect(v.valid?).to be_true
+          expect(v.valid?).to be true
           expect(v.errors).to be_empty
         end
       end
@@ -476,7 +476,7 @@ describe Vcloud::Core::ConfigValidator do
         data = 'invalid_ip_range_string'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: invalid_ip_range_string is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
     end
@@ -486,7 +486,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100.100-192.168.100.110'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
         expect(v.errors).to be_empty
       end
 
@@ -494,7 +494,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100-192.168.100.110'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 192.168.100-192.168.100.110 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
 
@@ -502,7 +502,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '192.168.100.110-192.168.100'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 192.168.100.110-192.168.100 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
 
@@ -510,7 +510,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '200.168.100.99-192.168.100'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 200.168.100.99-192.168.100 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
 
@@ -518,7 +518,7 @@ describe Vcloud::Core::ConfigValidator do
         data = '190.168.100.99:192.168.100'
         schema = { type: 'ip_address_range' }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: 190.168.100.99:192.168.100 is not a valid IP address range. Valid values can be IP address, CIDR, IP range, 'Any','internal' and 'external'."])
       end
     end
@@ -527,7 +527,7 @@ describe Vcloud::Core::ConfigValidator do
       data = '190.168.100.99'
       schema = { type: 'ip_address_range' }
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
       expect(v.errors).to eq([])
     end
   end
@@ -550,7 +550,7 @@ describe Vcloud::Core::ConfigValidator do
       data = 'allow'
       schema = { type: 'enum', required: false, acceptable_values: ['allow', 'decline', 'none']}
       v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-      expect(v.valid?).to be_true
+      expect(v.valid?).to be true
     end
   end
 
@@ -566,7 +566,7 @@ describe Vcloud::Core::ConfigValidator do
       it "should validate ok if value is #{boolean_value}" do
         schema = { type: 'boolean' }
         v = Vcloud::Core::ConfigValidator.validate(:base, boolean_value, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
       end
     end
   end
@@ -589,7 +589,7 @@ describe Vcloud::Core::ConfigValidator do
         }
         }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
         expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
       end
 
@@ -602,7 +602,7 @@ describe Vcloud::Core::ConfigValidator do
         }
         }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
         expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
       end
 
@@ -615,7 +615,7 @@ describe Vcloud::Core::ConfigValidator do
         }
         }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_true
+        expect(v.valid?).to be true
         expect(v.warnings).to eq(["name: is deprecated by 'full_name'"])
       end
     end
@@ -633,7 +633,7 @@ describe Vcloud::Core::ConfigValidator do
         }
         }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq(["base: missing 'full_name' parameter"])
       end
 
@@ -663,7 +663,7 @@ describe Vcloud::Core::ConfigValidator do
         }
         }
         v = Vcloud::Core::ConfigValidator.validate(:base, data, schema)
-        expect(v.valid?).to be_false
+        expect(v.valid?).to be false
         expect(v.errors).to eq([
                                "name: 123 is not a string",
                                "full_name: 123 is not a string",

@@ -39,39 +39,39 @@ module Vcloud
         context "it supports all the vCloud entity types our tools need" do
 
           it "supports the vApp entity type" do
-            expect(@query_types.include?("vApp")).to be_true
+            expect(@query_types.include?("vApp")).to be true
           end
 
           it "supports the vm entity type" do
-            expect(@query_types.include?("vm")).to be_true
+            expect(@query_types.include?("vm")).to be true
           end
 
           it "supports the orgVdc entity type" do
-            expect(@query_types.include?("orgVdc")).to be_true
+            expect(@query_types.include?("orgVdc")).to be true
           end
 
           it "supports the orgVdcNetwork entity type" do
-            expect(@query_types.include?("orgVdcNetwork")).to be_true
+            expect(@query_types.include?("orgVdcNetwork")).to be true
           end
 
           it "supports the edgeGateway entity type" do
-            expect(@query_types.include?("edgeGateway")).to be_true
+            expect(@query_types.include?("edgeGateway")).to be true
           end
 
           it "supports the task entity type" do
-            expect(@query_types.include?("task")).to be_true
+            expect(@query_types.include?("task")).to be true
           end
 
           it "supports the catalog entity type" do
-            expect(@query_types.include?("catalog")).to be_true
+            expect(@query_types.include?("catalog")).to be true
           end
 
           it "supports the catalogItem entity type" do
-            expect(@query_types.include?("catalogItem")).to be_true
+            expect(@query_types.include?("catalogItem")).to be true
           end
 
           it "supports the vAppTemplate entity type" do
-            expect(@query_types.include?("vAppTemplate")).to be_true
+            expect(@query_types.include?("vAppTemplate")).to be true
           end
 
         end

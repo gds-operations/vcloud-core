@@ -1,3 +1,10 @@
+## 2.0.1 (2017-06-09)
+
+  - Bug fix related to the `last_comment` method being removed in Rake
+  - Pinned nokogiri to work with Ruby 2.0
+  - Upgraded rspec
+  - Various bug fixes
+
 ## 2.0.0 (2015-12-24)
 
   - Remove support for Ruby 1.9.3, which is now end-of-life.

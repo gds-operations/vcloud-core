@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.2.2'
 
-  s.add_runtime_dependency 'fog', '~> 1.36.0'
+  s.add_runtime_dependency 'fog', '~> 1.40.0'
   s.add_runtime_dependency 'mustache', '~> 0.99.0'
   s.add_runtime_dependency 'highline'
   s.add_runtime_dependency 'nokogiri', '~> 1.6.8.1'

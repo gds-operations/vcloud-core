@@ -20,9 +20,9 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.2.2'
 
-  s.add_runtime_dependency 'fog', '~> 1.36.0'
+  s.add_runtime_dependency 'fog', '~> 1.40.0'
   s.add_runtime_dependency 'mustache', '~> 0.99.0'
   s.add_runtime_dependency 'highline'
   s.add_runtime_dependency 'nokogiri', '~> 1.6.8.1'
@@ -32,5 +32,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '>= 3.6'
   s.add_development_dependency 'rubocop', '~> 0.49.1'
   s.add_development_dependency 'simplecov', '~> 0.14.1'
-  s.add_development_dependency 'vcloud-tools-tester', '>= 2.0.0'
+  s.add_development_dependency 'vcloud-tools-tester', '>= 2.1.0'
 end

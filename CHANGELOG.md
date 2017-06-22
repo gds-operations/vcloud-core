@@ -1,3 +1,10 @@
+## 2.1.0 (2017-06-22)
+
+  - Removed support for Ruby older than 2.2.2
+  - Added support for Ruby 2.3.0 and 2.4.0
+  - Various bug fixes
+  - Updated version of Fog (1.40)
+
 ## 2.0.1 (2017-06-09)
 
   - Bug fix related to the `last_comment` method being removed in Rake

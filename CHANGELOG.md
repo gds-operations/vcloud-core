@@ -1,3 +1,7 @@
+## 2.1.1 (2017-08-01)
+
+  - Fixed a bug relating to private methods
+
 ## 2.1.0 (2017-06-22)
 
   - Removed support for Ruby older than 2.2.2

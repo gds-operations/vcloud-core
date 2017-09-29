@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'fog', '~> 1.40.0'
   s.add_runtime_dependency 'mustache', '~> 0.99.0'
   s.add_runtime_dependency 'highline'
-  s.add_runtime_dependency 'nokogiri', '~> 1.6.8.1'
+  s.add_runtime_dependency 'nokogiri', '~> 1.8.1'
   s.add_development_dependency 'gem_publisher', '1.2.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake', '>= 12'

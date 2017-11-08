@@ -1,3 +1,7 @@
+## 2.2.0 (2017-09-29)
+
+  - Upgrade to latest nokogiri due to vulnerability in libxml2
+
 ## 2.1.1 (2017-08-01)
 
   - Fixed a bug relating to private methods
